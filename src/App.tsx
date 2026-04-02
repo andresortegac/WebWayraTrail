@@ -63,6 +63,8 @@ const sponsors = [
   },
 ]
 
+const registrationUrl = 'https://forms.gle/CJ6QGkPHK7nno6VYA'
+
 function App() {
   const [isVisible, setIsVisible] = useState<Record<string, boolean>>({})
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({})
@@ -93,22 +95,28 @@ function App() {
   return (
     <div className="min-h-screen bg-wayra-dark text-wayra-cream overflow-x-hidden">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-wayra-dark/90 backdrop-blur-md border-b border-wayra-gold/20">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-wayra-gold/20 bg-wayra-dark/92 backdrop-blur-xl shadow-[0_10px_40px_rgba(0,0,0,0.28)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 md:h-20">
-            <div className="flex items-center gap-3">
-              <img 
-                src="/logo-wayra-trail.png" 
-                alt="WAYRA TRAIL Logo" 
-                className="h-10 md:h-12 w-auto"
-              />
+          <div className="flex items-center justify-between h-20 md:h-24 gap-4">
+            <div className="flex items-center">
+              <a
+                href="#hero"
+                className="group flex items-center rounded-2xl border border-wayra-gold/20 bg-wayra-green/35 px-3 py-2 shadow-lg shadow-black/20 transition-colors hover:border-wayra-gold/45 hover:bg-wayra-green/45"
+                aria-label="Ir al inicio de WAYRA TRAIL"
+              >
+                <img
+                  src={chimueloImage}
+                  alt="Chimuelo, mascota oficial de WAYRA TRAIL"
+                  className="h-14 md:h-16 w-auto object-contain drop-shadow-[0_6px_18px_rgba(0,0,0,0.35)]"
+                />
+              </a>
             </div>
-            <div className="hidden md:flex items-center gap-6">
-              <a href="#reglamento" className="text-sm font-medium hover:text-wayra-gold transition-colors">Reglamento</a>
-              <a href="#horarios" className="text-sm font-medium hover:text-wayra-gold transition-colors">Horarios</a>
-              <a href="#compromisos" className="text-sm font-medium hover:text-wayra-gold transition-colors">Compromisos</a>
-              <a href="#patrocinios" className="text-sm font-medium hover:text-wayra-gold transition-colors">Patrocinios</a>
-              <a href="#inscripcion" className="text-sm font-medium hover:text-wayra-gold transition-colors">Inscripción</a>
+            <div className="hidden md:flex items-center gap-1 rounded-full border border-white/10 bg-wayra-dark/70 px-3 py-2 shadow-lg shadow-black/30">
+              <a href="#reglamento" className="rounded-full px-4 py-2 text-sm font-semibold text-wayra-cream/95 transition-colors hover:bg-white/5 hover:text-wayra-gold">Reglamento</a>
+              <a href="#horarios" className="rounded-full px-4 py-2 text-sm font-semibold text-wayra-cream/95 transition-colors hover:bg-white/5 hover:text-wayra-gold">Horarios</a>
+              <a href="#compromisos" className="rounded-full px-4 py-2 text-sm font-semibold text-wayra-cream/95 transition-colors hover:bg-white/5 hover:text-wayra-gold">Compromisos</a>
+              <a href="#patrocinios" className="rounded-full px-4 py-2 text-sm font-semibold text-wayra-cream/95 transition-colors hover:bg-white/5 hover:text-wayra-gold">Patrocinios</a>
+              <a href="#inscripcion" className="rounded-full px-4 py-2 text-sm font-semibold text-wayra-cream/95 transition-colors hover:bg-white/5 hover:text-wayra-gold">Inscripción</a>
             </div>
           </div>
         </div>
@@ -118,7 +126,7 @@ function App() {
       <section 
         id="hero"
         ref={setRef('hero')}
-        className="relative min-h-screen flex items-center justify-center pt-20"
+        className="relative min-h-screen flex items-center justify-center pt-24 md:pt-28"
       >
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
@@ -175,7 +183,7 @@ function App() {
           </div>
 
           {/* CTA Button */}
-          <a href="#inscripcion">
+          <a href={registrationUrl} target="_blank" rel="noopener noreferrer">
             <Button 
               size="lg"
               className="bg-gradient-to-r from-wayra-gold to-wayra-orange hover:from-wayra-orange hover:to-wayra-gold text-wayra-dark font-bold text-lg px-8 py-6 rounded-full animate-pulse-glow transition-all duration-300 hover:scale-105"
@@ -645,16 +653,18 @@ function App() {
                   ¿Has leído todo el reglamento y estás listo para ser parte de esta aventura?
                 </p>
                 <Button 
+                  asChild
                   size="lg"
                   className="bg-gradient-to-r from-wayra-gold to-wayra-orange hover:from-wayra-orange hover:to-wayra-gold text-wayra-dark font-bold text-lg px-10 py-6 rounded-full animate-pulse-glow transition-all duration-300 hover:scale-105"
-                  onClick={() => alert('Redirigiendo al sistema de inscripción...')}
                 >
-                  <CheckCircle2 className="mr-2 w-5 h-5" />
-                  He leído el reglamento y deseo inscribirme
-                  <ChevronRight className="ml-2 w-5 h-5" />
+                  <a href={registrationUrl} target="_blank" rel="noopener noreferrer">
+                    <CheckCircle2 className="mr-2 w-5 h-5" />
+                    He leído el reglamento y deseo inscribirme
+                    <ChevronRight className="ml-2 w-5 h-5" />
+                  </a>
                 </Button>
                 <p className="text-wayra-cream/50 text-sm mt-4">
-                  Serás redirigido a la plataforma de inscripción oficial
+                  El formulario se abre en una nueva pestaña para que, al terminar, puedas volver fácilmente a esta página.
                 </p>
               </div>
             </div>
