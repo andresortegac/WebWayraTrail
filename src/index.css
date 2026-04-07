@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Open+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Open+Sans:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -6,34 +6,40 @@
 
 @layer base {
   :root {
-    --background: 145 35% 8%;
-    --foreground: 60 10% 96%;
-    --card: 145 30% 12%;
-    --card-foreground: 60 10% 96%;
-    --popover: 145 30% 10%;
-    --popover-foreground: 60 10% 96%;
-    --primary: 145 45% 28%;
-    --primary-foreground: 60 10% 96%;
-    --secondary: 35 65% 52%;
-    --secondary-foreground: 145 35% 8%;
-    --muted: 145 20% 18%;
-    --muted-foreground: 60 5% 70%;
-    --accent: 35 75% 55%;
-    --accent-foreground: 145 35% 8%;
+    --background: 140 30% 97%;
+    --foreground: 150 20% 15%;
+    --card: 0 0% 100%;
+    --card-foreground: 150 20% 15%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 150 20% 15%;
+    --primary: 142 60% 35%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 140 25% 92%;
+    --secondary-foreground: 150 20% 15%;
+    --muted: 140 20% 94%;
+    --muted-foreground: 150 10% 40%;
+    --accent: 142 50% 45%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 145 20% 22%;
-    --input: 145 20% 18%;
-    --ring: 35 65% 52%;
-    --radius: 0.75rem;
+    --border: 140 20% 88%;
+    --input: 140 20% 88%;
+    --ring: 142 60% 35%;
+    --radius: 0.625rem;
     
-    --wayra-green: #1a3d2e;
-    --wayra-green-light: #2d5a45;
-    --wayra-green-bright: #4a8b5e;
-    --wayra-gold: #d4a84b;
-    --wayra-orange: #c17a38;
-    --wayra-cream: #f5f5f0;
-    --wayra-dark: #0f1f17;
+    /* WAYRA TRAIL Custom Colors */
+    --wayra-primary: #2D7D46;
+    --wayra-primary-light: #4CAF50;
+    --wayra-primary-dark: #1B5E20;
+    --wayra-bg: #F1F8E9;
+    --wayra-accent: #81C784;
+    
+    /* Category Colors */
+    --cat-recreativa: #EF4444;
+    --cat-libre: #FCD34D;
+    --cat-a: #10B981;
+    --cat-b: #3B82F6;
+    --cat-c: #8B5CF6;
   }
 }
 
@@ -56,32 +62,101 @@
   }
 }
 
-@layer utilities {
-  .text-gradient-gold {
-    background: linear-gradient(135deg, #d4a84b 0%, #f0d78c 50%, #c17a38 100%);
+@layer components {
+  .wayra-gradient {
+    background: linear-gradient(135deg, #2D7D46 0%, #4CAF50 50%, #81C784 100%);
+  }
+  
+  .wayra-gradient-text {
+    background: linear-gradient(135deg, #2D7D46 0%, #4CAF50 50%, #81C784 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   
-  .bg-gradient-wayra {
-    background: linear-gradient(180deg, #0f1f17 0%, #1a3d2e 50%, #0f1f17 100%);
+  .wayra-card {
+    @apply bg-white rounded-xl shadow-lg border border-green-100;
   }
   
-  .bg-gradient-card {
-    background: linear-gradient(145deg, rgba(26, 61, 46, 0.9) 0%, rgba(15, 31, 23, 0.95) 100%);
+  .wayra-button {
+    @apply px-6 py-3 bg-gradient-to-r from-green-700 to-green-500 text-white font-semibold rounded-lg 
+           hover:from-green-800 hover:to-green-600 transition-all duration-300 shadow-md hover:shadow-lg;
   }
   
-  .border-gradient-gold {
-    border-image: linear-gradient(135deg, #d4a84b, #c17a38) 1;
+  .wayra-button-outline {
+    @apply px-6 py-3 border-2 border-green-600 text-green-700 font-semibold rounded-lg 
+           hover:bg-green-600 hover:text-white transition-all duration-300;
   }
   
-  .shadow-glow-gold {
-    box-shadow: 0 0 30px rgba(212, 168, 75, 0.3);
+  .category-badge {
+    @apply px-3 py-1 rounded-full text-sm font-semibold;
   }
   
-  .shadow-glow-green {
-    box-shadow: 0 0 30px rgba(74, 139, 94, 0.3);
+  .category-recreativa {
+    background-color: #FEE2E2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+  }
+  
+  .category-libre {
+    background-color: #FEF3C7;
+    color: #D97706;
+    border: 1px solid #FDE68A;
+  }
+  
+  .category-a {
+    background-color: #D1FAE5;
+    color: #059669;
+    border: 1px solid #A7F3D0;
+  }
+  
+  .category-b {
+    background-color: #DBEAFE;
+    color: #2563EB;
+    border: 1px solid #BFDBFE;
+  }
+  
+  .category-c {
+    background-color: #EDE9FE;
+    color: #7C3AED;
+    border: 1px solid #DDD6FE;
+  }
+  
+  .hero-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(129, 199, 132, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(45, 125, 70, 0.05) 0%, transparent 40%);
+  }
+  
+  .section-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232D7D46' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { 
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to { 
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -91,43 +166,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f1f17;
+  background: #F1F8E9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #d4a84b, #c17a38);
+  background: #4CAF50;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, #f0d78c, #d4a84b);
-}
-
-/* Animation classes */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(212, 168, 75, 0.4);
-  }
-  50% {
-    box-shadow: 0 0 40px rgba(212, 168, 75, 0.7);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.8s ease-out forwards;
-}
-
-.animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+  background: #2D7D46;
 }

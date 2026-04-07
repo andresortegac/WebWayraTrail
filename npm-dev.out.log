@@ -1,0 +1,4 @@
+
+> my-app@0.0.0 dev
+> start "WAYRA API" cmd /k node server\server.js && vite
+
