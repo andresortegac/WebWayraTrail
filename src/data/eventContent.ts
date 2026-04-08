@@ -52,32 +52,32 @@ export const categories = [
   {
     name: 'Recreativa',
     color: '#EF4444',
-    description: 'Solo para personas que no hayan practicado trail running ni carreras atleticas.',
-    ageRange: 'Sin limite de edad',
+    description: 'Solo para personas que no hayan practicado trail running ni carreras atléticas.',
+    ageRange: 'Sin límite de edad',
   },
   {
     name: 'Libre',
     color: '#FCD34D',
-    description: 'Categoria oficial para participantes entre 18 y 39 anos.',
-    ageRange: '18 - 39 anos',
+    description: 'Categoría oficial para participantes entre 18 y 39 años.',
+    ageRange: '18 - 39 años',
   },
   {
     name: 'A',
     color: '#10B981',
-    description: 'Categoria oficial para participantes entre 40 y 49 anos.',
-    ageRange: '40 - 49 anos',
+    description: 'Categoría oficial para participantes entre 40 y 49 años.',
+    ageRange: '40 - 49 años',
   },
   {
     name: 'B',
     color: '#3B82F6',
-    description: 'Categoria oficial para participantes entre 50 y 59 anos.',
-    ageRange: '50 - 59 anos',
+    description: 'Categoría oficial para participantes entre 50 y 59 años.',
+    ageRange: '50 - 59 años',
   },
   {
     name: 'C',
     color: '#8B5CF6',
-    description: 'Categoria oficial para participantes de 60 anos en adelante.',
-    ageRange: '60 anos en adelante',
+    description: 'Categoría oficial para participantes de 60 años en adelante.',
+    ageRange: '60 años en adelante',
   },
 ];
 
@@ -88,14 +88,14 @@ export const navigationItems = [
   { id: 'horarios', label: 'Horarios' },
   { id: 'compromisos', label: 'Claves' },
   { id: 'patrocinios', label: 'Patrocinios' },
-  { id: 'inscripcion', label: 'Inscripcion' },
+  { id: 'inscripcion', label: 'Inscripción' },
 ];
 
 export const heroSlides: HeroSlide[] = [
   {
-    title: 'Ruta entre montanas',
+    title: 'Ruta entre montañas',
     subtitle: 'Senderos que abren la experiencia',
-    description: 'La portada ahora respira paisaje real y prepara visualmente para una carrera de montana con identidad propia.',
+    description: 'La portada ahora respira paisaje real y prepara visualmente para una carrera de montaña con identidad propia.',
     location: 'Sibundoy, Putumayo',
     badge: 'Wayra Trail',
     image: new URL('../../img/hero-bg.jpg', import.meta.url).href,
@@ -103,7 +103,7 @@ export const heroSlides: HeroSlide[] = [
   {
     title: 'Atardecer del valle',
     subtitle: 'Color, altura y profundidad',
-    description: 'Un cierre de luz que le da al slider un tono elegante, natural y mucho mas conectado con el territorio.',
+    description: 'Un cierre de luz que le da al slider un tono elegante, natural y mucho más conectado con el territorio.',
     location: 'Valle de Sibundoy',
     badge: 'Paisaje local',
     image: new URL('../../img/sibundoy-atardecer-web.jpg', import.meta.url).href,
@@ -111,15 +111,15 @@ export const heroSlides: HeroSlide[] = [
   {
     title: 'Memoria viva en el parque',
     subtitle: 'Cultura ancestral en primer plano',
-    description: 'La presencia de arte local ayuda a que la portada no sea solo deportiva, sino tambien cultural y reconocible.',
+    description: 'La presencia de arte local ayuda a que la portada no sea solo deportiva, sino también cultural y reconocible.',
     location: 'Parque de Sibundoy',
     badge: 'Identidad ancestral',
     image: new URL('../../img/sibundoy-parque-madera-web.jpg', import.meta.url).href,
   },
   {
     title: 'Verde profundo y agua',
-    subtitle: 'Calma antes del desafio',
-    description: 'Una escena serena para equilibrar el hero con una fotografia fresca, abierta y muy propia del entorno putumayense.',
+    subtitle: 'Calma antes del desafío',
+    description: 'Una escena serena para equilibrar el hero con una fotografía fresca, abierta y muy propia del entorno putumayense.',
     location: 'Sibundoy rural',
     badge: 'Naturaleza viva',
     image: new URL('../../img/sibundoy-lago.jpg', import.meta.url).href,
@@ -128,18 +128,18 @@ export const heroSlides: HeroSlide[] = [
 
 export const officialHighlights: HighlightCard[] = [
   {
-    title: 'Aceptacion obligatoria',
-    description: 'La inscripcion confirma que leiste, comprendiste y aceptaste el reglamento oficial.',
+    title: 'Aceptación obligatoria',
+    description: 'La inscripción confirma que leíste, comprendiste y aceptaste el reglamento oficial.',
     icon: FileText,
   },
   {
     title: 'Kit oficial',
-    description: 'La entrega sera unicamente el 10 de octubre. El 11 de octubre no habra entrega de kits.',
+    description: 'La entrega será únicamente el 10 de octubre. El 11 de octubre no habrá entrega de kits.',
     icon: Package,
   },
   {
-    title: 'Dia de carrera',
-    description: 'Concentracion 6:30 a. m., salida 8:00 a. m., premiacion 1:00 p. m. y cierre 2:00 p. m.',
+    title: 'Día de carrera',
+    description: 'Concentración 6:30 a. m., salida 8:00 a. m., premiación 1:00 p. m. y cierre 2:00 p. m.',
     icon: CalendarDays,
   },
   {
@@ -152,9 +152,9 @@ export const officialHighlights: HighlightCard[] = [
 export const quickFacts = [
   '10 oct: entrega de kits',
   '11 oct: carrera oficial',
-  '5 categorias por rama',
-  'Cantimplora personal para hidratacion',
-  'Premiacion al cierre oficial',
+  '5 categorías por rama',
+  'Cantimplora personal para hidratación',
+  'Premiación al cierre oficial',
 ];
 
 export const timelineSections: TimelineSection[] = [
@@ -162,26 +162,26 @@ export const timelineSections: TimelineSection[] = [
     day: '10 de octubre',
     title: 'Entrega oficial de kits',
     description:
-      'Todos los participantes deben presentarse dentro de los horarios oficiales o autorizar a un companero de confianza.',
-    alert: 'El 11 de octubre no se realizara entrega de kits.',
+      'Todos los participantes deben presentarse dentro de los horarios oficiales o autorizar a un compañero de confianza.',
+    alert: 'El 11 de octubre no se realizará entrega de kits.',
     items: [
       { time: '8:00 a. m. - 12:00 m.', label: 'Primera franja de entrega' },
       { time: '12:00 m. - 6:00 p. m.', label: 'Segunda franja de entrega' },
-      { time: '6:00 p. m. - 10:00 p. m.', label: 'Ultima franja de entrega' },
+      { time: '6:00 p. m. - 10:00 p. m.', label: 'Última franja de entrega' },
     ],
   },
   {
     day: '11 de octubre',
-    title: 'Programacion oficial del evento',
+    title: 'Programación oficial del evento',
     description:
-      'Todos los atletas deben asistir a la concentracion para recibir orientaciones tecnicas y de seguridad.',
-    alert: 'La premiacion se realiza solo en el horario definido por la organizacion.',
+      'Todos los atletas deben asistir a la concentración para recibir orientaciones técnicas y de seguridad.',
+    alert: 'La premiación se realiza solo en el horario definido por la organización.',
     items: [
-      { time: '6:30 a. m.', label: 'Concentracion de participantes' },
-      { time: '6:30 a. m. - 7:45 a. m.', label: 'Calentamiento e informacion tecnica' },
+      { time: '6:30 a. m.', label: 'Concentración de participantes' },
+      { time: '6:30 a. m. - 7:45 a. m.', label: 'Calentamiento e información técnica' },
       { time: '8:00 a. m.', label: 'Salida oficial de la carrera' },
       { time: '12:30 p. m.', label: 'Hora estimada de llegada' },
-      { time: '1:00 p. m.', label: 'Premiacion oficial' },
+      { time: '1:00 p. m.', label: 'Premiación oficial' },
       { time: '2:00 p. m.', label: 'Cierre del evento' },
     ],
   },
@@ -189,45 +189,45 @@ export const timelineSections: TimelineSection[] = [
 
 export const participantCards: InfoCard[] = [
   {
-    title: 'Requisitos de participacion',
+    title: 'Requisitos de participación',
     icon: CheckCircle,
     items: [
-      'Diligenciar correctamente la inscripcion.',
+      'Diligenciar correctamente la inscripción.',
       'Aceptar el reglamento oficial.',
-      'Enviar fotografia e informacion requerida por la organizacion.',
+      'Enviar fotografía e información requerida por la organización.',
       'Presentarse con puntualidad en kits y competencia.',
-      'Cumplir indicaciones de logistica, jueces y organizadores.',
+      'Cumplir indicaciones de logística, jueces y organizadores.',
     ],
   },
   {
     title: 'Equipamiento recomendado',
     icon: Droplets,
     items: [
-      'Cantimplora o recipiente personal para recibir hidratacion.',
+      'Cantimplora o recipiente personal para recibir hidratación.',
       'Guantes.',
       'Bastones de trail o palillos de apoyo en ascensos y descensos.',
-      'Calzado de trail o de montana con buen agarre.',
-      'Si llueve: gorro para el frio, pito y chaqueta rompevientos.',
+      'Calzado de trail o de montaña con buen agarre.',
+      'Si llueve: gorro para el frío, pito y chaqueta rompevientos.',
     ],
   },
   {
-    title: 'Conducta y premiacion',
+    title: 'Conducta y premiación',
     icon: Trophy,
     items: [
       'Competir con respeto, honestidad y sana competencia.',
-      'Los cinco primeros de cada categoria deben permanecer hasta el cierre de la competencia.',
-      'La premiacion se entrega solo en el horario oficial.',
-      'Quien aspire a premiacion debe esperar la llegada del ultimo atleta.',
+      'Los cinco primeros de cada categoría deben permanecer hasta el cierre de la competencia.',
+      'La premiación se entrega solo en el horario oficial.',
+      'Quien aspire a premiación debe esperar la llegada del último atleta.',
     ],
   },
   {
-    title: 'Revision de inscripcion',
+    title: 'Revisión de inscripción',
     icon: AlertTriangle,
     items: [
-      'La organizacion puede revisar categorias incorrectas por edad o experiencia.',
-      'La categoria recreativa sera validada segun sus condiciones oficiales.',
-      'La informacion falsa, incompleta o inconsistente puede invalidar la inscripcion.',
-      'El comite organizador resolvera cualquier caso no previsto.',
+      'La organización puede revisar categorías incorrectas por edad o experiencia.',
+      'La categoría recreativa será validada según sus condiciones oficiales.',
+      'La información falsa, incompleta o inconsistente puede invalidar la inscripción.',
+      'El comité organizador resolverá cualquier caso no previsto.',
     ],
   },
 ];
@@ -235,139 +235,139 @@ export const participantCards: InfoCard[] = [
 export const officialRegulationSections: RegulationSection[] = [
   {
     title: '1. Objeto del reglamento',
-    summary: 'Define las condiciones de participacion, seguridad, categorias y obligaciones del evento.',
+    summary: 'Define las condiciones de participación, seguridad, categorías y obligaciones del evento.',
     items: [
-      'Establece normas logisticas, requisitos de seguridad, clasificacion por categorias y compromisos obligatorios para todos los atletas inscritos en WAYRA TRAIL 16K.',
+      'Establece normas logísticas, requisitos de seguridad, clasificación por categorías y compromisos obligatorios para todos los atletas inscritos en WAYRA TRAIL 16K.',
     ],
   },
   {
-    title: '2. Aceptacion del reglamento',
-    summary: 'La inscripcion implica aceptacion total de todas las disposiciones.',
+    title: '2. Aceptación del reglamento',
+    summary: 'La inscripción implica aceptación total de todas las disposiciones.',
     items: [
-      'Cada participante declara haber leido el reglamento completo.',
-      'Acepta cumplir cada norma aqui establecida.',
+      'Cada participante declara haber leído el reglamento completo.',
+      'Acepta cumplir cada norma aquí establecida.',
       'Se compromete a participar de manera responsable, honesta y respetuosa.',
-      'Reconoce que debe inscribirse en la categoria que realmente le corresponde segun edad y experiencia.',
+      'Reconoce que debe inscribirse en la categoría que realmente le corresponde según edad y experiencia.',
     ],
   },
   {
     title: '3. Entrega de kits',
-    summary: 'La entrega oficial sera solo el 10 de octubre en jornada continua.',
+    summary: 'La entrega oficial será solo el 10 de octubre en jornada continua.',
     items: [
       'Los participantes deben presentarse puntualmente dentro de los horarios establecidos.',
-      'El 11 de octubre no se realizara entrega de kits.',
-      'La organizacion no se hace responsable por kits no reclamados el dia oficial.',
-      'Si el atleta no puede asistir, debe autorizar a un companero de confianza para reclamar el kit.',
+      'El 11 de octubre no se realizará entrega de kits.',
+      'La organización no se hace responsable por kits no reclamados el día oficial.',
+      'Si el atleta no puede asistir, debe autorizar a un compañero de confianza para reclamar el kit.',
     ],
   },
   {
-    title: '4. Programacion oficial del evento',
-    summary: 'Todos deben asistir a la concentracion previa a la salida.',
+    title: '4. Programación oficial del evento',
+    summary: 'Todos deben asistir a la concentración previa a la salida.',
     items: [
-      '6:30 a. m.: concentracion de los participantes.',
-      '6:30 a. m. a 7:45 a. m.: calentamiento general e informacion tecnica de carrera.',
+      '6:30 a. m.: concentración de los participantes.',
+      '6:30 a. m. a 7:45 a. m.: calentamiento general e información técnica de carrera.',
       '8:00 a. m.: salida oficial de la carrera.',
       '12:30 p. m.: hora estimada de llegada.',
-      '1:00 p. m.: premiacion oficial.',
+      '1:00 p. m.: premiación oficial.',
       '2:00 p. m.: cierre del evento.',
     ],
   },
   {
-    title: '5. Categorias oficiales',
-    summary: 'Las categorias aplican en rama masculina y femenina.',
+    title: '5. Categorías oficiales',
+    summary: 'Las categorías aplican en rama masculina y femenina.',
     items: [
-      'Recreativa: exclusiva para personas que no hayan practicado trail running ni carreras atleticas.',
-      'Libre: participantes entre 18 y 39 anos.',
-      'A: participantes entre 40 y 49 anos.',
-      'B: participantes entre 50 y 59 anos.',
-      'C: participantes de 60 anos en adelante.',
-      'Cada atleta debe inscribirse con total honestidad; la organizacion podra verificar la informacion.',
+      'Recreativa: exclusiva para personas que no hayan practicado trail running ni carreras atléticas.',
+      'Libre: participantes entre 18 y 39 años.',
+      'A: participantes entre 40 y 49 años.',
+      'B: participantes entre 50 y 59 años.',
+      'C: participantes de 60 años en adelante.',
+      'Cada atleta debe inscribirse con total honestidad; la organización podrá verificar la información.',
     ],
   },
   {
-    title: '6. Requisitos de participacion',
-    summary: 'Hay requisitos minimos que todos los atletas deben cumplir.',
+    title: '6. Requisitos de participación',
+    summary: 'Hay requisitos mínimos que todos los atletas deben cumplir.',
     items: [
-      'Haber diligenciado correctamente la inscripcion.',
+      'Haber diligenciado correctamente la inscripción.',
       'Aceptar el presente reglamento.',
-      'Enviar su fotografia y la informacion requerida por la organizacion segun su categoria.',
-      'Presentarse con puntualidad en la entrega de kits y el dia de la competencia.',
-      'Cumplir las indicaciones del equipo logistico, jueces y organizadores.',
+      'Enviar su fotografía y la información requerida por la organización según su categoría.',
+      'Presentarse con puntualidad en la entrega de kits y el día de la competencia.',
+      'Cumplir las indicaciones del equipo logístico, jueces y organizadores.',
     ],
   },
   {
     title: '7. Implementos y equipamiento recomendado',
-    summary: 'El recorrido de montana exige preparacion y equipo adecuado.',
+    summary: 'El recorrido de montaña exige preparación y equipo adecuado.',
     items: [
       'Portar cantimplora para recibir agua en los puntos de avituallamiento.',
       'Se recomienda usar guantes.',
       'Se recomienda llevar bastones de trail o palillos de madera para apoyo.',
-      'Usar zapatillas de trail, tenis de montana o calzado con buen agarre.',
-      'En caso de lluvia: gorro para el frio, pito y chaqueta rompevientos.',
+      'Usar zapatillas de trail, tenis de montaña o calzado con buen agarre.',
+      'En caso de lluvia: gorro para el frío, pito y chaqueta rompevientos.',
       'No se recomienda el uso de bolsas de agua, salvo criterio personal del atleta y bajo su propia responsabilidad.',
     ],
   },
   {
-    title: '8. Avituallamiento e hidratacion',
-    summary: 'Cada atleta es responsable de su hidratacion y preparacion previa.',
+    title: '8. Avituallamiento e hidratación',
+    summary: 'Cada atleta es responsable de su hidratación y preparación previa.',
     items: [
-      'La organizacion dispondra de puntos de avituallamiento durante el recorrido.',
-      'Cada participante debe portar su propia cantimplora o recipiente personal para recibir hidratacion.',
-      'El atleta es responsable de su alimentacion, hidratacion y preparacion fisica previa.',
+      'La organización dispondrá de puntos de avituallamiento durante el recorrido.',
+      'Cada participante debe portar su propia cantimplora o recipiente personal para recibir hidratación.',
+      'El atleta es responsable de su alimentación, hidratación y preparación física previa.',
     ],
   },
   {
-    title: '9. Conducta deportiva y premiacion',
+    title: '9. Conducta deportiva y premiación',
     summary: 'La convivencia, el respeto y la permanencia hasta el cierre hacen parte del reglamento.',
     items: [
       'Todos los participantes deben mantener una conducta deportiva adecuada.',
-      'Los atletas que ocupen alguno de los cinco primeros puestos de su categoria deben permanecer en el evento hasta la finalizacion de la competencia.',
-      'La premiacion se realizara unicamente en el horario establecido por la organizacion.',
-      'Quien aspire a recibir premiacion debe esperar la llegada del ultimo atleta como muestra de respeto y para el cierre de clasificacion final.',
+      'Los atletas que ocupen alguno de los cinco primeros puestos de su categoría deben permanecer en el evento hasta la finalización de la competencia.',
+      'La premiación se realizará únicamente en el horario establecido por la organización.',
+      'Quien aspire a recibir premiación debe esperar la llegada del último atleta como muestra de respeto y para el cierre de clasificación final.',
     ],
   },
   {
     title: '10. Responsabilidad del participante',
     summary: 'Cada corredor participa bajo su propia responsabilidad.',
     items: [
-      'El atleta declara que se encuentra en condiciones fisicas adecuadas para realizar una carrera de montana.',
-      'Comprende las exigencias fisicas de la prueba.',
+      'El atleta declara que se encuentra en condiciones físicas adecuadas para realizar una carrera de montaña.',
+      'Comprende las exigencias físicas de la prueba.',
       'Reconoce los riesgos propios de una competencia de trail running.',
       'Se compromete a actuar con prudencia durante todo el recorrido.',
-      'Acepta seguir las instrucciones del personal logistico, de seguridad y organizacion.',
+      'Acepta seguir las instrucciones del personal logístico, de seguridad y organización.',
     ],
   },
   {
-    title: '11. Causales de no aceptacion o revision de inscripcion',
-    summary: 'La organizacion puede rechazar, revisar o ajustar registros.',
+    title: '11. Causales de no aceptación o revisión de inscripción',
+    summary: 'La organización puede rechazar, revisar o ajustar registros.',
     items: [
-      'Cuando el participante se registre en una categoria que no corresponda a su edad.',
-      'Cuando se inscriba en categoria recreativa sin cumplir las condiciones establecidas.',
-      'Cuando se detecte informacion falsa, incompleta o inconsistente.',
-      'Cuando no se cumplan los requisitos definidos por la organizacion.',
+      'Cuando el participante se registre en una categoría que no corresponda a su edad.',
+      'Cuando se inscriba en categoría recreativa sin cumplir las condiciones establecidas.',
+      'Cuando se detecte información falsa, incompleta o inconsistente.',
+      'Cuando no se cumplan los requisitos definidos por la organización.',
     ],
   },
   {
-    title: '12. Autoridad de la organizacion',
-    summary: 'La organizacion interpreta y hace cumplir el reglamento.',
+    title: '12. Autoridad de la organización',
+    summary: 'La organización interpreta y hace cumplir el reglamento.',
     items: [
-      'La organizacion del evento tiene plena facultad para interpretar, aplicar y hacer cumplir este reglamento.',
-      'Cualquier situacion no prevista sera resuelta por el comite organizador, cuya decision sera final.',
+      'La organización del evento tiene plena facultad para interpretar, aplicar y hacer cumplir este reglamento.',
+      'Cualquier situación no prevista será resuelta por el comité organizador, cuya decisión será final.',
     ],
   },
   {
-    title: '13. Declaracion final del participante',
-    summary: 'Formalizar la inscripcion equivale a aceptar todas las condiciones.',
+    title: '13. Declaración final del participante',
+    summary: 'Formalizar la inscripción equivale a aceptar todas las condiciones.',
     items: [
-      'El participante declara que ha leido y comprendido el reglamento y acepta cada una de sus condiciones.',
-      'Tambien manifiesta su voluntad de formar parte de la plataforma oficial del evento cumpliendo normas, horarios, requisitos y criterios de participacion.',
+      'El participante declara que ha leído y comprendido el reglamento y acepta cada una de sus condiciones.',
+      'También manifiesta su voluntad de formar parte de la plataforma oficial del evento cumpliendo normas, horarios, requisitos y criterios de participación.',
     ],
   },
   {
     title: '14. Mensaje de bienvenida',
-    summary: 'El evento invita a vivir una experiencia deportiva, cultural y de montana.',
+    summary: 'El evento invita a vivir una experiencia deportiva, cultural y de montaña.',
     items: [
-      'La organizacion da la bienvenida a todos los atletas y desea que su participacion se viva con disciplina, respeto, seguridad y espiritu de superacion.',
+      'La organización da la bienvenida a todos los atletas y desea que su participación se viva con disciplina, respeto, seguridad y espíritu de superación.',
     ],
   },
 ];
@@ -375,8 +375,8 @@ export const officialRegulationSections: RegulationSection[] = [
 export const formReminderItems = [
   '10 de octubre: entrega oficial de kits.',
   '11 de octubre: salida oficial a las 8:00 a. m.',
-  'La categoria recreativa solo aplica si no tienes experiencia previa en trail o carreras atleticas.',
-  'Debes llevar tu propia cantimplora para recibir hidratacion.',
+  'La categoría recreativa solo aplica si no tienes experiencia previa en trail o carreras atléticas.',
+  'Debes llevar tu propia cantimplora para recibir hidratación.',
 ];
 
 export const sponsors = [
@@ -397,12 +397,12 @@ export const sponsors = [
     image: new URL('../../img/comecializadora hortofrutical.jpeg', import.meta.url).href,
   },
   {
-    name: 'Semprando Economia',
+    name: 'Semprando Economía',
     image: new URL('../../img/semprando economia.jpeg', import.meta.url).href,
   },
 ];
 
 export const footerItems = [
-  { id: 'categorias', label: 'Categorias' },
+  { id: 'categorias', label: 'Categorías' },
   ...navigationItems,
 ];

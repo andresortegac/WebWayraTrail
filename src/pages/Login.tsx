@@ -31,14 +31,14 @@ export default function Login() {
         if (!err.response) {
           setError('No se pudo conectar con el servidor. Inicia el backend en el puerto 3001.');
         } else if (err.response.status === 401) {
-          setError('Usuario o contrasena incorrectos.');
+          setError('Usuario o contraseña incorrectos.');
         } else if (err.response.status >= 500) {
-          setError('El backend no esta respondiendo correctamente. Revisa la terminal del servidor.');
+          setError('El backend no está respondiendo correctamente. Revisa la terminal del servidor.');
         } else {
-          setError(err.response.data?.message || 'Error del servidor al iniciar sesion.');
+          setError(err.response.data?.message || 'Error del servidor al iniciar sesión.');
         }
       } else {
-        setError('No se pudo iniciar sesion.');
+        setError('No se pudo iniciar sesión.');
       }
     } finally {
       setIsLoading(false);
@@ -62,10 +62,10 @@ export default function Login() {
               <img src="/chimuelo.png" alt="WAYRA TRAIL" className="w-16 h-16 object-contain" />
             </div>
             <CardTitle className="text-2xl font-bold text-gray-900">
-              Acceso Administrador
+              Acceso administrador
             </CardTitle>
             <CardDescription>
-              WAYRA TRAIL - Panel de Administracion
+              WAYRA TRAIL - Panel de administración
             </CardDescription>
           </CardHeader>
 
@@ -94,7 +94,7 @@ export default function Login() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Contrasena</Label>
+                <Label htmlFor="password">Contraseña</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
@@ -121,7 +121,7 @@ export default function Login() {
                 className="w-full wayra-button"
                 disabled={isLoading}
               >
-                {isLoading ? 'Iniciando sesion...' : 'Iniciar Sesion'}
+                {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </Button>
             </form>
 
@@ -129,7 +129,7 @@ export default function Login() {
               <p className="text-sm text-green-800 text-center">
                 <strong>Credenciales por defecto:</strong><br />
                 Usuario: <code className="bg-green-100 px-2 py-0.5 rounded">admin</code><br />
-                Contrasena: <code className="bg-green-100 px-2 py-0.5 rounded">admin123</code>
+                Contraseña: <code className="bg-green-100 px-2 py-0.5 rounded">admin123</code>
               </p>
             </div>
           </CardContent>

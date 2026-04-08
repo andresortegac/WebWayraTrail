@@ -2,16 +2,13 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
   Eye,
-  Flag,
   Image,
-  MapPin,
   Mountain,
   Plus,
   Save,
   Sparkles,
   Trash2,
   Upload,
-  Video,
 } from 'lucide-react';
 import { HeroCarousel } from '@/components/HeroCarousel';
 import { Badge } from '@/components/ui/badge';
@@ -22,15 +19,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { navigationItems } from '@/data/eventContent';
 import {
   createEmptyGalleryItem,
-  createEmptyInfoItem,
-  createEmptyVideoItem,
   duplicateHomeContent,
-  getVideoEmbedUrl,
-  isDirectVideoFile,
   mergeHomeContentWithDefaults,
 } from '@/lib/home-content';
 import { siteContentService } from '@/services/api';
-import type { HomeContent, HomeGalleryItem, HomeInfoItem, HomeVideoItem } from '@/types';
+import type { HomeContent, HomeGalleryItem } from '@/types';
 
 type SaveState = {
   tone: 'idle' | 'success' | 'error';
@@ -185,24 +178,6 @@ export function AdminHomeEditor() {
     }));
   };
 
-  const updateVideoItem = (index: number, field: keyof HomeVideoItem, value: string) => {
-    setContent((prev) => ({
-      ...prev,
-      videoItems: prev.videoItems.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, [field]: value } : item
-      ),
-    }));
-  };
-
-  const updateInfoItem = (index: number, field: keyof HomeInfoItem, value: string) => {
-    setContent((prev) => ({
-      ...prev,
-      infoItems: prev.infoItems.map((item, itemIndex) =>
-        itemIndex === index ? { ...item, [field]: value } : item
-      ),
-    }));
-  };
-
   const handleImageUpload = async (index: number, file?: File) => {
     if (!file) {
       return;
@@ -218,21 +193,6 @@ export function AdminHomeEditor() {
     }
   };
 
-  const handleVideoThumbnailUpload = async (index: number, file?: File) => {
-    if (!file) {
-      return;
-    }
-
-    try {
-      const image = await optimizeImageFile(file);
-      updateVideoItem(index, 'thumbnail', image);
-      setSaveState({ tone: 'success', message: 'Miniatura optimizada para web. Ya puedes guardarla en el inicio.' });
-    } catch (error) {
-      console.error('Video thumbnail upload error:', error);
-      setSaveState({ tone: 'error', message: 'No se pudo leer la miniatura seleccionada.' });
-    }
-  };
-
   const addGalleryItem = () => {
     setContent((prev) => ({
       ...prev,
@@ -240,38 +200,10 @@ export function AdminHomeEditor() {
     }));
   };
 
-  const addVideoItem = () => {
-    setContent((prev) => ({
-      ...prev,
-      videoItems: [...prev.videoItems, createEmptyVideoItem(`video-${Date.now()}`, '#8b5cf6')],
-    }));
-  };
-
-  const addInfoItem = () => {
-    setContent((prev) => ({
-      ...prev,
-      infoItems: [...prev.infoItems, createEmptyInfoItem(`info-${Date.now()}`, '#06b6d4')],
-    }));
-  };
-
   const removeGalleryItem = (index: number) => {
     setContent((prev) => ({
       ...prev,
       galleryItems: prev.galleryItems.filter((_, itemIndex) => itemIndex !== index),
-    }));
-  };
-
-  const removeVideoItem = (index: number) => {
-    setContent((prev) => ({
-      ...prev,
-      videoItems: prev.videoItems.filter((_, itemIndex) => itemIndex !== index),
-    }));
-  };
-
-  const removeInfoItem = (index: number) => {
-    setContent((prev) => ({
-      ...prev,
-      infoItems: prev.infoItems.filter((_, itemIndex) => itemIndex !== index),
     }));
   };
 
@@ -305,7 +237,7 @@ export function AdminHomeEditor() {
         } else if (error.response.status === 401 || error.response.status === 403) {
           setSaveState({
             tone: 'error',
-            message: 'Tu sesion de administrador vencio o ya no es valida. Inicia sesion de nuevo e intenta guardar otra vez.',
+          message: 'Tu sesión de administrador venció o ya no es válida. Inicia sesión de nuevo e intenta guardar otra vez.',
           });
         } else if (typeof error.response.data?.message === 'string') {
           setSaveState({
@@ -315,13 +247,13 @@ export function AdminHomeEditor() {
         } else {
           setSaveState({
             tone: 'error',
-            message: 'No se pudo guardar el contenido. Verifica la conexion y vuelve a intentarlo.',
+            message: 'No se pudo guardar el contenido. Verifica la conexión y vuelve a intentarlo.',
           });
         }
       } else {
         setSaveState({
           tone: 'error',
-          message: 'No se pudo guardar el contenido. Verifica la conexion y vuelve a intentarlo.',
+          message: 'No se pudo guardar el contenido. Verifica la conexión y vuelve a intentarlo.',
         });
       }
     } finally {
@@ -330,23 +262,15 @@ export function AdminHomeEditor() {
   };
 
   const previewGallery = content.galleryItems.filter((item) => item.image.trim() !== '');
-  const previewVideos = content.videoItems.filter(
-    (item) => item.videoUrl.trim() !== '' || item.thumbnail.trim() !== ''
-  );
   const previewSlidesSource = previewGallery.length > 0 ? previewGallery.slice(0, 4) : content.galleryItems.slice(0, 3);
   const previewSlides = previewSlidesSource.map((item, index) => ({
     title: item.title || `Bloque visual ${index + 1}`,
     subtitle: item.subtitle || 'Texto superpuesto para la portada',
-    description: item.description || 'La portada del admin ahora replica el tono visual del home publico.',
+    description: item.description || 'La portada del admin ahora replica el tono visual del home público.',
     location: item.location || 'Wayra Trail',
     badge: item.badge || 'Inicio visual',
     image: item.image || FALLBACK_PREVIEW_IMAGE,
   }));
-  const previewStats = content.infoItems.slice(0, 3);
-  const previewGalleryCardsSource = previewGallery.length > 0 ? previewGallery : content.galleryItems;
-  const previewGalleryCards = previewGalleryCardsSource.slice(0, 3);
-  const previewVideoCards = previewVideos.slice(0, 2);
-
   if (isLoading) {
     return (
       <div className="rounded-[2rem] border border-[#d7e6db] bg-white p-10 shadow-[0_30px_80px_-55px_rgba(21,53,42,0.55)]">
@@ -354,7 +278,7 @@ export function AdminHomeEditor() {
           <div className="h-11 w-11 animate-spin rounded-full border-2 border-[#15352a]/25 border-t-[#15352a]" />
           <div>
             <p className="font-semibold">Cargando editor de inicio</p>
-            <p className="text-sm text-[#587062]">Preparando imagenes, textos y videos guardados.</p>
+            <p className="text-sm text-[#587062]">Preparando imágenes, textos y videos guardados.</p>
           </div>
         </div>
       </div>
@@ -375,22 +299,16 @@ export function AdminHomeEditor() {
               Crea una portada que se sienta viva desde el primer vistazo.
             </h2>
             <p className="mt-4 max-w-2xl text-sm leading-relaxed text-white/78 lg:text-base">
-              Aqui puedes armar la historia inicial del evento con fotos, textos superpuestos, videos y bloques de informacion.
-              Todo esta pensado para que el admin edite rapido y vea el resultado con una presencia mas cinematografica.
+              Aquí puedes editar el bloque principal del inicio con textos, botones e imágenes para el carrusel.
+              La vista previa replica la portada publica que hoy esta activa en el sitio.
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-3">
-            {[
-              { label: 'Galeria activa', value: `${content.galleryItems.length} bloques` },
-              { label: 'Videos listos', value: `${content.videoItems.length} piezas` },
-              { label: 'Mensajes clave', value: `${content.infoItems.length} tarjetas` },
-            ].map((item) => (
-              <div key={item.label} className="rounded-[1.5rem] border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
-                <p className="text-xs uppercase tracking-[0.18em] text-white/60">{item.label}</p>
-                <p className="mt-2 text-2xl font-black text-white">{item.value}</p>
-              </div>
-            ))}
+          <div className="grid gap-3 sm:grid-cols-1">
+            <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
+              <p className="text-xs uppercase tracking-[0.18em] text-white/60">Slides activos</p>
+              <p className="mt-2 text-2xl font-black text-white">{content.galleryItems.length} bloques</p>
+            </div>
           </div>
         </div>
       </section>
@@ -402,7 +320,7 @@ export function AdminHomeEditor() {
               <SectionHeading
                 icon={Sparkles}
                 title="Narrativa principal"
-                description="Edita los textos grandes que abren el home: badge, titulo, subtitulo y llamada a la accion."
+                description="Edita los textos grandes que abren el home: badge, título, subtítulo y llamadas a la acción."
               />
             </CardHeader>
             <CardContent className="grid gap-4 pt-6 md:grid-cols-2">
@@ -418,11 +336,11 @@ export function AdminHomeEditor() {
                 />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <label className="text-sm font-medium text-[#183127]">Titulo principal</label>
+                <label className="text-sm font-medium text-[#183127]">Título principal</label>
                 <Input value={content.heroTitle} onChange={(event) => updateContentField('heroTitle', event.target.value)} />
               </div>
               <div className="space-y-2 md:col-span-2">
-                <label className="text-sm font-medium text-[#183127]">Subtitulo</label>
+                <label className="text-sm font-medium text-[#183127]">Subtítulo</label>
                 <Input
                   value={content.heroSubtitle}
                   onChange={(event) => updateContentField('heroSubtitle', event.target.value)}
@@ -450,28 +368,6 @@ export function AdminHomeEditor() {
                   onChange={(event) => updateContentField('secondaryCtaText', event.target.value)}
                 />
               </div>
-              <div className="space-y-2 md:col-span-2">
-                <label className="text-sm font-medium text-[#183127]">Etiqueta de spotlight</label>
-                <Input
-                  value={content.spotlightLabel}
-                  onChange={(event) => updateContentField('spotlightLabel', event.target.value)}
-                />
-              </div>
-              <div className="space-y-2 md:col-span-2">
-                <label className="text-sm font-medium text-[#183127]">Titulo del spotlight</label>
-                <Input
-                  value={content.spotlightTitle}
-                  onChange={(event) => updateContentField('spotlightTitle', event.target.value)}
-                />
-              </div>
-              <div className="space-y-2 md:col-span-2">
-                <label className="text-sm font-medium text-[#183127]">Descripcion del spotlight</label>
-                <Textarea
-                  value={content.spotlightDescription}
-                  onChange={(event) => updateContentField('spotlightDescription', event.target.value)}
-                  className="min-h-24"
-                />
-              </div>
             </CardContent>
           </Card>
 
@@ -480,12 +376,12 @@ export function AdminHomeEditor() {
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <SectionHeading
                   icon={Image}
-                  title="Bloques fotograficos con texto"
-                  description="Cada tarjeta acepta imagen por carga directa o por URL, y los textos se muestran encima de la foto."
+                  title="Slides del carrusel"
+                  description="Cada slide acepta imagen por carga directa o por URL, y sus textos se usan tambien en la portada."
                 />
                 <Button type="button" onClick={addGalleryItem} className="bg-[#15352a] hover:bg-[#0f241d]">
                   <Plus className="mr-2 h-4 w-4" />
-                  Agregar foto
+                  Agregar slide
                 </Button>
               </div>
             </CardHeader>
@@ -494,8 +390,8 @@ export function AdminHomeEditor() {
                 <div key={item.id} className="rounded-[1.75rem] border border-[#e4ede6] bg-[#fbfcfa] p-4">
                   <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                     <div>
-                      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#587062]">Foto {index + 1}</p>
-                      <p className="text-sm text-[#7b8f83]">Carga una imagen o pega un enlace para esta historia.</p>
+                      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#587062]">Slide {index + 1}</p>
+                      <p className="text-sm text-[#7b8f83]">Carga una imagen o pega un enlace para este slide.</p>
                     </div>
                     <Button
                       type="button"
@@ -565,11 +461,11 @@ export function AdminHomeEditor() {
                         <Input value={item.badge} onChange={(event) => updateGalleryItem(index, 'badge', event.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Titulo sobre la foto</label>
+                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Título sobre la foto</label>
                         <Input value={item.title} onChange={(event) => updateGalleryItem(index, 'title', event.target.value)} />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Subtitulo</label>
+                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Subtítulo</label>
                         <Input
                           value={item.subtitle}
                           onChange={(event) => updateGalleryItem(index, 'subtitle', event.target.value)}
@@ -597,167 +493,6 @@ export function AdminHomeEditor() {
             </CardContent>
           </Card>
 
-          <Card className="overflow-hidden border-[#d6e5da] bg-white shadow-[0_25px_80px_-60px_rgba(17,51,40,0.5)]">
-            <CardHeader className="border-b border-[#edf3ee] bg-[#f9fbf7]">
-              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <SectionHeading
-                  icon={Video}
-                  title="Videos destacados"
-                  description="Anade videos mediante enlace y una miniatura para que el home tenga piezas en movimiento."
-                />
-                <Button type="button" onClick={addVideoItem} className="bg-[#15352a] hover:bg-[#0f241d]">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Agregar video
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-5 pt-6">
-              {content.videoItems.map((item, index) => (
-                <div key={item.id} className="rounded-[1.75rem] border border-[#e4ede6] bg-[#fbfcfa] p-4">
-                  <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                    <div>
-                      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#587062]">Video {index + 1}</p>
-                      <p className="text-sm text-[#7b8f83]">Funciona bien con enlaces de YouTube, Vimeo o archivos MP4.</p>
-                    </div>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={() => removeVideoItem(index)}
-                      disabled={content.videoItems.length === 1}
-                      className="text-red-600 hover:bg-red-50 hover:text-red-700"
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Quitar
-                    </Button>
-                  </div>
-
-                  <div className="grid gap-4 lg:grid-cols-[1fr_1.15fr]">
-                    <div className="space-y-3">
-                      <div className="overflow-hidden rounded-[1.5rem] border border-[#dfe8e2] bg-[#dde8df]">
-                        {item.thumbnail ? (
-                          <img src={item.thumbnail} alt={item.title || `Video ${index + 1}`} className="h-56 w-full object-cover" />
-                        ) : (
-                          <div className="flex h-56 items-center justify-center bg-[linear-gradient(135deg,#dbe7ff_0%,#efe5ff_100%)] text-center text-sm text-[#4f5e7c]">
-                            Carga una miniatura para este video
-                          </div>
-                        )}
-                      </div>
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-[#b9ccbe] bg-white px-4 py-3 text-sm font-medium text-[#15352a] transition hover:border-[#15352a]">
-                          <Upload className="h-4 w-4" />
-                          Cargar miniatura
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={(event) => void handleVideoThumbnailUpload(index, event.target.files?.[0])}
-                          />
-                        </label>
-                        <div className="space-y-2">
-                          <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Color acento</label>
-                          <Input
-                            value={item.accentColor}
-                            onChange={(event) => updateVideoItem(index, 'accentColor', event.target.value)}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid gap-3">
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Etiqueta</label>
-                        <Input value={item.tag} onChange={(event) => updateVideoItem(index, 'tag', event.target.value)} />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Titulo</label>
-                        <Input value={item.title} onChange={(event) => updateVideoItem(index, 'title', event.target.value)} />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Descripcion</label>
-                        <Textarea
-                          value={item.description}
-                          onChange={(event) => updateVideoItem(index, 'description', event.target.value)}
-                          className="min-h-24"
-                        />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">URL del video</label>
-                        <Input value={item.videoUrl} onChange={(event) => updateVideoItem(index, 'videoUrl', event.target.value)} />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">URL de miniatura</label>
-                        <Input
-                          value={item.thumbnail}
-                          onChange={(event) => updateVideoItem(index, 'thumbnail', event.target.value)}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
-
-          <Card className="overflow-hidden border-[#d6e5da] bg-white shadow-[0_25px_80px_-60px_rgba(17,51,40,0.5)]">
-            <CardHeader className="border-b border-[#edf3ee] bg-[#f9fbf7]">
-              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                <SectionHeading
-                  icon={Sparkles}
-                  title="Tarjetas de informacion"
-                  description="Crea bloques breves con cifras o mensajes para reforzar la propuesta del inicio."
-                />
-                <Button type="button" onClick={addInfoItem} className="bg-[#15352a] hover:bg-[#0f241d]">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Agregar tarjeta
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4 pt-6">
-              {content.infoItems.map((item, index) => (
-                <div key={item.id} className="rounded-[1.5rem] border border-[#e4ede6] bg-[#fbfcfa] p-4">
-                  <div className="mb-4 flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#587062]">Tarjeta {index + 1}</p>
-                    </div>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      onClick={() => removeInfoItem(index)}
-                      disabled={content.infoItems.length === 1}
-                      className="text-red-600 hover:bg-red-50 hover:text-red-700"
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Quitar
-                    </Button>
-                  </div>
-                  <div className="grid gap-3 md:grid-cols-[0.34fr_0.66fr]">
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Valor</label>
-                      <Input value={item.value} onChange={(event) => updateInfoItem(index, 'value', event.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Titulo</label>
-                      <Input value={item.title} onChange={(event) => updateInfoItem(index, 'title', event.target.value)} />
-                    </div>
-                    <div className="space-y-2 md:col-span-2">
-                      <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Descripcion</label>
-                      <Textarea
-                        value={item.description}
-                        onChange={(event) => updateInfoItem(index, 'description', event.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2 md:col-span-2">
-                      <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Color acento</label>
-                      <Input
-                        value={item.accentColor}
-                        onChange={(event) => updateInfoItem(index, 'accentColor', event.target.value)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </CardContent>
-          </Card>
         </div>
 
         <div className="order-1 space-y-6 2xl:order-2">
@@ -770,7 +505,7 @@ export function AdminHomeEditor() {
                     Vista previa de inicio
                   </CardTitle>
                   <CardDescription className="mt-1 text-[#587062]">
-                    Asi se percibe el contenido mientras editas. El home publico tomara este mismo tono visual.
+                    Así se percibe el contenido mientras editas. El home público tomará este mismo tono visual.
                   </CardDescription>
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -862,128 +597,6 @@ export function AdminHomeEditor() {
                       <HeroCarousel slides={previewSlides} />
                     </div>
                   </div>
-                </div>
-
-                <div className="grid gap-8 border-t border-green-100 bg-[linear-gradient(180deg,#fcfdf9_0%,#f2f7f1_100%)] px-5 py-6 lg:grid-cols-[0.92fr_1.08fr] lg:px-6">
-                  <div className="wayra-gradient rounded-[2rem] p-6 text-white shadow-[0_25px_75px_-45px_rgba(21,53,42,0.9)]">
-                    <div className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/85">
-                      <Flag className="h-4 w-4" />
-                      {content.spotlightLabel}
-                    </div>
-                    <h3 className="mt-5 text-3xl font-black leading-tight">{content.spotlightTitle}</h3>
-                    <p className="mt-4 text-sm leading-relaxed text-white/78 lg:text-base">{content.spotlightDescription}</p>
-
-                    <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                      {previewStats.map((item) => (
-                        <div
-                          key={item.id}
-                          className="rounded-[1.35rem] border border-white/10 p-4 backdrop-blur-sm"
-                          style={{ background: `linear-gradient(180deg, ${item.accentColor}2E 0%, rgba(255,255,255,0.09) 100%)` }}
-                        >
-                          <p className="text-xs uppercase tracking-[0.18em] text-white/55">{item.title || 'Dato clave'}</p>
-                          <p className="mt-3 text-3xl font-black text-white">{item.value || '--'}</p>
-                          <p className="mt-2 text-sm leading-relaxed text-white/74">{item.description || 'Refuerza aqui el mensaje principal.'}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {previewGalleryCards.map((item, index) => (
-                      <div
-                        key={item.id}
-                        className={`relative overflow-hidden rounded-[2rem] border border-green-100 bg-white shadow-xl ${
-                          index === 0 ? 'md:col-span-2 min-h-[360px]' : 'min-h-[280px]'
-                        }`}
-                      >
-                        <img
-                          src={item.image || FALLBACK_PREVIEW_IMAGE}
-                          alt=""
-                          aria-hidden="true"
-                          className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl opacity-45"
-                        />
-                        <img
-                          src={item.image || FALLBACK_PREVIEW_IMAGE}
-                          alt={item.title || `Bloque ${index + 1}`}
-                          className="absolute inset-0 h-full w-full object-contain"
-                        />
-                        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,16,10,0.12)_0%,rgba(6,16,10,0.78)_100%)]" />
-                        <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                          <div
-                            className="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]"
-                            style={{ backgroundColor: `${item.accentColor}D0` }}
-                          >
-                            {item.badge || `Bloque ${index + 1}`}
-                          </div>
-                          <h4 className="mt-4 text-2xl font-black leading-tight">{item.title || 'Titulo de la historia'}</h4>
-                          <p className="mt-2 text-sm font-semibold text-green-100">{item.subtitle || 'Subtitulo sobre la foto'}</p>
-                          <p className="mt-3 text-sm leading-relaxed text-white/78">
-                            {item.description || 'Tu descripcion aparecera aqui para complementar la historia visual.'}
-                          </p>
-                          <div className="mt-4 inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-white/60">
-                            <MapPin className="h-3.5 w-3.5" />
-                            {item.location || 'Ubicacion'}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 text-[#12231b]">
-                  <Video className="h-5 w-5 text-[#15352a]" />
-                  <h3 className="text-lg font-semibold">Vista de videos destacados</h3>
-                </div>
-                <div className="grid gap-4 xl:grid-cols-2">
-                  {previewVideoCards.map((item) => {
-                    const embedUrl = getVideoEmbedUrl(item.videoUrl);
-                    const hasDirectVideo = isDirectVideoFile(item.videoUrl);
-
-                    return (
-                      <div key={item.id} className="overflow-hidden rounded-[2rem] border border-green-100 bg-white shadow-xl">
-                        <div className="relative aspect-video bg-[#10231b]">
-                          {embedUrl ? (
-                            <iframe
-                              src={embedUrl}
-                              title={item.title}
-                              className="h-full w-full"
-                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                              allowFullScreen
-                            />
-                          ) : hasDirectVideo ? (
-                            <video src={item.videoUrl} poster={item.thumbnail} controls className="h-full w-full object-cover" />
-                          ) : item.thumbnail ? (
-                            <>
-                              <img src={item.thumbnail} alt={item.title} className="h-full w-full object-cover" />
-                              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,17,13,0.15)_0%,rgba(8,17,13,0.75)_100%)]" />
-                            </>
-                          ) : (
-                            <div className="flex h-full items-center justify-center text-sm text-white/70">Agrega un enlace de video</div>
-                          )}
-                        </div>
-                        <div className="p-5">
-                          <div
-                            className="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white"
-                            style={{ backgroundColor: item.accentColor }}
-                          >
-                            {item.tag || 'Video destacado'}
-                          </div>
-                          <h4 className="mt-4 text-2xl font-black text-gray-900">{item.title || 'Titulo del video'}</h4>
-                          <p className="mt-3 text-sm leading-relaxed text-gray-600">
-                            {item.description || 'La descripcion del video aparecera aqui cuando la edites.'}
-                          </p>
-                        </div>
-                      </div>
-                    );
-                  })}
-
-                  {previewVideos.length === 0 ? (
-                    <div className="rounded-[1.75rem] border border-dashed border-[#b9ccbe] bg-[#f8fbf8] p-6 text-sm text-[#587062] xl:col-span-2">
-                      Todavia no hay videos configurados. En cuanto pegues un enlace o una miniatura, apareceran aqui con el mismo lenguaje visual de la pagina.
-                    </div>
-                  ) : null}
                 </div>
               </div>
             </CardContent>

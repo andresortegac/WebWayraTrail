@@ -23,7 +23,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { duplicateHomeContent, getVideoEmbedUrl, isDirectVideoFile, mergeHomeContentWithDefaults } from '@/lib/home-content';
+import { duplicateHomeContent, mergeHomeContentWithDefaults } from '@/lib/home-content';
 import {
   categories,
   footerItems,
@@ -40,6 +40,25 @@ import {
 } from '@/data/eventContent';
 import { inscriptionService, siteContentService } from '@/services/api';
 import type { HomeContent, InscriptionFormData } from '@/types';
+
+const WHATSAPP_NUMBER = '573226635756';
+const WHATSAPP_MESSAGE =
+  'Hola, quiero más información sobre WAYRA TRAIL e inscribirme al evento.';
+
+const WhatsAppIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
+  <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
+    <path d="M19.05 4.94A9.86 9.86 0 0 0 12.03 2C6.56 2 2.1 6.45 2.1 11.94c0 1.75.46 3.46 1.33 4.97L2 22l5.25-1.38a9.9 9.9 0 0 0 4.75 1.21h.01c5.47 0 9.93-4.45 9.93-9.94a9.83 9.83 0 0 0-2.89-6.95Zm-7.03 15.2h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.12.82.84-3.04-.2-.31a8.2 8.2 0 0 1-1.27-4.34c0-4.54 3.69-8.24 8.24-8.24 2.2 0 4.27.86 5.82 2.42a8.17 8.17 0 0 1 2.4 5.82c0 4.54-3.7 8.24-8.22 8.24Zm4.52-6.17c-.25-.13-1.48-.73-1.71-.82-.23-.08-.4-.12-.56.13-.17.25-.65.82-.8.99-.15.17-.3.19-.56.06-.25-.13-1.07-.39-2.03-1.23-.75-.67-1.25-1.48-1.4-1.73-.15-.25-.02-.39.11-.52.11-.11.25-.3.38-.45.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.86-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.09s.9 2.42 1.02 2.59c.13.17 1.77 2.71 4.3 3.8.6.26 1.08.41 1.45.53.61.19 1.17.16 1.61.1.49-.07 1.48-.6 1.69-1.18.21-.58.21-1.07.15-1.17-.05-.1-.22-.17-.47-.29Z" />
+  </svg>
+);
+
+const NequiIcon = ({ className = 'h-8 w-8' }: { className?: string }) => (
+  <span
+    aria-hidden="true"
+    className={`inline-flex items-center justify-center rounded-lg bg-fuchsia-600 text-[11px] font-black uppercase tracking-[0.18em] text-white ${className}`}
+  >
+    N
+  </span>
+);
 
 const initialFormData: InscriptionFormData = {
   nombres: '',
@@ -100,7 +119,7 @@ export default function Home() {
     e.preventDefault();
 
     if (!hasAcceptedRegulation) {
-      alert('Debes aceptar el reglamento oficial para completar la inscripcion');
+      alert('Debes aceptar el reglamento oficial para completar la inscripción.');
       return;
     }
 
@@ -114,9 +133,9 @@ export default function Home() {
       resetForm();
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        alert(error.response?.data?.message || 'Error al procesar la inscripcion');
+        alert(error.response?.data?.message || 'Error al procesar la inscripción.');
       } else {
-        alert('Error al procesar la inscripcion');
+        alert('Error al procesar la inscripción.');
       }
     } finally {
       setIsSubmitting(false);
@@ -135,10 +154,7 @@ export default function Home() {
     }));
 
   const heroSlidesToRender = customHeroSlides.length > 0 ? customHeroSlides : heroSlides;
-  const showcaseGallery = homeContent.galleryItems.filter((item) => item.image.trim() !== '');
-  const showcaseVideos = homeContent.videoItems.filter(
-    (item) => item.videoUrl.trim() !== '' || item.thumbnail.trim() !== ''
-  );
+  const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
   return (
     <div className="min-h-screen bg-[#F1F8E9]">
@@ -209,7 +225,7 @@ export default function Home() {
               <h2 className="text-xl lg:text-2xl font-bold text-green-700 mb-6">
                 {homeContent.heroSubtitle}
               </h2>
-              <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0">
+              <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto whitespace-pre-line lg:mx-0">
                 {homeContent.heroDescription}
               </p>
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-8">
@@ -239,6 +255,42 @@ export default function Home() {
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
+              <div className="mt-6 rounded-[1.75rem] border border-emerald-200 bg-white/90 p-5 shadow-[0_22px_60px_-40px_rgba(21,53,42,0.45)] backdrop-blur-sm">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">
+                  Inscríbete ahora
+                </p>
+                <h3 className="mt-2 text-xl font-black text-gray-900">
+                  Vive WAYRA TRAIL y asegura tu cupo desde hoy
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-gray-600 whitespace-pre-line">
+                  Inscríbete al evento y reserva tu participación de forma rápida y directa.
+
+                  Nequi 322 6635756.
+                </p>
+                <div className="mt-4 inline-flex items-center gap-3 rounded-2xl bg-fuchsia-50 px-4 py-3 text-sm font-semibold text-fuchsia-800">
+                  <NequiIcon />
+                  <span>Nequi</span>
+                  <span className="text-fuchsia-400">|</span>
+                  <span>322 6635756</span>
+                </div>
+                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <button
+                    onClick={() => setShowInscriptionModal(true)}
+                    className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                  >
+                    Quiero inscribirme
+                  </button>
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#20ba59]"
+                  >
+                    <WhatsAppIcon className="h-5 w-5" />
+                    Mayor información por WhatsApp
+                  </a>
+                </div>
+              </div>
             </div>
             <div className="relative animate-fade-in">
               <HeroCarousel slides={heroSlidesToRender} />
@@ -247,134 +299,15 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-24 bg-[linear-gradient(180deg,#fcfdf9_0%,#f2f7f1_100%)]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 xl:grid-cols-[0.95fr_1.05fr]">
-            <div className="wayra-gradient rounded-[2rem] p-8 text-white shadow-[0_30px_90px_-50px_rgba(21,53,42,0.88)]">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/85">
-                <Flag className="w-4 h-4" />
-                {homeContent.spotlightLabel}
-              </div>
-              <h2 className="mt-6 text-3xl font-black leading-tight lg:text-4xl">{homeContent.spotlightTitle}</h2>
-              <p className="mt-4 text-base leading-relaxed text-white/78">{homeContent.spotlightDescription}</p>
-
-              <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                {homeContent.infoItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="rounded-[1.5rem] border border-white/10 p-4 backdrop-blur-sm"
-                    style={{ background: `linear-gradient(180deg, ${item.accentColor}30 0%, rgba(255,255,255,0.08) 100%)` }}
-                  >
-                    <p className="text-xs uppercase tracking-[0.18em] text-white/55">{item.title}</p>
-                    <p className="mt-3 text-3xl font-black text-white">{item.value}</p>
-                    <p className="mt-2 text-sm leading-relaxed text-white/75">{item.description}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-2">
-              {showcaseGallery.map((item, index) => (
-                <div
-                  key={item.id}
-                  className={`relative overflow-hidden rounded-[2rem] border border-green-100 shadow-xl ${
-                    index === 0 ? 'md:col-span-2 min-h-[400px]' : 'min-h-[320px]'
-                  }`}
-                >
-                  <img
-                    src={item.image}
-                    alt=""
-                    aria-hidden="true"
-                    className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl opacity-45"
-                  />
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="absolute inset-0 h-full w-full object-contain"
-                  />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,16,10,0.12)_0%,rgba(6,16,10,0.78)_100%)]" />
-                  <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-                    <div
-                      className="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]"
-                      style={{ backgroundColor: `${item.accentColor}D0` }}
-                    >
-                      {item.badge}
-                    </div>
-                    <h3 className="mt-4 text-2xl font-black leading-tight">{item.title}</h3>
-                    <p className="mt-2 text-base font-semibold text-green-100">{item.subtitle}</p>
-                    <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/78">{item.description}</p>
-                    <p className="mt-4 text-xs uppercase tracking-[0.2em] text-white/60">{item.location}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {showcaseVideos.length > 0 ? (
-            <div className="mt-10">
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between mb-6">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-green-700">Videos destacados</p>
-                  <h3 className="mt-2 text-3xl font-black text-gray-900">Historias en movimiento</h3>
-                </div>
-                <p className="max-w-2xl text-sm text-gray-600">
-                  Estos videos se administran desde el panel del evento y ayudan a presentar teaser, aliados o mensajes clave antes de la inscripcion.
-                </p>
-              </div>
-
-              <div className="grid gap-6 lg:grid-cols-2">
-                {showcaseVideos.map((item) => {
-                  const embedUrl = getVideoEmbedUrl(item.videoUrl);
-                  const hasDirectVideo = isDirectVideoFile(item.videoUrl);
-
-                  return (
-                    <div key={item.id} className="overflow-hidden rounded-[2rem] border border-green-100 bg-white shadow-xl">
-                      <div className="relative aspect-video bg-[#10231b]">
-                        {embedUrl ? (
-                          <iframe
-                            src={embedUrl}
-                            title={item.title}
-                            className="h-full w-full"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                          />
-                        ) : hasDirectVideo ? (
-                          <video src={item.videoUrl} poster={item.thumbnail} controls className="h-full w-full object-cover" />
-                        ) : (
-                          <>
-                            <img src={item.thumbnail} alt={item.title} className="h-full w-full object-cover" />
-                            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,17,13,0.15)_0%,rgba(8,17,13,0.75)_100%)]" />
-                          </>
-                        )}
-                      </div>
-                      <div className="p-6">
-                        <div
-                          className="inline-flex rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white"
-                          style={{ backgroundColor: item.accentColor }}
-                        >
-                          {item.tag}
-                        </div>
-                        <h4 className="mt-4 text-2xl font-black text-gray-900">{item.title}</h4>
-                        <p className="mt-3 text-sm leading-relaxed text-gray-600">{item.description}</p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </section>
-
       <section id="categorias" className="py-16 lg:py-24 section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Categorias de <span className="wayra-gradient-text">competencia</span>
+              Categorías de <span className="wayra-gradient-text">competencia</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              La categoria se define por edad y experiencia. En recreativa solo pueden inscribirse
-              quienes no hayan practicado trail running ni carreras atleticas.
+              La categoría se define por edad y experiencia. En recreativa solo pueden inscribirse
+              quienes no hayan practicado trail running ni carreras atléticas.
             </p>
           </div>
 
@@ -398,7 +331,7 @@ export default function Home() {
                 >
                   {cat.ageRange}
                 </div>
-                <p className="text-gray-600 text-sm leading-relaxed">{cat.description}</p>
+                <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{cat.description}</p>
               </div>
             ))}
           </div>
@@ -407,20 +340,20 @@ export default function Home() {
             <div className="bg-white rounded-3xl shadow-lg border border-green-100 p-6 lg:p-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Users className="w-6 h-6 text-green-600" />
-                Como se valida tu categoria
+                Cómo se valida tu categoría
               </h3>
               <div className="grid sm:grid-cols-2 gap-4 text-sm text-gray-600">
                 <div className="rounded-2xl bg-green-50 p-4">
-                  Las categorias Libre, A, B y C aplican para rama masculina y femenina.
+                  Las categorías Libre, A, B y C aplican para rama masculina y femenina.
                 </div>
                 <div className="rounded-2xl bg-green-50 p-4">
                   Tu edad se revisa con base en la fecha de nacimiento registrada.
                 </div>
                 <div className="rounded-2xl bg-green-50 p-4">
-                  La categoria recreativa exige honestidad total sobre tu experiencia deportiva.
+                  La categoría recreativa exige honestidad total sobre tu experiencia deportiva.
                 </div>
                 <div className="rounded-2xl bg-green-50 p-4">
-                  La organizacion puede revisar o ajustar inscripciones con datos inconsistentes.
+                  La organización puede revisar o ajustar inscripciones con datos inconsistentes.
                 </div>
               </div>
             </div>
@@ -432,8 +365,8 @@ export default function Home() {
               </div>
               <h3 className="text-2xl font-bold mt-4 mb-3">Inscribete con honestidad</h3>
               <p className="text-green-50 leading-relaxed">
-                El reglamento indica que cada atleta debe elegir la categoria que realmente le corresponde
-                segun su edad y experiencia. Si hay inconsistencias, la organizacion puede revisarlas.
+                El reglamento indica que cada atleta debe elegir la categoría que realmente le corresponde
+                según su edad y experiencia. Si hay inconsistencias, la organización puede revisarlas.
               </p>
             </div>
           </div>
@@ -449,10 +382,10 @@ export default function Home() {
                 Reglamento oficial
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-                Lo importante, <span className="wayra-gradient-text">sin hacerte leer de mas</span>
+                Lo importante, <span className="wayra-gradient-text">sin hacerte leer de más</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl">
-                Resumimos el reglamento en bloques rapidos para que ubiques lo esencial en segundos,
+                Resumimos el reglamento en bloques rápidos para que ubiques lo esencial en segundos,
                 pero dejamos el detalle completo disponible por secciones para quien quiera revisarlo.
               </p>
 
@@ -463,7 +396,7 @@ export default function Home() {
                       <Icon className="w-6 h-6" />
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{title}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+                    <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{description}</p>
                   </div>
                 ))}
               </div>
@@ -472,12 +405,12 @@ export default function Home() {
             <div className="wayra-gradient rounded-3xl p-8 text-white shadow-xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-semibold uppercase tracking-[0.18em]">
                 <Flag className="w-4 h-4" />
-                Lectura rapida
+                Lectura rápida
               </div>
               <h3 className="text-2xl font-bold mt-4 mb-3">Antes de inscribirte</h3>
               <p className="text-green-50 leading-relaxed">
-                La inscripcion implica aceptar el reglamento completo, participar bajo tu responsabilidad
-                y cumplir horarios, categoria real y reglas de convivencia.
+                La inscripción implica aceptar el reglamento completo, participar bajo tu responsabilidad
+                y cumplir horarios, categoría real y reglas de convivencia.
               </p>
               <div className="flex flex-wrap gap-2 mt-6">
                 {quickFacts.map((fact) => (
@@ -493,7 +426,7 @@ export default function Home() {
                 onClick={() => scrollToSection('inscripcion')}
                 className="mt-8 bg-white text-green-700 px-5 py-3 rounded-xl font-semibold hover:bg-green-50 transition-colors shadow-md inline-flex items-center gap-2"
               >
-                Ir a inscripcion
+                Ir a inscripción
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -508,7 +441,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="text-sm text-green-700 font-semibold">
-                La inscripcion implica aceptacion total del reglamento.
+                La inscripción implica aceptación total del reglamento.
               </div>
             </div>
 
@@ -554,7 +487,7 @@ export default function Home() {
                   {section.day}
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-3">{section.title}</h3>
-                <p className="text-gray-600 leading-relaxed mb-6">{section.description}</p>
+                <p className="text-gray-600 leading-relaxed mb-6 whitespace-pre-line">{section.description}</p>
                 <div className="space-y-3">
                   {section.items.map((item) => (
                     <div key={`${section.title}-${item.time}`} className="flex gap-4 rounded-2xl bg-green-50 p-4">
@@ -579,8 +512,8 @@ export default function Home() {
               Claves para <span className="wayra-gradient-text">competir bien</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Este bloque junta lo que mas suele preguntar un corredor: que debe cumplir, que llevar,
-              como se maneja la premiacion y cuando una inscripcion puede revisarse.
+              Este bloque junta lo que más suele preguntar un corredor: qué debe cumplir, qué llevar,
+              cómo se maneja la premiación y cuándo una inscripción puede revisarse.
             </p>
           </div>
 
@@ -595,7 +528,7 @@ export default function Home() {
                   {items.map((item) => (
                     <div key={item} className="flex gap-3 items-start">
                       <CheckCircle className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
-                      <p className="text-gray-600 text-sm leading-relaxed">{item}</p>
+                      <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">{item}</p>
                     </div>
                   ))}
                 </div>
@@ -609,7 +542,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Patrocinios y <span className="wayra-gradient-text">aliados</span>
+              Patrocinadores y <span className="wayra-gradient-text">aliados</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
               Gracias a las marcas y aliados que respaldan esta experiencia y ayudan a hacer
@@ -635,7 +568,7 @@ export default function Home() {
       <section id="inscripcion" className="py-16 lg:py-24 wayra-gradient">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
-            Listo para el desafio
+            Listo para el desafío
           </h2>
           <p className="text-lg text-green-100 mb-8">
             Completa tu registro y asegura tu lugar en esta experiencia. Los cupos son limitados.
@@ -705,7 +638,7 @@ export default function Home() {
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-gray-900">
-              Formulario de inscripcion
+              Formulario de inscripción
             </DialogTitle>
             <DialogDescription>
               Completa tus datos y confirma que aceptas el reglamento oficial de WAYRA TRAIL 16K.
@@ -740,18 +673,18 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="cedula">Cedula/Pasaporte *</Label>
+                <Label htmlFor="cedula">Cédula/Pasaporte *</Label>
                 <Input
                   id="cedula"
                   name="cedula"
                   value={formData.cedula}
                   onChange={handleInputChange}
                   required
-                  placeholder="Ingresa tu numero de identificacion"
+                  placeholder="Ingresa tu número de identificación"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="email">Correo electronico *</Label>
+                <Label htmlFor="email">Correo electrónico *</Label>
                 <Input
                   id="email"
                   name="email"
@@ -766,14 +699,14 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="telefono">Telefono *</Label>
+                <Label htmlFor="telefono">Teléfono *</Label>
                 <Input
                   id="telefono"
                   name="telefono"
                   value={formData.telefono}
                   onChange={handleInputChange}
                   required
-                  placeholder="099 123 4567"
+                  placeholder="300 123 4567"
                 />
               </div>
               <div className="space-y-2">
@@ -791,13 +724,13 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="genero">Genero *</Label>
+                <Label htmlFor="genero">Género *</Label>
                 <Select
                   value={formData.genero}
                   onValueChange={(value: 'M' | 'F') => setFormData((prev) => ({ ...prev, genero: value }))}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Selecciona tu genero" />
+                    <SelectValue placeholder="Selecciona tu género" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="M">Masculino</SelectItem>
@@ -838,14 +771,14 @@ export default function Home() {
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="telefono_emergencia">Telefono de emergencia *</Label>
+                <Label htmlFor="telefono_emergencia">Teléfono de emergencia *</Label>
                 <Input
                   id="telefono_emergencia"
                   name="telefono_emergencia"
                   value={formData.telefono_emergencia}
                   onChange={handleInputChange}
                   required
-                  placeholder="099 123 4567"
+                  placeholder="300 123 4567"
                 />
               </div>
             </div>
@@ -863,10 +796,10 @@ export default function Home() {
                   htmlFor="es_recreativa"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 >
-                  Participar en categoria recreativa
+                  Participar en categoría recreativa
                 </Label>
                 <p className="text-sm text-gray-500">
-                  Marca esta opcion solo si no has practicado trail running ni carreras atleticas.
+                  Marca esta opción solo si no has practicado trail running ni carreras atléticas.
                 </p>
               </div>
             </div>
@@ -880,7 +813,7 @@ export default function Home() {
                   <p className="font-semibold text-gray-900">Resumen express del reglamento</p>
                   <div className="mt-2 space-y-2">
                     {formReminderItems.map((item) => (
-                      <p key={item} className="text-sm text-gray-600 leading-relaxed">
+                      <p key={item} className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
                         {item}
                       </p>
                     ))}
@@ -902,7 +835,7 @@ export default function Home() {
                     He leido y acepto el reglamento oficial del evento *
                   </Label>
                   <p className="text-sm text-gray-500">
-                    La inscripcion solo se formaliza si aceptas las condiciones del reglamento oficial.
+                    La inscripción solo se formaliza si aceptas las condiciones del reglamento oficial.
                   </p>
                 </div>
               </div>
@@ -912,7 +845,7 @@ export default function Home() {
                 onClick={handleReviewRegulation}
                 className="text-sm font-semibold text-green-700 hover:text-green-800 transition-colors inline-flex items-center gap-2"
               >
-                Ver reglamento resumido en la pagina
+                Ver reglamento resumido en la página
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
@@ -923,7 +856,7 @@ export default function Home() {
                 className="w-full wayra-button"
                 disabled={isSubmitting || !hasAcceptedRegulation}
               >
-                {isSubmitting ? 'Procesando...' : 'Completar inscripcion'}
+                {isSubmitting ? 'Procesando...' : 'Completar inscripción'}
               </Button>
               {!hasAcceptedRegulation && (
                 <p className="text-xs text-center text-gray-500 mt-2">
@@ -949,7 +882,7 @@ export default function Home() {
             </DialogDescription>
           </DialogHeader>
           <div className="text-center py-4">
-            <p className="text-gray-600 mb-2">Has sido asignado a la categoria:</p>
+            <p className="text-gray-600 mb-2">Has sido asignado a la categoría:</p>
             <div
               className="inline-block px-6 py-3 rounded-xl text-xl font-bold"
               style={{
@@ -960,7 +893,7 @@ export default function Home() {
               {assignedCategory}
             </div>
             <p className="text-sm text-gray-500 mt-4">
-              Recuerda el color de tu categoria para la entrega de kits.
+              Recuerda el color de tu categoría para la entrega de kits.
             </p>
           </div>
           <Button onClick={() => setShowSuccessModal(false)} className="w-full wayra-button">

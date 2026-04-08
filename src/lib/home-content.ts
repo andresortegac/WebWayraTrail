@@ -38,17 +38,17 @@ export const createEmptyInfoItem = (id: string, accentColor = ACCENT_COLORS[2]):
 
 export const defaultHomeContent: HomeContent = {
   heroBadge: 'Territorio vivo',
-  heroTitle: 'Disena un inicio que haga latir',
+  heroTitle: 'Diseña un inicio que haga latir',
   heroHighlight: 'WAYRA TRAIL',
-  heroSubtitle: 'Fotos con texto, videos y mensajes que convierten interes en inscripciones',
+  heroSubtitle: 'Fotos con texto, videos y mensajes que convierten interés en inscripciones',
   heroDescription:
-    'Haz que la portada cuente una historia completa: paisaje, identidad, energia del evento y razones para sumarse desde el primer scroll.',
+    'Haz que la portada cuente una historia completa: paisaje, identidad, energía del evento y razones para sumarse desde el primer scroll.',
   primaryCtaText: 'Guardar inicio',
   secondaryCtaText: 'Ver resultado',
   spotlightLabel: 'Inicio editable',
   spotlightTitle: 'Un arranque visual para vender la experiencia, no solo anunciarla',
   spotlightDescription:
-    'Combina imagen, narrativa y video para que el sitio abra con una sensacion cinematografica, clara y memorable tanto para corredores como para patrocinadores.',
+    'Combina imagen, narrativa y video para que el sitio abra con una sensación cinematográfica, clara y memorable tanto para corredores como para patrocinadores.',
   galleryItems: [
     {
       id: 'gallery-1',
@@ -56,7 +56,7 @@ export const defaultHomeContent: HomeContent = {
       title: 'Senderos que abren la jornada',
       subtitle: 'Texto potente directamente sobre la foto',
       description:
-        'Usa esta pieza para presentar el espiritu del evento, activar el deseo de participar y reforzar la identidad del territorio.',
+        'Usa esta pieza para presentar el espíritu del evento, activar el deseo de participar y reforzar la identidad del territorio.',
       location: 'Sibundoy, Putumayo',
       accentColor: ACCENT_COLORS[0],
       image: sampleHeroImage,
@@ -64,7 +64,7 @@ export const defaultHomeContent: HomeContent = {
     {
       id: 'gallery-2',
       badge: 'Paisaje de apoyo',
-      title: 'Color, altura y emocion',
+      title: 'Color, altura y emoción',
       subtitle: 'Una segunda historia para el recorrido',
       description:
         'Ideal para mostrar una parte del trayecto, un patrocinador principal o una promesa emocional del evento.',
@@ -75,7 +75,7 @@ export const defaultHomeContent: HomeContent = {
     {
       id: 'gallery-3',
       badge: 'Cultura y comunidad',
-      title: 'La carrera tambien cuenta territorio',
+      title: 'La carrera también cuenta territorio',
       subtitle: 'Identidad visual con peso propio',
       description:
         'Sirve para vincular cultura local, comunidad, organizadores o mensajes institucionales en un formato atractivo.',
@@ -90,7 +90,7 @@ export const defaultHomeContent: HomeContent = {
       tag: 'Video teaser',
       title: 'Presenta la experiencia en movimiento',
       description:
-        'Pega aqui un enlace de YouTube, Vimeo o un MP4 para destacar el teaser oficial, un reel o una invitacion del director.',
+        'Pega aquí un enlace de YouTube, Vimeo o un MP4 para destacar el teaser oficial, un reel o una invitación del director.',
       videoUrl: '',
       thumbnail: sampleWaterImage,
       accentColor: ACCENT_COLORS[1],
@@ -111,14 +111,14 @@ export const defaultHomeContent: HomeContent = {
       id: 'info-1',
       value: '16K',
       title: 'Recorrido insignia',
-      description: 'Destaca la distancia, el desnivel o una caracteristica deportiva que llame la atencion.',
+      description: 'Destaca la distancia, el desnivel o una característica deportiva que llame la atención.',
       accentColor: ACCENT_COLORS[0],
     },
     {
       id: 'info-2',
       value: '5',
-      title: 'Categorias activas',
-      description: 'Resume rapidamente el formato competitivo, ramas o beneficios que el corredor entendera al instante.',
+      title: 'Categorías activas',
+      description: 'Resume rápidamente el formato competitivo, ramas o beneficios que el corredor entenderá al instante.',
       accentColor: ACCENT_COLORS[2],
     },
     {

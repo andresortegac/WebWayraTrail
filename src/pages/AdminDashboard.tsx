@@ -29,7 +29,7 @@ export default function AdminDashboard() {
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/60">Panel maestro</p>
                 <h1 className="mt-2 text-3xl font-black leading-tight lg:text-4xl">Administra historias, portada y registros</h1>
                 <p className="mt-3 max-w-2xl text-sm leading-relaxed text-white/72 lg:text-base">
-                  El panel ahora separa el inicio visual del evento de la gestion operativa para que puedas editar el contenido con mas control y mejor vista previa.
+                  El panel ahora separa el inicio visual del evento de la gestión operativa para que puedas editar el contenido con más control y mejor vista previa.
                 </p>
               </div>
             </div>
@@ -44,7 +44,7 @@ export default function AdminDashboard() {
                 className="border-white/15 bg-white/8 text-white hover:bg-white/15 hover:text-white"
               >
                 <LogOut className="mr-2 h-4 w-4" />
-                Cerrar sesion
+                Cerrar sesión
               </Button>
             </div>
           </div>
@@ -54,7 +54,7 @@ export default function AdminDashboard() {
       <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
           <aside className="rounded-[2rem] border border-[#dce7df] bg-white p-5 shadow-[0_30px_80px_-60px_rgba(18,49,39,0.45)]">
-            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#5d7368]">Menu admin</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#5d7368]">Menú admin</p>
             <div className="mt-5 space-y-3">
               <button
                 type="button"
@@ -94,7 +94,7 @@ export default function AdminDashboard() {
                   <div>
                     <p className="font-semibold">Inscripciones</p>
                     <p className={`text-sm ${activeView === 'inscripciones' ? 'text-white/72' : 'text-[#6a7f74]'}`}>
-                      Estadisticas, filtros, exportacion y limpieza
+                      Estadísticas, filtros, exportación y limpieza
                     </p>
                   </div>
                 </div>

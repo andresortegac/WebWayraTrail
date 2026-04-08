@@ -178,16 +178,16 @@ export function AdminInscriptionsPanel() {
       'ID',
       'Nombres',
       'Apellidos',
-      'Cedula',
+      'Cédula',
       'Email',
-      'Telefono',
+      'Teléfono',
       'Edad',
-      'Genero',
-      'Categoria',
+      'Género',
+      'Categoría',
       'Talla',
-      'Contacto Emergencia',
+      'Contacto de emergencia',
       'Tel. Emergencia',
-      'Fecha Inscripcion',
+      'Fecha de inscripción',
     ];
 
     const groupedForExport = filteredInscriptions.reduce((acc, inscription) => {
@@ -360,7 +360,7 @@ export function AdminInscriptionsPanel() {
         ${buildWorksheetXml('Inscripciones', EVENT_SUBTITLE, filteredInscriptions)}
         ${sortedCategories
           .map((category) =>
-            buildWorksheetXml(category, `${EVENT_SUBTITLE} - Categoria ${category}`, groupedForExport[category])
+            buildWorksheetXml(category, `${EVENT_SUBTITLE} - Categoría ${category}`, groupedForExport[category])
           )
           .join('')}
       </Workbook>
@@ -384,7 +384,7 @@ export function AdminInscriptionsPanel() {
           <div className="h-11 w-11 animate-spin rounded-full border-2 border-[#15352a]/25 border-t-[#15352a]" />
           <div>
             <p className="font-semibold">Cargando inscripciones</p>
-            <p className="text-sm text-[#587062]">Traemos registros, categorias y estadisticas del evento.</p>
+            <p className="text-sm text-[#587062]">Traemos registros, categorías y estadísticas del evento.</p>
           </div>
         </div>
       </div>
@@ -441,7 +441,7 @@ export function AdminInscriptionsPanel() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-[#12231b]">
             <BarChart3 className="h-5 w-5 text-[#15352a]" />
-            Distribucion por categorias
+            Distribución por categorías
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -505,12 +505,12 @@ export function AdminInscriptionsPanel() {
               onChange={(event) => setSelectedCategory(event.target.value)}
               className="rounded-xl border border-[#d2dfd5] bg-white px-4 py-2 text-sm text-[#183127] focus:outline-none focus:ring-2 focus:ring-[#15352a]/20"
             >
-              <option value="all">Todas las categorias</option>
+              <option value="all">Todas las categorías</option>
               <option value="Recreativa">Recreativa</option>
               <option value="Libre">Libre</option>
-              <option value="A">Categoria A</option>
-              <option value="B">Categoria B</option>
-              <option value="C">Categoria C</option>
+              <option value="A">Categoría A</option>
+              <option value="B">Categoría B</option>
+              <option value="C">Categoría C</option>
             </select>
 
             <Button
@@ -553,7 +553,7 @@ export function AdminInscriptionsPanel() {
                     <table className="w-full min-w-[980px]">
                       <thead className="bg-[#f8faf8]">
                         <tr>
-                          {['ID', 'Nombres', 'Apellidos', 'Cedula', 'Edad', 'Genero', 'Talla', 'Contacto', 'Acciones'].map((header) => (
+                          {['ID', 'Nombres', 'Apellidos', 'Cédula', 'Edad', 'Género', 'Talla', 'Contacto', 'Acciones'].map((header) => (
                             <th key={header} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-[#5d7368]">
                               {header}
                             </th>
@@ -620,9 +620,9 @@ export function AdminInscriptionsPanel() {
       <Dialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Confirmar eliminacion</DialogTitle>
+            <DialogTitle>Confirmar eliminación</DialogTitle>
             <DialogDescription>
-              Esta accion eliminara la inscripcion seleccionada y no se puede deshacer.
+              Esta acción eliminará la inscripción seleccionada y no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <div className="mt-4 flex justify-end gap-2">

@@ -73,8 +73,8 @@ router.put('/home', authenticateToken, requireAdmin, async (req, res) => {
     if (payloadBytes > safePacketBudget) {
       return res.status(413).json({
         message:
-          `Las imagenes del inicio pesan demasiado para el limite actual del servidor. ` +
-          `Reduce su tamano o vuelve a subirlas mas comprimidas. ` +
+          `Las imágenes del inicio pesan demasiado para el límite actual del servidor. ` +
+          `Reduce su tamaño o vuelve a subirlas más comprimidas. ` +
           `Contenido actual: ${formatKilobytes(payloadBytes)}. ` +
           `Limite seguro del servidor: ${formatKilobytes(safePacketBudget)}.`,
       });
@@ -98,8 +98,8 @@ router.put('/home', authenticateToken, requireAdmin, async (req, res) => {
     if (error?.code === 'ECONNRESET') {
       return res.status(413).json({
         message:
-          'Las imagenes del inicio superan el tamano que la base de datos permite guardar en este momento. ' +
-          'Prueba con archivos mas livianos o comprimidos.',
+          'Las imágenes del inicio superan el tamaño que la base de datos permite guardar en este momento. ' +
+          'Prueba con archivos más livianos o comprimidos.',
       });
     }
 
