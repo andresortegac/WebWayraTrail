@@ -11,9 +11,50 @@ function readEnv(name, fallback) {
   return trimmedValue === '' ? fallback : trimmedValue;
 }
 
-const databaseName = readEnv('DB_DATABASE', readEnv('DB_NAME', 'wayra_trail'));
+function decodeUrlPart(value) {
+  if (typeof value !== 'string' || value === '') {
+    return '';
+  }
 
-const dbConfig = {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
+function readDatabaseUrlConfig() {
+  const rawUrl = readEnv('DATABASE_URL', readEnv('MYSQL_URL', ''));
+  if (!rawUrl) {
+    return null;
+  }
+
+  try {
+    const connectionUrl = new URL(rawUrl);
+    const databaseNameFromUrl = decodeUrlPart(connectionUrl.pathname.replace(/^\/+/, ''));
+
+    return {
+      databaseName: databaseNameFromUrl || readEnv('DB_DATABASE', readEnv('DB_NAME', 'wayra_trail')),
+      config: {
+        host: connectionUrl.hostname || readEnv('DB_HOST', 'localhost'),
+        port: Number(connectionUrl.port || readEnv('DB_PORT', '3306')),
+        user: decodeUrlPart(connectionUrl.username) || readEnv('DB_USERNAME', readEnv('DB_USER', 'root')),
+        password: decodeUrlPart(connectionUrl.password) || process.env.DB_PASSWORD || '',
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0,
+      },
+    };
+  } catch (error) {
+    console.warn(`Invalid DATABASE_URL or MYSQL_URL. Falling back to DB_* variables. ${error.message}`);
+    return null;
+  }
+}
+
+const databaseUrlConfig = readDatabaseUrlConfig();
+const databaseName = databaseUrlConfig?.databaseName || readEnv('DB_DATABASE', readEnv('DB_NAME', 'wayra_trail'));
+
+const dbConfig = databaseUrlConfig?.config || {
   host: readEnv('DB_HOST', 'localhost'),
   port: Number(readEnv('DB_PORT', '3306')),
   user: readEnv('DB_USERNAME', readEnv('DB_USER', 'root')),
@@ -31,9 +72,24 @@ async function initDatabase() {
   let connection;
 
   try {
-    // First, connect without database to create it if needed
+    // Try to create the database when the MySQL user allows it.
+    // Managed hosts often provision the database ahead of time and block CREATE DATABASE.
     const tempConnection = await mysql.createConnection(dbConfig);
-    await tempConnection.execute(`CREATE DATABASE IF NOT EXISTS \`${databaseName}\``);
+    try {
+      await tempConnection.execute(`CREATE DATABASE IF NOT EXISTS \`${databaseName}\``);
+    } catch (error) {
+      const canIgnoreCreateDatabaseError = [
+        'ER_DBACCESS_DENIED_ERROR',
+        'ER_DB_CREATE_EXISTS',
+        'ER_SPECIFIC_ACCESS_DENIED_ERROR',
+      ].includes(error.code);
+
+      if (!canIgnoreCreateDatabaseError) {
+        throw error;
+      }
+
+      console.warn(`Skipping database creation for ${databaseName}: ${error.message}`);
+    }
     await tempConnection.end();
 
     // Now create pool with database

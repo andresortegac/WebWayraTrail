@@ -10,7 +10,7 @@ const siteContentRoutes = require('./routes/site-content');
 
 const app = express();
 
-// ?? IMPORTANTE: usar puerto dinámico (Hostinger lo exige)
+// Use a dynamic port because Hostinger assigns it at runtime.
 const PORT = process.env.PORT || 3000;
 
 // Middleware
@@ -23,13 +23,13 @@ app.use('/api/auth', authRoutes);
 app.use('/api/inscriptions', inscriptionRoutes);
 app.use('/api/site-content', siteContentRoutes);
 
-// ?? Servir frontend SIEMPRE (no solo en production)
+// Serve the frontend build in every environment.
 const distPath = path.join(__dirname, '../dist');
 
 app.use(express.static(distPath));
 
-// ?? fallback para React Router
-app.get('*', (req, res) => {
+// Express 5 requires named wildcards; this route also matches "/".
+app.get('/{*splat}', (req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
@@ -37,11 +37,11 @@ app.get('*', (req, res) => {
 initDatabase()
   .then(() => {
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`?? Server running on port ${PORT}`);
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
-    console.error('? Unable to start server:', error);
+    console.error('Unable to start server:', error);
     process.exit(1);
   });
 
