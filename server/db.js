@@ -23,6 +23,14 @@ function decodeUrlPart(value) {
   }
 }
 
+function normalizeDatabaseHost(host) {
+  if (host === 'localhost' || host === '::1') {
+    return '127.0.0.1';
+  }
+
+  return host;
+}
+
 function readDatabaseUrlConfig() {
   const rawUrl = readEnv('DATABASE_URL', readEnv('MYSQL_URL', ''));
   if (!rawUrl) {
@@ -36,7 +44,7 @@ function readDatabaseUrlConfig() {
     return {
       databaseName: databaseNameFromUrl || readEnv('DB_DATABASE', readEnv('DB_NAME', 'wayra_trail')),
       config: {
-        host: connectionUrl.hostname || readEnv('DB_HOST', 'localhost'),
+        host: normalizeDatabaseHost(connectionUrl.hostname || readEnv('DB_HOST', 'localhost')),
         port: Number(connectionUrl.port || readEnv('DB_PORT', '3306')),
         user: decodeUrlPart(connectionUrl.username) || readEnv('DB_USERNAME', readEnv('DB_USER', 'root')),
         password: decodeUrlPart(connectionUrl.password) || process.env.DB_PASSWORD || '',
@@ -55,7 +63,7 @@ const databaseUrlConfig = readDatabaseUrlConfig();
 const databaseName = databaseUrlConfig?.databaseName || readEnv('DB_DATABASE', readEnv('DB_NAME', 'wayra_trail'));
 
 const dbConfig = databaseUrlConfig?.config || {
-  host: readEnv('DB_HOST', 'localhost'),
+  host: normalizeDatabaseHost(readEnv('DB_HOST', 'localhost')),
   port: Number(readEnv('DB_PORT', '3306')),
   user: readEnv('DB_USERNAME', readEnv('DB_USER', 'root')),
   password: process.env.DB_PASSWORD || '',
