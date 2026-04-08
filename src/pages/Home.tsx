@@ -281,7 +281,17 @@ export default function Home() {
                     index === 0 ? 'md:col-span-2 min-h-[400px]' : 'min-h-[320px]'
                   }`}
                 >
-                  <img src={item.image} alt={item.title} className="absolute inset-0 h-full w-full object-cover" />
+                  <img
+                    src={item.image}
+                    alt=""
+                    aria-hidden="true"
+                    className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl opacity-45"
+                  />
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    className="absolute inset-0 h-full w-full object-contain"
+                  />
                   <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,16,10,0.12)_0%,rgba(6,16,10,0.78)_100%)]" />
                   <div className="absolute inset-x-0 bottom-0 p-6 text-white">
                     <div

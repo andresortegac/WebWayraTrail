@@ -1,5 +1,5 @@
 const express = require('express');
-const { pool } = require('../db');
+const db = require('../db');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
 const router = express.Router();
@@ -60,7 +60,7 @@ router.post('/', async (req, res) => {
     }
 
     // Check if cedula already exists
-    const [existing] = await pool.execute(
+    const [existing] = await db.pool.execute(
       'SELECT id FROM inscriptions WHERE cedula = ?',
       [cedula]
     );
@@ -70,7 +70,7 @@ router.post('/', async (req, res) => {
     }
 
     // Insert inscription
-    const [result] = await pool.execute(
+    const [result] = await db.pool.execute(
       `INSERT INTO inscriptions 
        (nombres, apellidos, cedula, email, telefono, fecha_nacimiento, edad, genero, 
         categoria, color_categoria, talla_camiseta, contacto_emergencia, telefono_emergencia) 
@@ -95,7 +95,7 @@ router.post('/', async (req, res) => {
 // Get all inscriptions (admin only)
 router.get('/', authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const [inscriptions] = await pool.execute(
+    const [inscriptions] = await db.pool.execute(
       'SELECT * FROM inscriptions ORDER BY fecha_inscripcion DESC'
     );
     res.json(inscriptions);
@@ -108,7 +108,7 @@ router.get('/', authenticateToken, requireAdmin, async (req, res) => {
 // Get inscriptions grouped by category (admin only)
 router.get('/by-category', authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const [rows] = await pool.execute(
+    const [rows] = await db.pool.execute(
       `SELECT categoria, color_categoria, COUNT(*) as total,
         SUM(CASE WHEN genero = 'M' THEN 1 ELSE 0 END) as hombres,
         SUM(CASE WHEN genero = 'F' THEN 1 ELSE 0 END) as mujeres
@@ -126,9 +126,9 @@ router.get('/by-category', authenticateToken, requireAdmin, async (req, res) => 
 // Get statistics (admin only)
 router.get('/stats', authenticateToken, requireAdmin, async (req, res) => {
   try {
-    const [total] = await pool.execute('SELECT COUNT(*) as count FROM inscriptions');
-    const [hombres] = await pool.execute('SELECT COUNT(*) as count FROM inscriptions WHERE genero = "M"');
-    const [mujeres] = await pool.execute('SELECT COUNT(*) as count FROM inscriptions WHERE genero = "F"');
+    const [total] = await db.pool.execute('SELECT COUNT(*) as count FROM inscriptions');
+    const [hombres] = await db.pool.execute('SELECT COUNT(*) as count FROM inscriptions WHERE genero = "M"');
+    const [mujeres] = await db.pool.execute('SELECT COUNT(*) as count FROM inscriptions WHERE genero = "F"');
     
     res.json({
       total: total[0].count,
@@ -145,7 +145,7 @@ router.get('/stats', authenticateToken, requireAdmin, async (req, res) => {
 router.delete('/:id', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    await pool.execute('DELETE FROM inscriptions WHERE id = ?', [id]);
+    await db.pool.execute('DELETE FROM inscriptions WHERE id = ?', [id]);
     res.json({ message: 'Inscripción eliminada' });
   } catch (error) {
     console.error('Delete inscription error:', error);

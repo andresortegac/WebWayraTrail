@@ -1,5 +1,5 @@
 const express = require('express');
-const { pool } = require('../db');
+const db = require('../db');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 const { defaultHomeContent, normalizeHomeContent } = require('../siteContentDefaults');
 
@@ -19,7 +19,7 @@ async function getMaxAllowedPacket() {
   }
 
   try {
-    const [rows] = await pool.query("SHOW VARIABLES LIKE 'max_allowed_packet'");
+    const [rows] = await db.pool.query("SHOW VARIABLES LIKE 'max_allowed_packet'");
     const configuredValue = Number(rows?.[0]?.Value);
 
     cachedMaxAllowedPacket = Number.isFinite(configuredValue) && configuredValue > 0
@@ -35,7 +35,7 @@ async function getMaxAllowedPacket() {
 }
 
 async function readHomeContent() {
-  const [rows] = await pool.execute(
+  const [rows] = await db.pool.execute(
     'SELECT content_json FROM site_content WHERE content_key = ? LIMIT 1',
     ['home']
   );
@@ -80,7 +80,7 @@ router.put('/home', authenticateToken, requireAdmin, async (req, res) => {
       });
     }
 
-    await pool.execute(
+    await db.pool.execute(
       `INSERT INTO site_content (content_key, content_json)
        VALUES (?, ?)
        ON DUPLICATE KEY UPDATE

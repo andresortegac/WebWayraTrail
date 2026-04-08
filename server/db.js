@@ -1,21 +1,49 @@
 const mysql = require('mysql2/promise');
 require('dotenv').config();
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  port: Number(process.env.DB_PORT || 3306),
-  user: process.env.DB_USERNAME || process.env.DB_USER || 'root',
+function readEnv(name, fallback) {
+  const value = process.env[name];
+  if (typeof value !== 'string') {
+    return fallback;
+  }
+
+  const trimmedValue = value.trim();
+  return trimmedValue === '' ? fallback : trimmedValue;
+}
+
+const databaseName = readEnv('DB_DATABASE', readEnv('DB_NAME', 'wayra_trail'));
+
+const dbConfig = {
+  host: readEnv('DB_HOST', 'localhost'),
+  port: Number(readEnv('DB_PORT', '3306')),
+  user: readEnv('DB_USERNAME', readEnv('DB_USER', 'root')),
   password: process.env.DB_PASSWORD || '',
-  database: process.env.DB_DATABASE || process.env.DB_NAME || 'wayra_trail',
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0
-});
+};
+
+let pool;
+const dbModule = { pool: null, initDatabase };
 
 // Initialize database tables
 async function initDatabase() {
+  let connection;
+
   try {
-    const connection = await pool.getConnection();
+    // First, connect without database to create it if needed
+    const tempConnection = await mysql.createConnection(dbConfig);
+    await tempConnection.execute(`CREATE DATABASE IF NOT EXISTS \`${databaseName}\``);
+    await tempConnection.end();
+
+    // Now create pool with database
+    pool = mysql.createPool({
+      ...dbConfig,
+      database: databaseName
+    });
+    dbModule.pool = pool;
+
+    connection = await pool.getConnection();
     
     // Create inscriptions table
     await connection.execute(`
@@ -72,11 +100,11 @@ async function initDatabase() {
     `);
 
     const availableColumns = new Set(userColumns.map((column) => column.COLUMN_NAME));
-    const adminName = process.env.AUTH_ADMIN_NAME || 'Administrador WAYRA TRAIL';
-    const adminUsername = process.env.AUTH_ADMIN_USERNAME || 'admin';
-    const adminEmail = process.env.AUTH_ADMIN_EMAIL || 'admin@wayratrail.com';
-    const adminPassword = process.env.AUTH_ADMIN_PASSWORD || 'admin123';
-    const adminRole = process.env.AUTH_ADMIN_ROLE || 'admin';
+    const adminName = readEnv('AUTH_ADMIN_NAME', 'Administrador WAYRA TRAIL');
+    const adminUsername = readEnv('AUTH_ADMIN_USERNAME', 'admin');
+    const adminEmail = readEnv('AUTH_ADMIN_EMAIL', 'admin@wayratrail.com');
+    const adminPassword = readEnv('AUTH_ADMIN_PASSWORD', 'admin123');
+    const adminRole = readEnv('AUTH_ADMIN_ROLE', 'admin');
     const adminPasswordHash = await bcrypt.hash(adminPassword, 10);
     const [existingAdmin] = await connection.execute(
       'SELECT id FROM users WHERE username = ? LIMIT 1',
@@ -109,11 +137,14 @@ async function initDatabase() {
       }
     }
 
-    connection.release();
     console.log('Database initialized successfully');
   } catch (error) {
     console.error('Database initialization error:', error);
+    dbModule.pool = null;
+    throw error;
+  } finally {
+    connection?.release();
   }
 }
 
-module.exports = { pool, initDatabase };
+module.exports = dbModule;

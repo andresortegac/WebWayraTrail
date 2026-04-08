@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { pool } = require('../db');
+const db = require('../db');
 const { JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
@@ -15,7 +15,7 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ message: 'Username and password are required' });
     }
 
-    const [users] = await pool.execute(
+    const [users] = await db.pool.execute(
       'SELECT * FROM users WHERE username = ?',
       [username]
     );
@@ -46,7 +46,7 @@ router.post('/login', async (req, res) => {
     res.json({
       token,
       user: {
-        id: user.id,
+        id: Number(user.id),
         username: user.username,
         role: user.role
       }

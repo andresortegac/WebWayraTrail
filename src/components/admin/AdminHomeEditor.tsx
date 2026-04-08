@@ -513,7 +513,19 @@ export function AdminHomeEditor() {
                     <div className="space-y-3">
                       <div className="overflow-hidden rounded-[1.5rem] border border-[#dfe8e2] bg-[#dde8df]">
                         {item.image ? (
-                          <img src={item.image} alt={item.title || `Foto ${index + 1}`} className="h-56 w-full object-cover" />
+                          <div className="relative h-56 w-full overflow-hidden bg-[#163323]">
+                            <img
+                              src={item.image}
+                              alt=""
+                              aria-hidden="true"
+                              className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl opacity-45"
+                            />
+                            <img
+                              src={item.image}
+                              alt={item.title || `Foto ${index + 1}`}
+                              className="relative z-10 h-full w-full object-contain"
+                            />
+                          </div>
                         ) : (
                           <div className="flex h-56 items-center justify-center bg-[linear-gradient(135deg,#d9efe1_0%,#f7e9bf_100%)] text-center text-sm text-[#476255]">
                             Sube una imagen para este bloque
@@ -886,8 +898,14 @@ export function AdminHomeEditor() {
                       >
                         <img
                           src={item.image || FALLBACK_PREVIEW_IMAGE}
+                          alt=""
+                          aria-hidden="true"
+                          className="absolute inset-0 h-full w-full scale-110 object-cover blur-2xl opacity-45"
+                        />
+                        <img
+                          src={item.image || FALLBACK_PREVIEW_IMAGE}
                           alt={item.title || `Bloque ${index + 1}`}
-                          className="absolute inset-0 h-full w-full object-cover"
+                          className="absolute inset-0 h-full w-full object-contain"
                         />
                         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,16,10,0.12)_0%,rgba(6,16,10,0.78)_100%)]" />
                         <div className="absolute inset-x-0 bottom-0 p-5 text-white">

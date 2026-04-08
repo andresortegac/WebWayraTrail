@@ -31,10 +31,15 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Initialize database and start server
-initDatabase().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+initDatabase()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error('Unable to start server:', error);
+    process.exit(1);
   });
-});
 
 module.exports = app;
