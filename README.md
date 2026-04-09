@@ -1,73 +1,55 @@
-# React + TypeScript + Vite
+# WebWayraTrail
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicacion web con frontend en Vite/React y backend Express conectado a MySQL.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js `20.19.0` LTS
+- npm `10+`
+- MySQL accesible desde las variables de entorno
 
-## React Compiler
+## Nota Importante Sobre Hosting
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Este proyecto no usa `sqlite3`. La base de datos del backend usa `mysql2` en `server/db.js`.
 
-## Expanding the ESLint configuration
+Si el servidor reporta un error de modulo nativo `sqlite3`, normalmente significa que:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- se subio un `node_modules` viejo generado en otra maquina
+- el hosting esta reutilizando dependencias de un despliegue anterior
+- el entorno del servidor esta intentando arrancar con una version de Node distinta a la requerida
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Ademas, este proyecto depende de herramientas que requieren Node `20`, por lo que `18` no es una opcion segura para instalar dependencias o compilar.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Instalacion Local
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run build
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Despliegue Recomendado
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Configurar el servidor con Node.js `20 LTS`.
+2. Eliminar `node_modules` y cualquier cache de dependencias del hosting.
+3. Volver a instalar dependencias directamente en el servidor con `npm install`.
+4. Compilar en el servidor con `npm run build` si el flujo de despliegue lo requiere.
+5. Iniciar la app con `node server/server.js` o con el comando configurado por el hosting.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Variables De Entorno
+
+Configura al menos estas variables:
+
+- `DB_HOST`
+- `DB_PORT`
+- `DB_USERNAME` o `DB_USER`
+- `DB_PASSWORD`
+- `DB_DATABASE` o `DB_NAME`
+- `PORT`
+
+Variables opcionales para el administrador inicial:
+
+- `AUTH_ADMIN_NAME`
+- `AUTH_ADMIN_USERNAME`
+- `AUTH_ADMIN_EMAIL`
+- `AUTH_ADMIN_PASSWORD`
+- `AUTH_ADMIN_ROLE`
