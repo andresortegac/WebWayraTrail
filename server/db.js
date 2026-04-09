@@ -24,10 +24,6 @@ function decodeUrlPart(value) {
 }
 
 function normalizeDatabaseHost(host) {
-  if (host === 'localhost' || host === '::1') {
-    return '127.0.0.1';
-  }
-
   return host;
 }
 
@@ -181,35 +177,44 @@ async function initDatabase() {
     const adminPassword = readEnv('AUTH_ADMIN_PASSWORD', 'admin123');
     const adminRole = readEnv('AUTH_ADMIN_ROLE', 'admin');
     const adminPasswordHash = await bcrypt.hash(adminPassword, 10);
+    const passwordColumn = availableColumns.has('password_hash')
+      ? 'password_hash'
+      : (availableColumns.has('password') ? 'password' : null);
+
+    if (!availableColumns.has('username')) {
+      throw new Error('The users table must include a username column.');
+    }
+
+    if (!passwordColumn) {
+      throw new Error('The users table must include either password_hash or password.');
+    }
+
     const [existingAdmin] = await connection.execute(
       'SELECT id FROM users WHERE username = ? LIMIT 1',
       [adminUsername]
     );
+    const adminRecordEntries = [
+      ['name', adminName],
+      ['username', adminUsername],
+      ['email', adminEmail],
+      [passwordColumn, adminPasswordHash],
+      ['role', adminRole],
+    ].filter(([columnName]) => availableColumns.has(columnName));
 
-    if (availableColumns.has('password_hash')) {
-      if (existingAdmin.length > 0) {
+    if (existingAdmin.length > 0) {
+      const updateEntries = adminRecordEntries.filter(([columnName]) => columnName !== 'username');
+
+      if (updateEntries.length > 0) {
         await connection.execute(
-          'UPDATE users SET name = ?, email = ?, password_hash = ?, role = ? WHERE username = ?',
-          [adminName, adminEmail, adminPasswordHash, adminRole, adminUsername]
-        );
-      } else {
-        await connection.execute(
-          'INSERT INTO users (name, username, email, password_hash, role) VALUES (?, ?, ?, ?, ?)',
-          [adminName, adminUsername, adminEmail, adminPasswordHash, adminRole]
+          `UPDATE users SET ${updateEntries.map(([columnName]) => `${columnName} = ?`).join(', ')} WHERE username = ?`,
+          [...updateEntries.map(([, value]) => value), adminUsername]
         );
       }
-    } else if (availableColumns.has('password')) {
-      if (existingAdmin.length > 0) {
-        await connection.execute(
-          'UPDATE users SET password = ?, role = ? WHERE username = ?',
-          [adminPasswordHash, adminRole, adminUsername]
-        );
-      } else {
-        await connection.execute(
-          'INSERT INTO users (username, password, role) VALUES (?, ?, ?)',
-          [adminUsername, adminPasswordHash, adminRole]
-        );
-      }
+    } else {
+      await connection.execute(
+        `INSERT INTO users (${adminRecordEntries.map(([columnName]) => columnName).join(', ')}) VALUES (${adminRecordEntries.map(() => '?').join(', ')})`,
+        adminRecordEntries.map(([, value]) => value)
+      );
     }
 
     pool = nextPool;
