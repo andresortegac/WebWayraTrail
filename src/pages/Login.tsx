@@ -29,9 +29,11 @@ export default function Login() {
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         if (!err.response) {
-          setError('No se pudo conectar con el servidor. Inicia el backend en el puerto 3001.');
+          setError('No se pudo conectar con el servidor. Verifica que el backend esté iniciado.');
         } else if (err.response.status === 401) {
           setError('Usuario o contraseña incorrectos.');
+        } else if (err.response.status === 503) {
+          setError('La base de datos no está disponible en este momento. Revisa la terminal del servidor e intenta nuevamente.');
         } else if (err.response.status >= 500) {
           setError('El backend no está respondiendo correctamente. Revisa la terminal del servidor.');
         } else {
@@ -86,8 +88,9 @@ export default function Login() {
                     type="text"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="admin"
+                    placeholder="Ingresa tu usuario"
                     className="pl-10"
+                    autoComplete="username"
                     required
                   />
                 </div>
@@ -102,14 +105,16 @@ export default function Login() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="********"
+                    placeholder="Ingresa tu contraseña"
                     className="pl-10 pr-10"
+                    autoComplete="current-password"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -124,19 +129,11 @@ export default function Login() {
                 {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
               </Button>
             </form>
-
-            <div className="mt-6 p-4 bg-green-50 rounded-lg">
-              <p className="text-sm text-green-800 text-center">
-                <strong>Credenciales por defecto:</strong><br />
-                Usuario: <code className="bg-green-100 px-2 py-0.5 rounded">admin</code><br />
-                Contraseña: <code className="bg-green-100 px-2 py-0.5 rounded">admin123</code>
-              </p>
-            </div>
           </CardContent>
         </Card>
 
         <p className="text-center text-gray-500 text-sm mt-6">
-          &copy; 2026 WAYRA TRAIL - Desarrolladores ALFA DIGITAL SOLUTION S.A.S
+          &copy; 2026 WAYRA TRAIL - Sitio web realizado por Alfa Digital Solutions S.A.S.
         </p>
       </div>
     </div>

@@ -602,11 +602,11 @@ export default function Home() {
                 </p>
                 <p className="flex items-center gap-2">
                   <Phone className="w-4 h-4" />
-                  +593 98 765 4321
+                  +57 322 663 5756
                 </p>
                 <p className="flex items-center gap-2">
                   <MapPin className="w-4 h-4" />
-                  Ecuador
+                  Colombia, Sibundoy, Putumayo
                 </p>
               </div>
             </div>
@@ -629,7 +629,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-            <p>&copy; 2026 WAYRA TRAIL - Desarrolladores ALFA DIGITAL SOLUTION S.A.S</p>
+            <p>&copy; 2026 WAYRA TRAIL - Sitio web realizado por Alfa Digital Solutions S.A.S.</p>
           </div>
         </div>
       </footer>
