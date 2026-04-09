@@ -75,9 +75,21 @@ const dbConfig = databaseUrlConfig?.config || {
 let pool;
 const dbModule = { pool: null, initDatabase };
 
+function getDatabaseDebugInfo() {
+  return {
+    host: dbConfig.host,
+    port: dbConfig.port,
+    database: databaseName,
+    user: dbConfig.user,
+    source: databaseUrlConfig ? 'DATABASE_URL/MYSQL_URL' : 'DB_*',
+  };
+}
+
 // Initialize database tables
 async function initDatabase() {
   let connection;
+  let nextPool;
+  let initialized = false;
 
   try {
     // Try to create the database when the MySQL user allows it.
@@ -101,13 +113,12 @@ async function initDatabase() {
     await tempConnection.end();
 
     // Now create pool with database
-    pool = mysql.createPool({
+    nextPool = mysql.createPool({
       ...dbConfig,
       database: databaseName
     });
-    dbModule.pool = pool;
 
-    connection = await pool.getConnection();
+    connection = await nextPool.getConnection();
     
     // Create inscriptions table
     await connection.execute(`
@@ -201,13 +212,28 @@ async function initDatabase() {
       }
     }
 
+    pool = nextPool;
+    dbModule.pool = nextPool;
+    initialized = true;
     console.log('Database initialized successfully');
   } catch (error) {
-    console.error('Database initialization error:', error);
-    dbModule.pool = null;
+    console.error('Database initialization error:', {
+      ...getDatabaseDebugInfo(),
+      code: error.code || 'UNKNOWN',
+      message: error.message,
+    });
     throw error;
   } finally {
     connection?.release();
+
+    if (!initialized) {
+      if (nextPool) {
+        await nextPool.end().catch(() => {});
+      }
+
+      pool = null;
+      dbModule.pool = null;
+    }
   }
 }
 

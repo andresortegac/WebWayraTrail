@@ -28,19 +28,22 @@ export default function Login() {
       navigate('/admin');
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        const message = err.response?.data?.message;
+
         if (!err.response) {
-          setError('No se pudo conectar con el servidor. Verifica que el backend esté iniciado.');
-        } else if (err.response.status === 401) {
-          setError('Usuario o contraseña incorrectos.');
-        } else if (err.response.status === 503) {
-          setError('La base de datos no está disponible en este momento. Revisa la terminal del servidor e intenta nuevamente.');
-        } else if (err.response.status >= 500) {
-          setError('El backend no está respondiendo correctamente. Revisa la terminal del servidor.');
+          setError('No se pudo conectar con el servidor. Verifica que el backend este iniciado.');
+        } else if (status === 401) {
+          setError(message || 'Usuario o contrasena incorrectos.');
+        } else if (status === 503) {
+          setError(message || 'La base de datos no esta disponible en este momento. Revisa la terminal del servidor e intenta nuevamente.');
+        } else if (status && status >= 500) {
+          setError(message || 'El backend no esta respondiendo correctamente. Revisa la terminal del servidor.');
         } else {
-          setError(err.response.data?.message || 'Error del servidor al iniciar sesión.');
+          setError(message || 'Error del servidor al iniciar sesion.');
         }
       } else {
-        setError('No se pudo iniciar sesión.');
+        setError('No se pudo iniciar sesion.');
       }
     } finally {
       setIsLoading(false);
@@ -67,7 +70,7 @@ export default function Login() {
               Acceso administrador
             </CardTitle>
             <CardDescription>
-              WAYRA TRAIL - Panel de administración
+              WAYRA TRAIL - Panel de administracion
             </CardDescription>
           </CardHeader>
 
@@ -97,7 +100,7 @@ export default function Login() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password">Contraseña</Label>
+                <Label htmlFor="password">Contrasena</Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                   <Input
@@ -105,7 +108,7 @@ export default function Login() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Ingresa tu contraseña"
+                    placeholder="Ingresa tu contrasena"
                     className="pl-10 pr-10"
                     autoComplete="current-password"
                     required
@@ -114,7 +117,7 @@ export default function Login() {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+                    aria-label={showPassword ? 'Ocultar contrasena' : 'Mostrar contrasena'}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -126,7 +129,7 @@ export default function Login() {
                 className="w-full wayra-button"
                 disabled={isLoading}
               >
-                {isLoading ? 'Iniciando sesión...' : 'Iniciar sesión'}
+                {isLoading ? 'Iniciando sesion...' : 'Iniciar sesion'}
               </Button>
             </form>
           </CardContent>

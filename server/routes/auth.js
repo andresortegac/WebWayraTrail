@@ -6,10 +6,39 @@ const { JWT_SECRET } = require('../middleware/auth');
 
 const router = express.Router();
 
+function getLoginErrorResponse(error) {
+  const knownDatabaseErrors = new Set([
+    'ER_NO_SUCH_TABLE',
+    'ER_BAD_FIELD_ERROR',
+    'ER_BAD_NULL_ERROR',
+    'ER_PARSE_ERROR',
+  ]);
+
+  if (knownDatabaseErrors.has(error?.code)) {
+    return {
+      status: 500,
+      message: 'La tabla de usuarios no esta configurada correctamente en la base de datos.',
+    };
+  }
+
+  return {
+    status: 500,
+    message: 'Server error',
+  };
+}
+
 // Login
 router.post('/login', async (req, res) => {
+  const username = typeof req.body?.username === 'string' ? req.body.username : '';
+
+  if (!db.pool) {
+    return res.status(503).json({
+      message: 'La base de datos aun se esta inicializando. Intenta nuevamente en unos minutos.',
+    });
+  }
+
   try {
-    const { username, password } = req.body;
+    const { password } = req.body;
 
     if (!username || !password) {
       return res.status(400).json({ message: 'Username and password are required' });
@@ -52,8 +81,14 @@ router.post('/login', async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Server error' });
+    const response = getLoginErrorResponse(error);
+
+    console.error('Login error:', {
+      username,
+      code: error.code || 'UNKNOWN',
+      message: error.message,
+    });
+    res.status(response.status).json({ message: response.message });
   }
 });
 
