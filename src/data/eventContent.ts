@@ -397,8 +397,16 @@ export const sponsors = [
     image: new URL('../../img/comecializadora hortofrutical.jpeg', import.meta.url).href,
   },
   {
-    name: 'Semprando Economía',
+    name: 'Sembrado Economía',
     image: new URL('../../img/semprando economia.jpeg', import.meta.url).href,
+  },
+  {
+    name: 'Somos Sibundoy',
+    image: new URL('../../img/somos-sibundoy.svg', import.meta.url).href,
+  },
+  {
+    name: 'Sebas Running',
+    image: new URL('../../img/sebas-running.svg', import.meta.url).href,
   },
 ];
 

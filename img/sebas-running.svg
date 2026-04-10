@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Sebas Running</title>
+  <desc id="desc">Logotipo vectorial de Sebas Running en color negro.</desc>
+  <rect width="1200" height="420" fill="#ffffff"/>
+  <g fill="#111111">
+    <path d="M110 290c30-28 68-69 112-118l34 12c-48 56-95 101-141 131Z"/>
+    <path d="M580 294c46-70 84-129 115-177l40 11c-24 35-51 75-82 122l545 0v44H580Z"/>
+    <text x="220" y="228" font-size="128" font-weight="900" font-family="Arial Black, Arial, sans-serif" letter-spacing="4">SEBAS</text>
+    <text x="730" y="228" font-size="128" font-weight="900" font-family="Arial Black, Arial, sans-serif" letter-spacing="4">RUNNING</text>
+    <path d="M670 116c18 10 30 27 34 48-24 28-44 61-66 95l-35-1c20-52 42-99 67-142Z"/>
+    <path d="M682 170l57 30-21 21-56-31Z"/>
+  </g>
+</svg>

@@ -42,8 +42,9 @@ import { inscriptionService, siteContentService } from '@/services/api';
 import type { HomeContent, InscriptionFormData } from '@/types';
 
 const WHATSAPP_NUMBER = '573226635756';
+const WHATSAPP_NUMBER_ALT = '573138925127';
 const WHATSAPP_MESSAGE =
-  'Hola, quiero más información sobre WAYRA TRAIL e inscribirme al evento.';
+  'Hola, quiero inscribirme en WAYRA TRAIL. Me gustaria recibir informacion sobre el pago, el envio del comprobante y la foto de bienvenida.';
 
 const WhatsAppIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
@@ -155,6 +156,7 @@ export default function Home() {
 
   const heroSlidesToRender = customHeroSlides.length > 0 ? customHeroSlides : heroSlides;
   const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  const whatsappAltHref = `https://wa.me/${WHATSAPP_NUMBER_ALT}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
   return (
     <div className="min-h-screen bg-[#F1F8E9]">
@@ -288,6 +290,26 @@ export default function Home() {
                   >
                     <WhatsAppIcon className="h-5 w-5" />
                     Mayor información por WhatsApp
+                  </a>
+                </div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <a
+                    href={whatsappHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
+                  >
+                    <WhatsAppIcon className="h-4 w-4" />
+                    322 663 5756
+                  </a>
+                  <a
+                    href={whatsappAltHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
+                  >
+                    <WhatsAppIcon className="h-4 w-4" />
+                    313 892 5127
                   </a>
                 </div>
               </div>
@@ -550,13 +572,15 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-6">
             {sponsors.map((sponsor) => (
-              <div key={sponsor.name} className="bg-white rounded-2xl shadow-lg border border-green-100 p-6 flex flex-col items-center justify-center text-center min-h-[190px]">
+              <div key={sponsor.name} className="bg-white rounded-2xl shadow-lg border border-green-100 p-6 flex flex-col items-center justify-center text-center min-h-[210px]">
                 <img
                   src={sponsor.image}
                   alt={sponsor.name}
-                  className="h-20 w-full object-contain mb-4"
+                  className="h-24 w-full object-contain mb-4 [image-rendering:-webkit-optimize-contrast]"
+                  loading="lazy"
+                  decoding="async"
                 />
                 <p className="text-sm font-semibold text-gray-700">{sponsor.name}</p>
               </div>
@@ -644,6 +668,35 @@ export default function Home() {
               Completa tus datos y confirma que aceptas el reglamento oficial de WAYRA TRAIL 16K.
             </DialogDescription>
           </DialogHeader>
+
+          <div className="rounded-2xl border border-emerald-100 bg-emerald-50 px-4 py-4 text-sm leading-relaxed text-emerald-900">
+            <p>
+              Despues de enviar la inscripcion, manda una fotografia del deportista para subirla a la pagina y darle la bienvenida.
+            </p>
+            <p className="mt-2">
+              El comprobante de pago debes enviarlo por WhatsApp a cualquiera de estos contactos:
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 font-semibold text-emerald-800 shadow-sm transition hover:bg-emerald-100"
+              >
+                <WhatsAppIcon className="h-4 w-4" />
+                322 663 5756
+              </a>
+              <a
+                href={whatsappAltHref}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 font-semibold text-emerald-800 shadow-sm transition hover:bg-emerald-100"
+              >
+                <WhatsAppIcon className="h-4 w-4" />
+                313 892 5127
+              </a>
+            </div>
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-4 mt-4">
             <div className="grid md:grid-cols-2 gap-4">

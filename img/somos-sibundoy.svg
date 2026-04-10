@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-labelledby="title desc">
+  <title id="title">Somos Sibundoy</title>
+  <desc id="desc">Logotipo vectorial de Somos Sibundoy en color naranja.</desc>
+  <defs>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#f97316" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="420" fill="#ffffff"/>
+  <g filter="url(#softShadow)">
+    <path d="M118 246c68-54 150-92 214-96 53-4 90 16 112 44 17 22 33 60 10 90-28 36-88 46-136 39-73-10-148-40-200-77Z" fill="#f4511e"/>
+    <circle cx="60" cy="320" r="18" fill="#f4511e"/>
+    <circle cx="410" cy="130" r="16" fill="#f4511e"/>
+    <circle cx="604" cy="88" r="11" fill="#f4511e"/>
+    <circle cx="708" cy="78" r="11" fill="#f4511e"/>
+    <circle cx="838" cy="92" r="11" fill="#f4511e"/>
+    <circle cx="930" cy="120" r="12" fill="#f4511e"/>
+    <circle cx="1100" cy="250" r="16" fill="#f4511e"/>
+    <path d="M813 100c45-22 110-12 154 22 32 24 55 64 53 109-3 56-46 108-97 138-48 28-112 37-164 23 41-17 89-47 117-84 25-33 34-71 24-107-12-44-48-80-87-101Z" fill="#f4511e"/>
+    <path d="M750 72c35-31 88-44 138-36 45 7 90 32 114 70l-24 10c-20-30-55-49-92-55-42-7-87 3-117 30Z" fill="#f4511e"/>
+    <text x="400" y="170" fill="#f4511e" font-size="116" font-weight="900" font-family="Arial Black, Arial, sans-serif">¡Somos</text>
+    <text x="334" y="290" fill="#f4511e" font-size="142" font-weight="900" font-family="Arial Black, Arial, sans-serif">SIBUNDOY!</text>
+  </g>
+</svg>
