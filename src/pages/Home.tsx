@@ -45,6 +45,8 @@ const WHATSAPP_NUMBER = '573226635756';
 const WHATSAPP_NUMBER_ALT = '573138925127';
 const WHATSAPP_MESSAGE =
   'Hola, quiero inscribirme en WAYRA TRAIL. Me gustaria recibir informacion sobre el pago, el envio del comprobante y la foto de bienvenida.';
+const INSCRIPTION_OPEN_DATE = new Date('2026-06-01T00:00:00-05:00');
+const INSCRIPTION_OPEN_MESSAGE = 'Las inscripciones se activan el 1 de junio de 2026.';
 
 const WhatsAppIcon = ({ className = 'w-5 h-5' }: { className?: string }) => (
   <svg viewBox="0 0 24 24" aria-hidden="true" className={className} fill="currentColor">
@@ -114,6 +116,15 @@ export default function Home() {
   const handleReviewRegulation = () => {
     setShowInscriptionModal(false);
     window.setTimeout(() => scrollToSection('reglamento'), 150);
+  };
+
+  const handleOpenInscription = () => {
+    if (new Date() < INSCRIPTION_OPEN_DATE) {
+      alert(INSCRIPTION_OPEN_MESSAGE);
+      return;
+    }
+
+    setShowInscriptionModal(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -243,7 +254,7 @@ export default function Home() {
               </div>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <button
-                  onClick={() => setShowInscriptionModal(true)}
+                  onClick={handleOpenInscription}
                   className="wayra-button flex items-center justify-center gap-2"
                 >
                   <User className="w-5 h-5" />
@@ -277,7 +288,7 @@ export default function Home() {
                 </div>
                 <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
                   <button
-                    onClick={() => setShowInscriptionModal(true)}
+                    onClick={handleOpenInscription}
                     className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
                   >
                     Quiero inscribirme
@@ -598,7 +609,7 @@ export default function Home() {
             Completa tu registro y asegura tu lugar en esta experiencia. Los cupos son limitados.
           </p>
           <button
-            onClick={() => setShowInscriptionModal(true)}
+            onClick={handleOpenInscription}
             className="bg-white text-green-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-50 transition-colors shadow-lg inline-flex items-center gap-2"
           >
             <User className="w-5 h-5" />
@@ -658,7 +669,17 @@ export default function Home() {
         </div>
       </footer>
 
-      <Dialog open={showInscriptionModal} onOpenChange={setShowInscriptionModal}>
+      <Dialog
+        open={showInscriptionModal}
+        onOpenChange={(open) => {
+          if (open) {
+            handleOpenInscription();
+            return;
+          }
+
+          setShowInscriptionModal(false);
+        }}
+      >
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold text-gray-900">
