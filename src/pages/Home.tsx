@@ -67,6 +67,7 @@ const initialFormData: InscriptionFormData = {
   cedula: '',
   email: '',
   telefono: '',
+  eps: '',
   fecha_nacimiento: '',
   genero: 'M',
   talla_camiseta: '',
@@ -775,6 +776,17 @@ export default function Home() {
                   value={formData.fecha_nacimiento}
                   onChange={handleInputChange}
                   required
+                />
+              </div>
+              <div className="space-y-2 md:col-span-2">
+                <Label htmlFor="eps">EPS *</Label>
+                <Input
+                  id="eps"
+                  name="eps"
+                  value={formData.eps}
+                  onChange={handleInputChange}
+                  required
+                  placeholder="Ej. Nueva EPS, Sanitas, Sura"
                 />
               </div>
             </div>

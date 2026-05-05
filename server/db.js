@@ -125,6 +125,7 @@ async function initDatabase() {
         cedula VARCHAR(20) NOT NULL UNIQUE,
         email VARCHAR(100) NOT NULL,
         telefono VARCHAR(20) NOT NULL,
+        eps VARCHAR(120) NOT NULL,
         fecha_nacimiento DATE NOT NULL,
         edad INT NOT NULL,
         genero ENUM('M', 'F') NOT NULL,
@@ -138,6 +139,20 @@ async function initDatabase() {
         INDEX idx_genero (genero)
       )
     `);
+
+    const [inscriptionColumns] = await connection.execute(`
+      SELECT COLUMN_NAME
+      FROM INFORMATION_SCHEMA.COLUMNS
+      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'inscriptions'
+    `);
+    const inscriptionColumnNames = new Set(inscriptionColumns.map((column) => column.COLUMN_NAME));
+
+    if (!inscriptionColumnNames.has('eps')) {
+      await connection.execute(`
+        ALTER TABLE inscriptions
+        ADD COLUMN eps VARCHAR(120) NOT NULL DEFAULT '' AFTER telefono
+      `);
+    }
 
     // Create users table for admin
     await connection.execute(`

@@ -5,6 +5,7 @@ export interface Inscription {
   cedula: string;
   email: string;
   telefono: string;
+  eps: string;
   fecha_nacimiento: string;
   edad: number;
   genero: 'M' | 'F';
@@ -22,6 +23,7 @@ export interface InscriptionFormData {
   cedula: string;
   email: string;
   telefono: string;
+  eps: string;
   fecha_nacimiento: string;
   genero: 'M' | 'F';
   talla_camiseta: string;

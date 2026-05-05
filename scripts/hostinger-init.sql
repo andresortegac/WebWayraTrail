@@ -5,6 +5,7 @@ CREATE TABLE IF NOT EXISTS inscriptions (
   cedula VARCHAR(20) NOT NULL UNIQUE,
   email VARCHAR(100) NOT NULL,
   telefono VARCHAR(20) NOT NULL,
+  eps VARCHAR(120) NOT NULL,
   fecha_nacimiento DATE NOT NULL,
   edad INT NOT NULL,
   genero ENUM('M', 'F') NOT NULL,
@@ -17,6 +18,22 @@ CREATE TABLE IF NOT EXISTS inscriptions (
   INDEX idx_categoria (categoria),
   INDEX idx_genero (genero)
 );
+
+SET @has_eps := (
+  SELECT COUNT(*)
+  FROM INFORMATION_SCHEMA.COLUMNS
+  WHERE TABLE_SCHEMA = DATABASE()
+    AND TABLE_NAME = 'inscriptions'
+    AND COLUMN_NAME = 'eps'
+);
+SET @alter_eps := IF(
+  @has_eps = 0,
+  'ALTER TABLE inscriptions ADD COLUMN eps VARCHAR(120) NOT NULL DEFAULT '''' AFTER telefono',
+  'SELECT 1'
+);
+PREPARE alter_eps_statement FROM @alter_eps;
+EXECUTE alter_eps_statement;
+DEALLOCATE PREPARE alter_eps_statement;
 
 CREATE TABLE IF NOT EXISTS users (
   id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

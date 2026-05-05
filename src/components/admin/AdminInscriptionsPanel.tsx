@@ -24,7 +24,7 @@ const EVENT_SUBTITLE = 'Ruta de Guerreros Ancestrales 16K';
 const EXCEL_EXPORT_MIME = 'application/vnd.ms-excel;charset=utf-8;';
 const EXCEL_SHEET_NAME_MAX_LENGTH = 31;
 const CATEGORY_EXPORT_ORDER = ['Recreativa', 'Libre', 'A', 'B', 'C'];
-const EXCEL_COLUMN_WIDTHS = [48, 110, 110, 90, 200, 95, 55, 75, 95, 70, 145, 105, 120];
+const EXCEL_COLUMN_WIDTHS = [48, 110, 110, 90, 200, 95, 120, 55, 75, 95, 70, 145, 105, 120];
 
 const escapeHtml = (value: unknown) =>
   String(value ?? '')
@@ -148,7 +148,8 @@ export function AdminInscriptionsPanel() {
       inscription.nombres.toLowerCase().includes(searchTerm.toLowerCase()) ||
       inscription.apellidos.toLowerCase().includes(searchTerm.toLowerCase()) ||
       inscription.cedula.includes(searchTerm) ||
-      inscription.email.toLowerCase().includes(searchTerm.toLowerCase());
+      inscription.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (inscription.eps || '').toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesCategory = selectedCategory === 'all' || inscription.categoria === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -181,6 +182,7 @@ export function AdminInscriptionsPanel() {
       'Cédula',
       'Email',
       'Teléfono',
+      'EPS',
       'Edad',
       'Género',
       'Categoría',
@@ -262,6 +264,7 @@ export function AdminInscriptionsPanel() {
                   ${buildCellXml(inscription.cedula, rowStyleId)}
                   ${buildCellXml(inscription.email, rowStyleId)}
                   ${buildCellXml(inscription.telefono, rowStyleId)}
+                  ${buildCellXml(inscription.eps || 'Sin registrar', rowStyleId)}
                   ${buildCellXml(inscription.edad, rowStyleId)}
                   ${buildCellXml(inscription.genero === 'M' ? 'Hombre' : 'Mujer', rowStyleId)}
                   ${buildCellXml(inscription.categoria, categoryCellStyleId)}
@@ -493,7 +496,7 @@ export function AdminInscriptionsPanel() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#89a095]" />
               <Input
-                placeholder="Buscar por nombre, cedula o email..."
+                placeholder="Buscar por nombre, cedula, EPS o email..."
                 value={searchTerm}
                 onChange={(event) => setSearchTerm(event.target.value)}
                 className="pl-10"
@@ -550,10 +553,10 @@ export function AdminInscriptionsPanel() {
 
                 {(expandedCategories[category] || Object.keys(groupedByCategory).length === 1) && (
                   <div className="overflow-x-auto">
-                    <table className="w-full min-w-[980px]">
+                    <table className="w-full min-w-[1080px]">
                       <thead className="bg-[#f8faf8]">
                         <tr>
-                          {['ID', 'Nombres', 'Apellidos', 'Cédula', 'Edad', 'Género', 'Talla', 'Contacto', 'Acciones'].map((header) => (
+                          {['ID', 'Nombres', 'Apellidos', 'Cédula', 'EPS', 'Edad', 'Género', 'Talla', 'Contacto', 'Acciones'].map((header) => (
                             <th key={header} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-[#5d7368]">
                               {header}
                             </th>
@@ -571,6 +574,7 @@ export function AdminInscriptionsPanel() {
                             <td className="px-4 py-3 text-sm font-medium text-[#12231b]">{inscription.nombres}</td>
                             <td className="px-4 py-3 text-sm text-[#183127]">{inscription.apellidos}</td>
                             <td className="px-4 py-3 text-sm text-[#183127]">{inscription.cedula}</td>
+                            <td className="px-4 py-3 text-sm text-[#183127]">{inscription.eps || 'Sin registrar'}</td>
                             <td className="px-4 py-3 text-sm text-[#183127]">{inscription.edad}</td>
                             <td className="px-4 py-3 text-sm text-[#183127]">
                               <Badge className={inscription.genero === 'F' ? 'bg-pink-100 text-pink-700' : 'bg-sky-100 text-sky-700'}>

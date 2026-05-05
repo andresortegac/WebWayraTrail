@@ -27,6 +27,7 @@ router.post('/', async (req, res) => {
       cedula,
       email,
       telefono,
+      eps,
       fecha_nacimiento,
       genero,
       talla_camiseta,
@@ -34,10 +35,11 @@ router.post('/', async (req, res) => {
       telefono_emergencia,
       es_recreativa
     } = req.body;
+    const epsValue = typeof eps === 'string' ? eps.trim() : '';
 
     // Validate required fields
     if (!nombres || !apellidos || !cedula || !email || !telefono || 
-        !fecha_nacimiento || !genero || !talla_camiseta || 
+        !epsValue || !fecha_nacimiento || !genero || !talla_camiseta || 
         !contacto_emergencia || !telefono_emergencia) {
       return res.status(400).json({ message: 'All fields are required' });
     }
@@ -72,10 +74,10 @@ router.post('/', async (req, res) => {
     // Insert inscription
     const [result] = await db.pool.execute(
       `INSERT INTO inscriptions 
-       (nombres, apellidos, cedula, email, telefono, fecha_nacimiento, edad, genero, 
+       (nombres, apellidos, cedula, email, telefono, eps, fecha_nacimiento, edad, genero, 
         categoria, color_categoria, talla_camiseta, contacto_emergencia, telefono_emergencia) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [nombres, apellidos, cedula, email, telefono, fecha_nacimiento, edad, genero,
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [nombres, apellidos, cedula, email, telefono, epsValue, fecha_nacimiento, edad, genero,
        categoriaInfo.categoria, categoriaInfo.color, talla_camiseta, 
        contacto_emergencia, telefono_emergencia]
     );
