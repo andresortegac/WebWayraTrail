@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
   Eye,
+  Handshake,
   Image,
   Mountain,
   Plus,
@@ -19,11 +20,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { navigationItems } from '@/data/eventContent';
 import {
   createEmptyGalleryItem,
+  createEmptySponsorItem,
   duplicateHomeContent,
   mergeHomeContentWithDefaults,
 } from '@/lib/home-content';
 import { siteContentService } from '@/services/api';
-import type { HomeContent, HomeGalleryItem } from '@/types';
+import type { HomeContent, HomeGalleryItem, HomeSponsorItem } from '@/types';
 
 type SaveState = {
   tone: 'idle' | 'success' | 'error';
@@ -178,6 +180,15 @@ export function AdminHomeEditor() {
     }));
   };
 
+  const updateSponsorItem = (index: number, field: keyof HomeSponsorItem, value: string) => {
+    setContent((prev) => ({
+      ...prev,
+      sponsorItems: prev.sponsorItems.map((item, itemIndex) =>
+        itemIndex === index ? { ...item, [field]: value } : item
+      ),
+    }));
+  };
+
   const handleImageUpload = async (index: number, file?: File) => {
     if (!file) {
       return;
@@ -193,6 +204,21 @@ export function AdminHomeEditor() {
     }
   };
 
+  const handleSponsorLogoUpload = async (index: number, file?: File) => {
+    if (!file) {
+      return;
+    }
+
+    try {
+      const image = await optimizeImageFile(file);
+      updateSponsorItem(index, 'image', image);
+      setSaveState({ tone: 'success', message: 'Logo optimizado para web. Recuerda guardar el inicio para publicarlo.' });
+    } catch (error) {
+      console.error('Sponsor logo upload error:', error);
+      setSaveState({ tone: 'error', message: 'No se pudo leer el logo seleccionado.' });
+    }
+  };
+
   const addGalleryItem = () => {
     setContent((prev) => ({
       ...prev,
@@ -204,6 +230,20 @@ export function AdminHomeEditor() {
     setContent((prev) => ({
       ...prev,
       galleryItems: prev.galleryItems.filter((_, itemIndex) => itemIndex !== index),
+    }));
+  };
+
+  const addSponsorItem = () => {
+    setContent((prev) => ({
+      ...prev,
+      sponsorItems: [...prev.sponsorItems, createEmptySponsorItem(`sponsor-${Date.now()}`)],
+    }));
+  };
+
+  const removeSponsorItem = (index: number) => {
+    setContent((prev) => ({
+      ...prev,
+      sponsorItems: prev.sponsorItems.filter((_, itemIndex) => itemIndex !== index),
     }));
   };
 
@@ -271,6 +311,10 @@ export function AdminHomeEditor() {
     badge: item.badge || 'Inicio visual',
     image: item.image || FALLBACK_PREVIEW_IMAGE,
   }));
+  const activeSponsorCount = content.sponsorItems.filter(
+    (item) => item.name.trim() !== '' && item.image.trim() !== ''
+  ).length;
+
   if (isLoading) {
     return (
       <div className="rounded-[2rem] border border-[#d7e6db] bg-white p-10 shadow-[0_30px_80px_-55px_rgba(21,53,42,0.55)]">
@@ -304,10 +348,14 @@ export function AdminHomeEditor() {
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-1">
+          <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
               <p className="text-xs uppercase tracking-[0.18em] text-white/60">Slides activos</p>
               <p className="mt-2 text-2xl font-black text-white">{content.galleryItems.length} bloques</p>
+            </div>
+            <div className="rounded-[1.5rem] border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
+              <p className="text-xs uppercase tracking-[0.18em] text-white/60">Patrocinadores</p>
+              <p className="mt-2 text-2xl font-black text-white">{activeSponsorCount} logos</p>
             </div>
           </div>
         </div>
@@ -484,6 +532,94 @@ export function AdminHomeEditor() {
                           value={item.description}
                           onChange={(event) => updateGalleryItem(index, 'description', event.target.value)}
                           className="min-h-24"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden border-[#d6e5da] bg-white shadow-[0_25px_80px_-60px_rgba(17,51,40,0.5)]">
+            <CardHeader className="border-b border-[#edf3ee] bg-[#f9fbf7]">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <SectionHeading
+                  icon={Handshake}
+                  title="Patrocinadores"
+                  description="Actualiza logos, nombres y enlaces de las marcas que aparecen en la seccion de patrocinios."
+                />
+                <Button type="button" onClick={addSponsorItem} className="bg-[#15352a] hover:bg-[#0f241d]">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Agregar patrocinador
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="grid gap-4 pt-6 xl:grid-cols-2">
+              {content.sponsorItems.map((item, index) => (
+                <div key={item.id} className="rounded-[1.75rem] border border-[#e4ede6] bg-[#fbfcfa] p-4">
+                  <div className="mb-4 flex items-start justify-between gap-3">
+                    <div>
+                      <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[#587062]">
+                        Patrocinador {index + 1}
+                      </p>
+                      <p className="text-sm text-[#7b8f83]">Carga el logo o pega una URL publica.</p>
+                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => removeSponsorItem(index)}
+                      disabled={content.sponsorItems.length === 1}
+                      className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Quitar
+                    </Button>
+                  </div>
+
+                  <div className="space-y-4">
+                    <div className="overflow-hidden rounded-[1.5rem] border border-[#dfe8e2] bg-white">
+                      {item.image ? (
+                        <div className="flex h-44 items-center justify-center p-6">
+                          <img
+                            src={item.image}
+                            alt={item.name || `Logo patrocinador ${index + 1}`}
+                            className="max-h-full w-full object-contain [image-rendering:-webkit-optimize-contrast]"
+                          />
+                        </div>
+                      ) : (
+                        <div className="flex h-44 items-center justify-center bg-[linear-gradient(135deg,#edf6ef_0%,#fff7dc_100%)] text-center text-sm text-[#476255]">
+                          Sube el logo del patrocinador
+                        </div>
+                      )}
+                    </div>
+
+                    <label className="flex cursor-pointer items-center justify-center gap-2 rounded-2xl border border-dashed border-[#b9ccbe] bg-white px-4 py-3 text-sm font-medium text-[#15352a] transition hover:border-[#15352a]">
+                      <Upload className="h-4 w-4" />
+                      Cargar logo
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(event) => void handleSponsorLogoUpload(index, event.target.files?.[0])}
+                      />
+                    </label>
+
+                    <div className="grid gap-3">
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Nombre</label>
+                        <Input value={item.name} onChange={(event) => updateSponsorItem(index, 'name', event.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">URL del logo</label>
+                        <Input value={item.image} onChange={(event) => updateSponsorItem(index, 'image', event.target.value)} />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-xs font-semibold uppercase tracking-[0.16em] text-[#587062]">Enlace opcional</label>
+                        <Input
+                          value={item.website}
+                          onChange={(event) => updateSponsorItem(index, 'website', event.target.value)}
+                          placeholder="https://..."
                         />
                       </div>
                     </div>

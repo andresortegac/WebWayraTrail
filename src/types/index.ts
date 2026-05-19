@@ -95,6 +95,13 @@ export interface HomeInfoItem {
   accentColor: string;
 }
 
+export interface HomeSponsorItem {
+  id: string;
+  name: string;
+  image: string;
+  website: string;
+}
+
 export interface HomeContent {
   heroBadge: string;
   heroTitle: string;
@@ -109,4 +116,5 @@ export interface HomeContent {
   galleryItems: HomeGalleryItem[];
   videoItems: HomeVideoItem[];
   infoItems: HomeInfoItem[];
+  sponsorItems: HomeSponsorItem[];
 }

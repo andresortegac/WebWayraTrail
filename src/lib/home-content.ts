@@ -1,9 +1,16 @@
-import type { HomeContent, HomeGalleryItem, HomeInfoItem, HomeVideoItem } from '@/types';
+import type { HomeContent, HomeGalleryItem, HomeInfoItem, HomeSponsorItem, HomeVideoItem } from '@/types';
 
 const sampleHeroImage = new URL('../../img/hero-bg.jpg', import.meta.url).href;
 const sampleSunsetImage = new URL('../../img/sibundoy-atardecer-web.jpg', import.meta.url).href;
 const sampleCultureImage = new URL('../../img/sibundoy-parque-madera-web.jpg', import.meta.url).href;
 const sampleWaterImage = new URL('../../img/sibundoy-lago.jpg', import.meta.url).href;
+const alfaDigitalLogo = new URL('../../img/alfa digital.png', import.meta.url).href;
+const christianLogo = new URL('../../img/christian.jpeg', import.meta.url).href;
+const climaLabLogo = new URL('../../img/clima lab.jpeg', import.meta.url).href;
+const hortofruticalLogo = new URL('../../img/comecializadora hortofrutical.jpeg', import.meta.url).href;
+const sembrandoLogo = new URL('../../img/semprando economia.jpeg', import.meta.url).href;
+const somosSibundoyLogo = new URL('../../img/somos-sibundoy.svg', import.meta.url).href;
+const sebasRunningLogo = new URL('../../img/sebas-running.svg', import.meta.url).href;
 
 const ACCENT_COLORS = ['#ef4444', '#f59e0b', '#10b981', '#0ea5e9', '#8b5cf6'];
 
@@ -34,6 +41,13 @@ export const createEmptyInfoItem = (id: string, accentColor = ACCENT_COLORS[2]):
   title: '',
   description: '',
   accentColor,
+});
+
+export const createEmptySponsorItem = (id: string): HomeSponsorItem => ({
+  id,
+  name: '',
+  image: '',
+  website: '',
 });
 
 export const defaultHomeContent: HomeContent = {
@@ -129,6 +143,50 @@ export const defaultHomeContent: HomeContent = {
       accentColor: ACCENT_COLORS[3],
     },
   ],
+  sponsorItems: [
+    {
+      id: 'sponsor-1',
+      name: 'Alfa Digital',
+      image: alfaDigitalLogo,
+      website: '',
+    },
+    {
+      id: 'sponsor-2',
+      name: 'Christian',
+      image: christianLogo,
+      website: '',
+    },
+    {
+      id: 'sponsor-3',
+      name: 'Clima Lab',
+      image: climaLabLogo,
+      website: '',
+    },
+    {
+      id: 'sponsor-4',
+      name: 'Comercializadora Hortofrutical',
+      image: hortofruticalLogo,
+      website: '',
+    },
+    {
+      id: 'sponsor-5',
+      name: 'Sembrado Economia',
+      image: sembrandoLogo,
+      website: '',
+    },
+    {
+      id: 'sponsor-6',
+      name: 'Somos Sibundoy',
+      image: somosSibundoyLogo,
+      website: '',
+    },
+    {
+      id: 'sponsor-7',
+      name: 'Sebas Running',
+      image: sebasRunningLogo,
+      website: '',
+    },
+  ],
 };
 
 const cloneContent = (content: HomeContent): HomeContent =>
@@ -163,6 +221,17 @@ const normalizeInfoItems = (items?: HomeInfoItem[]) => {
 
   return items.map((item, index) => ({
     ...createEmptyInfoItem(item.id || `info-${index + 1}`, item.accentColor || ACCENT_COLORS[(index + 2) % ACCENT_COLORS.length]),
+    ...item,
+  }));
+};
+
+const normalizeSponsorItems = (items?: HomeSponsorItem[]) => {
+  if (!Array.isArray(items) || items.length === 0) {
+    return defaultHomeContent.sponsorItems.map((item) => ({ ...item }));
+  }
+
+  return items.map((item, index) => ({
+    ...createEmptySponsorItem(item.id || `sponsor-${index + 1}`),
     ...item,
   }));
 };
@@ -205,7 +274,13 @@ const hasConfiguredContent = (content?: Partial<HomeContent> | null) => {
     )
   );
 
-  return Boolean(galleryHasData || videosHaveData || infoHasData);
+  const sponsorsHaveData = content.sponsorItems?.some((item) =>
+    [item.name, item.image, item.website].some(
+      (value) => typeof value === 'string' && value.trim() !== ''
+    )
+  );
+
+  return Boolean(galleryHasData || videosHaveData || infoHasData || sponsorsHaveData);
 };
 
 export const mergeHomeContentWithDefaults = (content?: Partial<HomeContent> | null): HomeContent => {
@@ -227,6 +302,7 @@ export const mergeHomeContentWithDefaults = (content?: Partial<HomeContent> | nu
     galleryItems: normalizeGalleryItems(content?.galleryItems),
     videoItems: normalizeVideoItems(content?.videoItems),
     infoItems: normalizeInfoItems(content?.infoItems),
+    sponsorItems: normalizeSponsorItems(content?.sponsorItems),
   };
 };
 

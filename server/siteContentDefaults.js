@@ -54,6 +54,7 @@ const defaultHomeContent = {
     createDefaultInfoItem('info-2', DEFAULT_ACCENT_COLORS[2]),
     createDefaultInfoItem('info-3', DEFAULT_ACCENT_COLORS[3]),
   ],
+  sponsorItems: [],
 };
 
 const cleanText = (value, fallback = '') =>
@@ -103,6 +104,17 @@ const normalizeInfoItems = (items) => {
   }));
 };
 
+const normalizeSponsorItems = (items) => {
+  const source = Array.isArray(items) ? items.slice(0, 12) : defaultHomeContent.sponsorItems;
+
+  return source.map((item, index) => ({
+    id: cleanText(item?.id, `sponsor-${index + 1}`),
+    name: cleanText(item?.name),
+    image: typeof item?.image === 'string' ? item.image : '',
+    website: cleanText(item?.website, ''),
+  }));
+};
+
 const normalizeHomeContent = (content) => ({
   heroBadge: cleanText(content?.heroBadge, defaultHomeContent.heroBadge),
   heroTitle: cleanText(content?.heroTitle, defaultHomeContent.heroTitle),
@@ -117,6 +129,7 @@ const normalizeHomeContent = (content) => ({
   galleryItems: normalizeGalleryItems(content?.galleryItems),
   videoItems: normalizeVideoItems(content?.videoItems),
   infoItems: normalizeInfoItems(content?.infoItems),
+  sponsorItems: normalizeSponsorItems(content?.sponsorItems),
 });
 
 module.exports = {

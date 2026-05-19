@@ -34,7 +34,6 @@ import {
   officialRegulationSections,
   participantCards,
   quickFacts,
-  sponsors,
   tallas,
   timelineSections,
 } from '@/data/eventContent';
@@ -160,6 +159,9 @@ export default function Home() {
     }));
 
   const heroSlidesToRender = customHeroSlides.length > 0 ? customHeroSlides : heroSlides;
+  const activeSponsors = homeContent.sponsorItems.filter(
+    (sponsor) => sponsor.name.trim() !== '' && sponsor.image.trim() !== ''
+  );
   const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
   const whatsappAltHref = `https://wa.me/${WHATSAPP_NUMBER_ALT}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
@@ -578,18 +580,40 @@ export default function Home() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-6">
-            {sponsors.map((sponsor) => (
-              <div key={sponsor.name} className="bg-white rounded-2xl shadow-lg border border-green-100 p-6 flex flex-col items-center justify-center text-center min-h-[210px]">
-                <img
-                  src={sponsor.image}
-                  alt={sponsor.name}
-                  className="h-24 w-full object-contain mb-4 [image-rendering:-webkit-optimize-contrast]"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <p className="text-sm font-semibold text-gray-700">{sponsor.name}</p>
-              </div>
-            ))}
+            {activeSponsors.map((sponsor) => {
+              const cardClassName =
+                'bg-white rounded-2xl shadow-lg border border-green-100 p-6 flex flex-col items-center justify-center text-center min-h-[210px] transition hover:-translate-y-1 hover:shadow-xl';
+              const sponsorWebsite = sponsor.website.trim();
+              const sponsorHref = /^https?:\/\//i.test(sponsorWebsite) ? sponsorWebsite : '';
+              const cardContent = (
+                <>
+                  <img
+                    src={sponsor.image}
+                    alt={sponsor.name}
+                    className="h-24 w-full object-contain mb-4 [image-rendering:-webkit-optimize-contrast]"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                  <p className="text-sm font-semibold text-gray-700">{sponsor.name}</p>
+                </>
+              );
+
+              return sponsorHref ? (
+                <a
+                  key={sponsor.id}
+                  href={sponsorHref}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={cardClassName}
+                >
+                  {cardContent}
+                </a>
+              ) : (
+                <div key={sponsor.id} className={cardClassName}>
+                  {cardContent}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
