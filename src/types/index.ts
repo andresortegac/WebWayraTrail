@@ -14,6 +14,7 @@ export interface Inscription {
   talla_camiseta: string;
   contacto_emergencia: string;
   telefono_emergencia: string;
+  foto_url: string;
   fecha_inscripcion: string;
 }
 

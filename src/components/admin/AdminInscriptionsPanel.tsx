@@ -556,7 +556,7 @@ export function AdminInscriptionsPanel() {
                     <table className="w-full min-w-[1080px]">
                       <thead className="bg-[#f8faf8]">
                         <tr>
-                          {['ID', 'Nombres', 'Apellidos', 'Cédula', 'EPS', 'Edad', 'Género', 'Talla', 'Contacto', 'Acciones'].map((header) => (
+                          {['ID', 'Foto', 'Nombres', 'Apellidos', 'Cédula', 'EPS', 'Edad', 'Género', 'Talla', 'Contacto', 'Acciones'].map((header) => (
                             <th key={header} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.14em] text-[#5d7368]">
                               {header}
                             </th>
@@ -571,6 +571,19 @@ export function AdminInscriptionsPanel() {
                             style={{ backgroundColor: `${inscription.color_categoria}10` }}
                           >
                             <td className="px-4 py-3 text-sm text-[#183127]">{inscription.id}</td>
+                            <td className="px-4 py-3 text-sm text-[#183127]">
+                              {inscription.foto_url ? (
+                                <img
+                                  src={inscription.foto_url}
+                                  alt={`Foto de ${inscription.nombres}`}
+                                  className="h-12 w-12 rounded-full object-cover"
+                                />
+                              ) : (
+                                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-xs text-slate-500">
+                                  SIN FOTO
+                                </span>
+                              )}
+                            </td>
                             <td className="px-4 py-3 text-sm font-medium text-[#12231b]">{inscription.nombres}</td>
                             <td className="px-4 py-3 text-sm text-[#183127]">{inscription.apellidos}</td>
                             <td className="px-4 py-3 text-sm text-[#183127]">{inscription.cedula}</td>

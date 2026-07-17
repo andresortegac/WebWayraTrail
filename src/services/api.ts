@@ -34,8 +34,12 @@ export const authService = {
 
 // Inscription services
 export const inscriptionService = {
-  create: async (data: InscriptionFormData) => {
-    const response = await api.post('/inscriptions', data);
+  create: async (data: FormData) => {
+    const response = await api.post('/inscriptions', data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
     return response.data;
   },
   

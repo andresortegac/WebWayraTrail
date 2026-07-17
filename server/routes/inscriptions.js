@@ -1,6 +1,29 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 const db = require('../db');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
+
+const uploadsDir = path.join(__dirname, '../uploads');
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, uploadsDir),
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const safeName = `${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`;
+    cb(null, safeName);
+  },
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (!file.mimetype.startsWith('image/')) {
+      return cb(new Error('Solo se permiten archivos de imagen'));
+    }
+    cb(null, true);
+  },
+  limits: { fileSize: 5 * 1024 * 1024 },
+});
 
 const router = express.Router();
 
@@ -19,7 +42,7 @@ function calculateCategory(edad) {
 }
 
 // Create new inscription (public)
-router.post('/', async (req, res) => {
+router.post('/', upload.single('foto'), async (req, res) => {
   try {
     const {
       nombres,
@@ -35,14 +58,18 @@ router.post('/', async (req, res) => {
       telefono_emergencia,
       es_recreativa
     } = req.body;
+    const fotoFile = req.file;
     const epsValue = typeof eps === 'string' ? eps.trim() : '';
+    const esRecreativa = es_recreativa === 'true' || es_recreativa === '1' || es_recreativa === true;
 
     // Validate required fields
     if (!nombres || !apellidos || !cedula || !email || !telefono || 
         !epsValue || !fecha_nacimiento || !genero || !talla_camiseta || 
-        !contacto_emergencia || !telefono_emergencia) {
-      return res.status(400).json({ message: 'All fields are required' });
+        !contacto_emergencia || !telefono_emergencia || !fotoFile) {
+      return res.status(400).json({ message: 'Todos los campos y la foto son obligatorios' });
     }
+
+    const fotoUrl = `/uploads/${fotoFile.filename}`;
 
     // Calculate age
     const birthDate = new Date(fecha_nacimiento);
@@ -75,11 +102,11 @@ router.post('/', async (req, res) => {
     const [result] = await db.pool.execute(
       `INSERT INTO inscriptions 
        (nombres, apellidos, cedula, email, telefono, eps, fecha_nacimiento, edad, genero, 
-        categoria, color_categoria, talla_camiseta, contacto_emergencia, telefono_emergencia) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        categoria, color_categoria, talla_camiseta, contacto_emergencia, telefono_emergencia, foto_url) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [nombres, apellidos, cedula, email, telefono, epsValue, fecha_nacimiento, edad, genero,
        categoriaInfo.categoria, categoriaInfo.color, talla_camiseta, 
-       contacto_emergencia, telefono_emergencia]
+       contacto_emergencia, telefono_emergencia, fotoUrl]
     );
 
     res.status(201).json({

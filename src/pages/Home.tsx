@@ -82,6 +82,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasAcceptedRegulation, setHasAcceptedRegulation] = useState(false);
   const [formData, setFormData] = useState<InscriptionFormData>(initialFormData);
+  const [fotoFile, setFotoFile] = useState<File | null>(null);
   const [homeContent, setHomeContent] = useState<HomeContent>(() => duplicateHomeContent());
 
   useEffect(() => {
@@ -102,8 +103,14 @@ export default function Home() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFotoFile(file);
+  };
+
   const resetForm = () => {
     setFormData(initialFormData);
+    setFotoFile(null);
     setHasAcceptedRegulation(false);
   };
 
@@ -131,7 +138,25 @@ export default function Home() {
     setIsSubmitting(true);
 
     try {
-      const response = await inscriptionService.create(formData);
+      const payload = new FormData();
+      payload.append('nombres', formData.nombres);
+      payload.append('apellidos', formData.apellidos);
+      payload.append('cedula', formData.cedula);
+      payload.append('email', formData.email);
+      payload.append('telefono', formData.telefono);
+      payload.append('eps', formData.eps);
+      payload.append('fecha_nacimiento', formData.fecha_nacimiento);
+      payload.append('genero', formData.genero);
+      payload.append('talla_camiseta', formData.talla_camiseta);
+      payload.append('contacto_emergencia', formData.contacto_emergencia);
+      payload.append('telefono_emergencia', formData.telefono_emergencia);
+      payload.append('es_recreativa', String(formData.es_recreativa));
+
+      if (fotoFile) {
+        payload.append('foto', fotoFile);
+      }
+
+      const response = await inscriptionService.create(payload);
       setAssignedCategory(response.categoria);
       setShowInscriptionModal(false);
       setShowSuccessModal(true);
@@ -874,6 +899,33 @@ export default function Home() {
                   placeholder="300 123 4567"
                 />
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="foto">Foto del deportista *</Label>
+              <div>
+                <input
+                  id="foto"
+                  name="foto"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="sr-only"
+                  required
+                />
+                <label
+                  htmlFor="foto"
+                  className="flex items-center justify-between rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm text-gray-700 shadow-sm cursor-pointer hover:bg-gray-50"
+                >
+                  <span>{fotoFile ? fotoFile.name : 'Selecciona una imagen'}</span>
+                  <span className="rounded-full bg-green-600 px-3 py-1 text-xs font-semibold text-white">
+                    Seleccionar
+                  </span>
+                </label>
+              </div>
+              <p className="text-xs text-gray-500">
+                Elige una imagen clara del deportista para usar en la bienvenida.
+              </p>
             </div>
 
             <div className="flex items-start space-x-2 pt-2">

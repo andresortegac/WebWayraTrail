@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
@@ -60,6 +61,10 @@ app.use('/api', (req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/inscriptions', inscriptionRoutes);
 app.use('/api/site-content', siteContentRoutes);
+
+const uploadsDir = path.join(__dirname, '../uploads');
+fs.mkdirSync(uploadsDir, { recursive: true });
+app.use('/uploads', express.static(uploadsDir));
 
 // Serve the frontend build in every environment.
 const distPath = path.join(__dirname, '../dist');

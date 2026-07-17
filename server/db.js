@@ -134,6 +134,7 @@ async function initDatabase() {
         talla_camiseta VARCHAR(10) NOT NULL,
         contacto_emergencia VARCHAR(100) NOT NULL,
         telefono_emergencia VARCHAR(20) NOT NULL,
+        foto_url VARCHAR(255) NOT NULL DEFAULT '',
         fecha_inscripcion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         INDEX idx_categoria (categoria),
         INDEX idx_genero (genero)
@@ -151,6 +152,13 @@ async function initDatabase() {
       await connection.execute(`
         ALTER TABLE inscriptions
         ADD COLUMN eps VARCHAR(120) NOT NULL DEFAULT '' AFTER telefono
+      `);
+    }
+
+    if (!inscriptionColumnNames.has('foto_url')) {
+      await connection.execute(`
+        ALTER TABLE inscriptions
+        ADD COLUMN foto_url VARCHAR(255) NOT NULL DEFAULT '' AFTER telefono_emergencia
       `);
     }
 
