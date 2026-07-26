@@ -192,7 +192,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F1F8E9]">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-green-100/80 bg-white/85 backdrop-blur-xl shadow-[0_10px_30px_-24px_rgba(21,53,42,0.25)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -207,7 +207,7 @@ export default function Home() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-sm font-medium text-gray-700 hover:text-green-700 transition-colors px-2 py-1 whitespace-nowrap"
+                  className="wayra-nav-link whitespace-nowrap"
                 >
                   {item.label}
                 </button>
@@ -219,7 +219,7 @@ export default function Home() {
             <div className="flex lg:hidden items-center gap-3">
               <button
                 onClick={() => scrollToSection('inscripcion')}
-                className="text-sm font-medium text-gray-700 hover:text-green-700 transition-colors whitespace-nowrap"
+                className="wayra-nav-link whitespace-nowrap"
               >
                 Inscripcion
               </button>
@@ -234,7 +234,7 @@ export default function Home() {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="text-sm font-medium text-gray-700 hover:text-green-700 transition-colors px-3 py-1.5 rounded-full bg-green-50 whitespace-nowrap"
+                  className="wayra-nav-link whitespace-nowrap rounded-full bg-green-50 px-3 py-1.5"
                 >
                   {item.label}
                 </button>
@@ -244,15 +244,15 @@ export default function Home() {
         </div>
       </nav>
 
-      <section id="inicio" className="relative pt-36 pb-16 lg:pt-32 lg:pb-24 hero-pattern">
+      <section id="inicio" className="relative overflow-hidden pt-36 pb-16 lg:pt-32 lg:pb-24 hero-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-100 rounded-full text-green-800 text-sm font-medium mb-6">
+              <div className="wayra-chip mb-6">
                 <Mountain className="w-4 h-4" />
                 <span>{homeContent.heroBadge}</span>
               </div>
-              <h1 className="text-4xl lg:text-6xl font-black text-gray-900 mb-4 leading-tight">
+              <h1 className="mb-4 text-4xl font-black leading-[0.95] tracking-[-0.03em] text-gray-900 lg:text-6xl">
                 {homeContent.heroTitle}{' '}
                 <span className="wayra-gradient-text">{homeContent.heroHighlight}</span>
               </h1>
@@ -262,14 +262,14 @@ export default function Home() {
               <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto whitespace-pre-line lg:mx-0">
                 {homeContent.heroDescription}
               </p>
-              <div className="flex flex-wrap gap-2 justify-center lg:justify-start mb-8">
-                <span className="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-green-800 shadow-sm">
+              <div className="mb-8 flex flex-wrap justify-center gap-2 lg:justify-start">
+                <span className="wayra-chip">
                   Sibundoy
                 </span>
-                <span className="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-green-800 shadow-sm">
+                <span className="wayra-chip">
                   Putumayo
                 </span>
-                <span className="inline-flex items-center rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-green-800 shadow-sm">
+                <span className="wayra-chip">
                   Colombia
                 </span>
               </div>
@@ -289,7 +289,7 @@ export default function Home() {
                   <ChevronRight className="w-5 h-5" />
                 </button>
               </div>
-              <div className="mt-6 rounded-[1.75rem] border border-emerald-200 bg-white/90 p-5 shadow-[0_22px_60px_-40px_rgba(21,53,42,0.45)] backdrop-blur-sm">
+              <div className="wayra-hover-3d wayra-panel mt-6 p-5">
                 <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">
                   Inscríbete ahora
                 </p>
@@ -356,7 +356,7 @@ export default function Home() {
       <section id="categorias" className="py-16 lg:py-24 section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="wayra-section-title mb-4">
               Categorías de <span className="wayra-gradient-text">competencia</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -391,7 +391,7 @@ export default function Home() {
           </div>
 
           <div className="mt-10 grid lg:grid-cols-[1.3fr_0.7fr] gap-6">
-            <div className="bg-white rounded-3xl shadow-lg border border-green-100 p-6 lg:p-8">
+            <div className="wayra-panel p-6 lg:p-8">
               <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                 <Users className="w-6 h-6 text-green-600" />
                 Cómo se valida tu categoría
@@ -412,7 +412,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="wayra-gradient rounded-3xl p-6 text-white shadow-xl">
+            <div className="wayra-gradient rounded-[1.75rem] p-6 text-white shadow-[0_20px_50px_-24px_rgba(21,53,42,0.45)]">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-semibold uppercase tracking-[0.18em]">
                 <Shield className="w-4 h-4" />
                 Regla clave
@@ -435,7 +435,7 @@ export default function Home() {
                 <FileText className="w-4 h-4" />
                 Reglamento oficial
               </div>
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="wayra-section-title mb-4">
                 Lo importante, <span className="wayra-gradient-text">sin hacerte leer de más</span>
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl">
@@ -456,7 +456,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="wayra-gradient rounded-3xl p-8 text-white shadow-xl">
+            <div className="wayra-gradient rounded-[1.75rem] p-8 text-white shadow-[0_20px_50px_-24px_rgba(21,53,42,0.45)]">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 text-xs font-semibold uppercase tracking-[0.18em]">
                 <Flag className="w-4 h-4" />
                 Lectura rápida
@@ -486,7 +486,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-10 bg-[#F8FCF5] rounded-3xl border border-green-100 p-6 lg:p-8">
+          <div className="wayra-panel mt-10 p-6 lg:p-8">
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-4">
               <div>
                 <h3 className="text-2xl font-bold text-gray-900">Texto completo por secciones</h3>
@@ -525,7 +525,7 @@ export default function Home() {
       <section id="horarios" className="py-16 lg:py-24 section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="wayra-section-title mb-4">
               Horarios y <span className="wayra-gradient-text">momentos clave</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -535,7 +535,7 @@ export default function Home() {
 
           <div className="grid lg:grid-cols-2 gap-6">
             {timelineSections.map((section) => (
-              <div key={section.title} className="bg-white rounded-3xl shadow-lg border border-green-100 p-6 lg:p-8">
+              <div key={section.title} className="wayra-panel p-6 lg:p-8">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-green-100 text-green-800 text-xs font-semibold uppercase tracking-[0.18em] mb-4">
                   <CalendarDays className="w-4 h-4" />
                   {section.day}
@@ -562,7 +562,7 @@ export default function Home() {
       <section id="compromisos" className="py-16 lg:py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="wayra-section-title mb-4">
               Claves para <span className="wayra-gradient-text">competir bien</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -595,7 +595,7 @@ export default function Home() {
       <section id="patrocinios" className="py-16 lg:py-24 section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="wayra-section-title mb-4">
               Patrocinadores y <span className="wayra-gradient-text">aliados</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -607,7 +607,7 @@ export default function Home() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-6">
             {activeSponsors.map((sponsor) => {
               const cardClassName =
-                'bg-white rounded-2xl shadow-lg border border-green-100 p-6 flex flex-col items-center justify-center text-center min-h-[210px] transition hover:-translate-y-1 hover:shadow-xl';
+                'wayra-sponsor-card';
               const sponsorWebsite = sponsor.website.trim();
               const sponsorHref = /^https?:\/\//i.test(sponsorWebsite) ? sponsorWebsite : '';
               const cardContent = (

@@ -75,17 +75,152 @@
   }
   
   .wayra-card {
-    @apply bg-white rounded-xl shadow-lg border border-green-100;
+    @apply bg-white rounded-[1.35rem] shadow-lg border border-green-100;
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    transform-style: preserve-3d;
+    will-change: transform, box-shadow;
+  }
+
+  .wayra-card:hover,
+  .wayra-card:focus-within {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 0 18px 34px -18px rgba(21, 53, 42, 0.34);
+    border-color: rgba(45, 125, 70, 0.28);
   }
   
   .wayra-button {
-    @apply px-6 py-3 bg-gradient-to-r from-green-700 to-green-500 text-white font-semibold rounded-lg 
-           hover:from-green-800 hover:to-green-600 transition-all duration-300 shadow-md hover:shadow-lg;
+    @apply px-6 py-3 bg-gradient-to-r from-green-700 to-green-500 text-white font-semibold rounded-xl shadow-md;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .wayra-button:hover,
+  .wayra-button:focus-visible {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 14px 28px -14px rgba(21, 53, 42, 0.38);
+    filter: saturate(1.08) brightness(1.03);
+  }
+
+  .wayra-button::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.28) 40%, transparent 80%);
+    transform: translateX(-120%);
+    transition: transform 0.55s ease;
+  }
+
+  .wayra-button:hover::after {
+    transform: translateX(120%);
   }
   
   .wayra-button-outline {
-    @apply px-6 py-3 border-2 border-green-600 text-green-700 font-semibold rounded-lg 
-           hover:bg-green-600 hover:text-white transition-all duration-300;
+    @apply px-6 py-3 border-2 border-green-600 text-green-700 font-semibold rounded-xl;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  .wayra-button-outline:hover,
+  .wayra-button-outline:focus-visible {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 12px 22px -14px rgba(21, 53, 42, 0.28);
+    background-color: #15803d;
+    color: white;
+  }
+
+  .wayra-button-outline::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.24) 40%, transparent 80%);
+    transform: translateX(-120%);
+    transition: transform 0.55s ease;
+  }
+
+  .wayra-button-outline:hover::after {
+    transform: translateX(120%);
+  }
+
+  .wayra-hover-3d {
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+    transform-style: preserve-3d;
+    will-change: transform, box-shadow;
+  }
+
+  .wayra-hover-3d:hover {
+    transform: translateY(-3px) scale(1.005);
+    box-shadow: 0 14px 28px -18px rgba(21, 53, 42, 0.30);
+  }
+
+  .wayra-panel {
+    border: 1px solid rgba(45, 125, 70, 0.14);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 1.75rem;
+    box-shadow: 0 20px 50px -28px rgba(21, 53, 42, 0.35);
+    backdrop-filter: blur(16px);
+  }
+
+  .wayra-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgba(45, 125, 70, 0.14);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 0.55rem 0.95rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #166534;
+    box-shadow: 0 8px 20px -14px rgba(21, 53, 42, 0.24);
+  }
+
+  .wayra-nav-link {
+    @apply text-sm font-semibold text-gray-700;
+    padding: 0.45rem 0.75rem;
+    border-radius: 9999px;
+    transition: color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .wayra-nav-link:hover,
+  .wayra-nav-link:focus-visible {
+    color: #166534;
+    background-color: rgba(34, 197, 94, 0.12);
+    box-shadow: 0 8px 18px -14px rgba(21, 53, 42, 0.25);
+  }
+
+  .wayra-section-title {
+    font-size: clamp(1.9rem, 3.2vw, 2.7rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #111827;
+  }
+
+  .wayra-sponsor-card {
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(45, 125, 70, 0.13);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 210px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    box-shadow: 0 14px 32px -24px rgba(21, 53, 42, 0.28);
+  }
+
+  .wayra-sponsor-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 18px 34px -22px rgba(21, 53, 42, 0.34);
+    border-color: rgba(45, 125, 70, 0.24);
   }
   
   .category-badge {
