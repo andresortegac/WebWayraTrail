@@ -4,7 +4,8 @@ const path = require('path');
 const db = require('../db');
 const { authenticateToken, requireAdmin } = require('../middleware/auth');
 
-const uploadsDir = path.join(__dirname, '../uploads');
+// Keep uploaded photos in the same root-level directory exposed by server/server.js.
+const uploadsDir = path.join(__dirname, '../../uploads');
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
