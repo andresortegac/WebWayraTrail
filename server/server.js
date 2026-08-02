@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
+
+// Load/create .env file FIRST, before requiring anything else
+require('./config-loader');
+
 require('dotenv').config();
 
 const db = require('./db');
