@@ -175,11 +175,11 @@ export default function Home() {
   const customHeroSlides = homeContent.galleryItems
     .filter((item) => item.image.trim() !== '')
     .map((item) => ({
-      title: item.title || 'Historia principal',
-      subtitle: item.subtitle || 'Texto destacado del inicio',
-      description: item.description || 'Presenta el momento, el paisaje o el mensaje principal del evento.',
-      location: item.location || 'Wayra Trail',
-      badge: item.badge || 'Inicio visual',
+      title: item.title,
+      subtitle: item.subtitle,
+      description: item.description,
+      location: item.location,
+      badge: item.badge,
       image: item.image,
     }));
 

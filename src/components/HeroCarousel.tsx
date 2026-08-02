@@ -48,9 +48,13 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className="absolute inset-x-8 top-6 z-20 flex items-start justify-between gap-4">
-        <div className="inline-flex max-w-fit items-center gap-2 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white backdrop-blur-md">
-          {selectedSlide.badge}
-        </div>
+        {selectedSlide.badge.trim() !== '' ? (
+          <div className="inline-flex max-w-fit items-center gap-2 rounded-full border border-white/20 bg-black/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white backdrop-blur-md">
+            {selectedSlide.badge}
+          </div>
+        ) : (
+          <div aria-hidden="true" />
+        )}
         <button
           type="button"
           onClick={() => setIsPaused((prev) => !prev)}
@@ -74,7 +78,7 @@ export function HeroCarousel({ slides }: HeroCarouselProps) {
                 />
                 <img
                   src={slide.image}
-                  alt={`${slide.title} - ${slide.location}`}
+                  alt={[slide.title, slide.location].filter(Boolean).join(' - ') || 'Imagen del carrusel Wayra Trail'}
                   className="relative z-10 h-full w-full object-contain"
                 />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(6,16,10,0.12)_0%,rgba(6,16,10,0.34)_40%,rgba(6,16,10,0.82)_100%)]" />
