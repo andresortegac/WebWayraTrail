@@ -13,7 +13,8 @@
     "dev:full": "node scripts/dev.cjs",
     "build": "vite build",
     "preview": "vite preview",
-    "migrate": "node -e \"require('./server/db').initDatabase().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); })\""
+    "migrate": "node -e \"require('./server/db').initDatabase().then(() => process.exit(0)).catch((err) => { console.error(err); process.exit(1); })\"",
+    "diagnose": "node scripts/diagnose.js"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
