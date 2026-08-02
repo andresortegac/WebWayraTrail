@@ -154,26 +154,29 @@ if (!fs.existsSync(distPath)) {
   }
 }
 
+// Serve static files
 app.use(express.static(distPath));
 
-// Catch-all route for SPA: serve index.html for any unmatched routes
-app.use((req, res) => {
+// SPA routing: serve index.html for any route that doesn't have a file extension
+// This allows React Router to handle client-side routing
+app.use((req, res, next) => {
+  // If the request path has a file extension, it's a static file that should 404
+  if (path.extname(req.path)) {
+    return next();
+  }
+  
+  // Otherwise, serve index.html for client-side routing
   const indexPath = path.join(distPath, 'index.html');
   
-  console.log(`[SPA Catch-all] ${req.method} ${req.path}`);
-  console.log(`[SPA Catch-all] Checking for ${indexPath}`);
-  
   if (fs.existsSync(indexPath)) {
-    console.log(`[SPA Catch-all] ✅ Serving index.html`);
+    console.log(`[SPA Route] ${req.method} ${req.path} → serving index.html`);
     res.sendFile(indexPath);
   } else {
-    console.error(`[SPA Catch-all] ❌ index.html not found!`);
+    console.error(`[SPA Route] ❌ index.html not found at ${indexPath}`);
     res.status(404).json({
-      message: 'Application not fully deployed. Run: npm run build',
-      path: indexPath,
-      distPath: distPath,
-      distExists: fs.existsSync(distPath),
-      files: fs.existsSync(distPath) ? fs.readdirSync(distPath) : []
+      message: 'Frontend not available',
+      path: req.path,
+      indexPath: indexPath
     });
   }
 });
