@@ -69,6 +69,69 @@ app.use('/api/auth', authRoutes);
 app.use('/api/inscriptions', inscriptionRoutes);
 app.use('/api/site-content', siteContentRoutes);
 
+// 🔍 DEBUG ENDPOINTS
+app.get('/api/debug/status', (req, res) => {
+  const distPath = path.join(__dirname, '../dist');
+  const indexPath = path.join(distPath, 'index.html');
+  
+  const status = {
+    timestamp: new Date().toISOString(),
+    nodeVersion: process.version,
+    environment: process.env.NODE_ENV || 'development',
+    platform: process.platform,
+    workDir: process.cwd(),
+    distPath: distPath,
+    distExists: fs.existsSync(distPath),
+    indexPath: indexPath,
+    indexExists: fs.existsSync(indexPath),
+  };
+
+  if (status.distExists) {
+    try {
+      status.distContents = fs.readdirSync(distPath);
+    } catch (e) {
+      status.distContentsError = e.message;
+    }
+  }
+
+  if (status.indexExists) {
+    try {
+      const stat = fs.statSync(indexPath);
+      status.indexSize = stat.size;
+      status.indexModified = stat.mtime;
+      const content = fs.readFileSync(indexPath, 'utf8');
+      status.indexPreview = content.substring(0, 150);
+      status.isValidHtml = content.includes('<html') || content.includes('<HTML');
+    } catch (e) {
+      status.indexError = e.message;
+    }
+  }
+
+  res.json(status);
+});
+
+app.get('/api/debug/startup-log', (req, res) => {
+  const logPath = path.join(__dirname, '../startup-check.log');
+  
+  if (!fs.existsSync(logPath)) {
+    return res.json({
+      message: 'No startup log found',
+      logPath: logPath,
+      exists: false,
+    });
+  }
+
+  try {
+    const content = fs.readFileSync(logPath, 'utf8');
+    res.type('text/plain').send(content);
+  } catch (error) {
+    res.status(500).json({
+      error: 'Failed to read startup log',
+      message: error.message,
+    });
+  }
+});
+
 const uploadsDir = path.join(__dirname, '../uploads');
 fs.mkdirSync(uploadsDir, { recursive: true });
 app.use('/uploads', express.static(uploadsDir));
