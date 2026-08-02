@@ -75,8 +75,17 @@ const distPath = path.join(__dirname, '../dist');
 
 // Verify dist directory exists
 if (!fs.existsSync(distPath)) {
-  console.warn(`⚠️  Warning: dist directory not found at ${distPath}`);
-  console.warn('Make sure to run: npm run build');
+  console.error(`❌ CRITICAL: dist directory not found at ${distPath}`);
+  console.error('This usually means the frontend build is missing.');
+  console.error('Run: npm run build');
+} else {
+  const indexPath = path.join(distPath, 'index.html');
+  if (fs.existsSync(indexPath)) {
+    const stats = fs.statSync(indexPath);
+    console.log(`✅ Frontend build found. dist/index.html size: ${stats.size} bytes`);
+  } else {
+    console.error(`❌ CRITICAL: dist/index.html not found at ${indexPath}`);
+  }
 }
 
 app.use(express.static(distPath));
@@ -85,12 +94,20 @@ app.use(express.static(distPath));
 app.use((req, res) => {
   const indexPath = path.join(distPath, 'index.html');
   
+  console.log(`[SPA Catch-all] ${req.method} ${req.path}`);
+  console.log(`[SPA Catch-all] Checking for ${indexPath}`);
+  
   if (fs.existsSync(indexPath)) {
+    console.log(`[SPA Catch-all] ✅ Serving index.html`);
     res.sendFile(indexPath);
   } else {
+    console.error(`[SPA Catch-all] ❌ index.html not found!`);
     res.status(404).json({
       message: 'Application not fully deployed. Run: npm run build',
-      path: indexPath
+      path: indexPath,
+      distPath: distPath,
+      distExists: fs.existsSync(distPath),
+      files: fs.existsSync(distPath) ? fs.readdirSync(distPath) : []
     });
   }
 });
