@@ -6,23 +6,29 @@
 echo "🚀 Configurando WebWayraTrail en Hostinger..."
 echo ""
 
-# Crear archivo .env
+# Crear archivo .env desde .env.example
+echo "📋 Creando archivo .env..."
+if [ -f ".env" ]; then
+  echo "⚠️  Archivo .env ya existe. Haciendo backup..."
+  cp .env .env.backup.$(date +%s)
+fi
+
 cat > .env << 'ENVEOF'
 PORT=3000
 DB_HOST=5.183.10.192
 DB_PORT=3306
+DB_DATABASE=u811973920_wayratrail_db
 DB_USERNAME=u811973920_wayratrail
 DB_PASSWORD=Wayra@2026_
-DB_DATABASE=u811973920_wayratrail_db
 JWT_SECRET=wayra_trail_jwt_secret_2024_production_key_random_secure
+AUTH_ADMIN_NAME=Administrador WAYRA TRAIL
 AUTH_ADMIN_USERNAME=admin
+AUTH_ADMIN_EMAIL=admin@wayratrail.com
 AUTH_ADMIN_PASSWORD=Wayra@2026_
 AUTH_ADMIN_ROLE=admin
-AUTH_ADMIN_NAME=Administrador WAYRA TRAIL
-AUTH_ADMIN_EMAIL=admin@wayratrail.com
 ENVEOF
 
-echo "✅ Archivo .env creado"
+echo "✅ Archivo .env creado correctamente"
 echo ""
 
 # Verificar versión de Node

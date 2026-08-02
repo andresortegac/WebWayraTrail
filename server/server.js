@@ -69,11 +69,26 @@ app.use('/uploads', express.static(uploadsDir));
 // Serve the frontend build in every environment.
 const distPath = path.join(__dirname, '../dist');
 
+// Verify dist directory exists
+if (!fs.existsSync(distPath)) {
+  console.warn(`⚠️  Warning: dist directory not found at ${distPath}`);
+  console.warn('Make sure to run: npm run build');
+}
+
 app.use(express.static(distPath));
 
 // Catch-all route for SPA: serve index.html for any unmatched routes
 app.use((req, res) => {
-  res.sendFile(path.join(distPath, 'index.html'));
+  const indexPath = path.join(distPath, 'index.html');
+  
+  if (fs.existsSync(indexPath)) {
+    res.sendFile(indexPath);
+  } else {
+    res.status(404).json({
+      message: 'Application not fully deployed. Run: npm run build',
+      path: indexPath
+    });
+  }
 });
 
 // Start the HTTP server even if the database is temporarily unavailable.
