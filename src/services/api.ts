@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Inscription, InscriptionFormData, CategoryInfo, Stats, LoginResponse, HomeContent } from '@/types';
+import type { Inscription, CategoryInfo, Stats, LoginResponse, HomeContent } from '@/types';
 
 const API_URL = import.meta.env.VITE_API_URL || '/api';
 

@@ -184,6 +184,10 @@ export default function Home() {
     }));
 
   const heroSlidesToRender = customHeroSlides.length > 0 ? customHeroSlides : heroSlides;
+  const heroSplitIndex = Math.max(1, Math.ceil(heroSlidesToRender.length / 2));
+  const topHeroSlides = heroSlidesToRender.slice(0, heroSplitIndex);
+  const middleHeroSlides = heroSlidesToRender.slice(heroSplitIndex);
+  const middleSlidesToRender = middleHeroSlides.length > 0 ? middleHeroSlides : topHeroSlides;
   const activeSponsors = homeContent.sponsorItems.filter(
     (sponsor) => sponsor.name.trim() !== '' && sponsor.image.trim() !== ''
   );
@@ -244,111 +248,71 @@ export default function Home() {
         </div>
       </nav>
 
-      <section id="inicio" className="relative overflow-hidden pt-36 pb-16 lg:pt-32 lg:pb-24 hero-pattern">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="text-center lg:text-left animate-fade-in">
+      <section id="inicio" className="relative overflow-hidden pb-20 pt-36 hero-pattern lg:pb-28 lg:pt-32">
+        <div className="mx-auto max-w-[1480px] px-4 sm:px-6 lg:px-8">
+          <div className="relative animate-fade-in">
+            <div className="pointer-events-none absolute -left-10 -top-10 h-48 w-48 rounded-full bg-emerald-300/20 blur-3xl" />
+            <div className="pointer-events-none absolute -bottom-12 right-0 h-56 w-56 rounded-full bg-amber-300/20 blur-3xl" />
+            <HeroCarousel slides={topHeroSlides} />
+          </div>
+
+          <div className="mt-10 grid gap-6 xl:grid-cols-[1.35fr_0.65fr] xl:items-stretch">
+            <div className="rounded-[2rem] border border-emerald-950/10 bg-white/80 p-6 shadow-[0_30px_80px_-55px_rgba(15,55,38,0.6)] backdrop-blur-xl sm:p-8 lg:p-10">
               <div className="wayra-chip mb-6">
-                <Mountain className="w-4 h-4" />
+                <Mountain className="h-4 w-4" />
                 <span>{homeContent.heroBadge}</span>
               </div>
-              <h1 className="mb-4 text-4xl font-black leading-[0.95] tracking-[-0.03em] text-gray-900 lg:text-6xl">
+              <h1 className="max-w-5xl text-4xl font-black leading-[0.92] tracking-[-0.045em] text-slate-950 sm:text-5xl lg:text-7xl">
                 {homeContent.heroTitle}{' '}
                 <span className="wayra-gradient-text">{homeContent.heroHighlight}</span>
               </h1>
-              <h2 className="text-xl lg:text-2xl font-bold text-green-700 mb-6">
-                {homeContent.heroSubtitle}
-              </h2>
-              <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto whitespace-pre-line lg:mx-0">
-                {homeContent.heroDescription}
-              </p>
-              <div className="mb-8 flex flex-wrap justify-center gap-2 lg:justify-start">
-                <span className="wayra-chip">
-                  Sibundoy
-                </span>
-                <span className="wayra-chip">
-                  Putumayo
-                </span>
-                <span className="wayra-chip">
-                  Colombia
-                </span>
+              <div className="mt-7 grid gap-6 lg:grid-cols-[0.72fr_1.28fr] lg:items-start">
+                <div>
+                  <h2 className="text-xl font-black leading-tight text-emerald-700 lg:text-2xl">{homeContent.heroSubtitle}</h2>
+                  <div className="mt-5 flex flex-wrap gap-2">
+                    {['Sibundoy', 'Putumayo', 'Colombia'].map((place) => (
+                      <span key={place} className="wayra-chip">{place}</span>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <p className="max-w-3xl whitespace-pre-line text-base leading-8 text-slate-600 lg:text-lg">{homeContent.heroDescription}</p>
+                  <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+                    <button onClick={handleOpenInscription} className="wayra-button flex items-center justify-center gap-2">
+                      <User className="h-5 w-5" />
+                      {homeContent.primaryCtaText}
+                    </button>
+                    <button onClick={() => scrollToSection('reglamento')} className="wayra-button-outline flex items-center justify-center gap-2">
+                      {homeContent.secondaryCtaText}
+                      <ChevronRight className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                <button
-                  onClick={handleOpenInscription}
-                  className="wayra-button flex items-center justify-center gap-2"
-                >
-                  <User className="w-5 h-5" />
-                  {homeContent.primaryCtaText}
-                </button>
-                <button
-                  onClick={() => scrollToSection('reglamento')}
-                  className="wayra-button-outline flex items-center justify-center gap-2"
-                >
-                  {homeContent.secondaryCtaText}
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
-              <div className="wayra-hover-3d wayra-panel mt-6 p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-700">
-                  Inscríbete ahora
-                </p>
-                <h3 className="mt-2 text-xl font-black text-gray-900">
-                  Vive WAYRA TRAIL y asegura tu cupo desde hoy
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-gray-600 whitespace-pre-line">
-                  Inscríbete al evento y reserva tu participación de forma rápida y directa.
+            </div>
 
-                  Nequi 322 6635756.
+            <aside className="relative overflow-hidden rounded-[2rem] bg-[#102c21] p-6 text-white shadow-[0_35px_80px_-45px_rgba(11,44,31,0.9)] sm:p-8">
+              <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-emerald-400/15 blur-3xl" />
+              <div className="relative flex h-full flex-col">
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-300">Inscripciones abiertas</p>
+                <h3 className="mt-4 text-3xl font-black leading-tight">Asegura tu lugar en la ruta.</h3>
+                <p className="mt-4 text-sm leading-7 text-emerald-50/75">
+                  Inscríbete al evento y reserva tu participación. Confirma el proceso de pago directamente con la organización.
                 </p>
-                <div className="mt-4 inline-flex items-center gap-3 rounded-2xl bg-fuchsia-50 px-4 py-3 text-sm font-semibold text-fuchsia-800">
-                  <NequiIcon />
-                  <span>Nequi</span>
-                  <span className="text-fuchsia-400">|</span>
-                  <span>322 6635756</span>
+                <div className="mt-6 rounded-2xl border border-white/10 bg-white/10 p-4 backdrop-blur-sm">
+                  <p className="text-xs uppercase tracking-[0.18em] text-white/60">Pago por Nequi</p>
+                  <div className="mt-2 flex items-center gap-3 text-lg font-black"><NequiIcon /><span>322 663 5756</span></div>
                 </div>
-                <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-                  <button
-                    onClick={handleOpenInscription}
-                    className="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
-                  >
-                    Quiero inscribirme
-                  </button>
-                  <a
-                    href={whatsappHref}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-200 bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#20ba59]"
-                  >
+                <div className="mt-auto space-y-3 pt-7">
+                  <button onClick={handleOpenInscription} className="w-full rounded-xl bg-white px-5 py-3 font-bold text-emerald-900 transition hover:bg-emerald-50">Quiero inscribirme</button>
+                  <a href={whatsappHref} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-[#25D366] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#20ba59]">
                     <WhatsAppIcon className="h-5 w-5" />
-                    Mayor información por WhatsApp
+                    Hablar por WhatsApp
                   </a>
-                </div>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  <a
-                    href={whatsappHref}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
-                  >
-                    <WhatsAppIcon className="h-4 w-4" />
-                    322 663 5756
-                  </a>
-                  <a
-                    href={whatsappAltHref}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-50"
-                  >
-                    <WhatsAppIcon className="h-4 w-4" />
-                    313 892 5127
-                  </a>
+                  <p className="text-center text-xs text-white/50">Línea alterna: 313 892 5127</p>
                 </div>
               </div>
-            </div>
-            <div className="relative animate-fade-in">
-              <HeroCarousel slides={heroSlidesToRender} />
-            </div>
+            </aside>
           </div>
         </div>
       </section>
@@ -424,6 +388,24 @@ export default function Home() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="relative overflow-hidden bg-[#0d261c] py-16 text-white lg:py-24">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_20%,rgba(52,211,153,0.16),transparent_28%),radial-gradient(circle_at_85%_80%,rgba(250,204,21,0.12),transparent_30%)]" />
+        <div className="relative mx-auto max-w-[1480px] px-4 sm:px-6 lg:px-8">
+          <div className="mb-9 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+            <div className="max-w-3xl">
+              <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-300">Territorio Wayra</p>
+              <h2 className="mt-4 text-3xl font-black leading-tight tracking-[-0.035em] sm:text-4xl lg:text-6xl">
+                La carrera se vive antes de cruzar la meta.
+              </h2>
+            </div>
+            <p className="max-w-xl text-base leading-7 text-emerald-50/70 lg:text-right">
+              Paisaje, comunidad y energía ancestral reunidos en una experiencia visual que acompaña cada tramo del recorrido.
+            </p>
+          </div>
+          <HeroCarousel slides={middleSlidesToRender} />
         </div>
       </section>
 
