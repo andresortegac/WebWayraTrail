@@ -1,4 +1,5 @@
 const DEFAULT_ACCENT_COLORS = ['#ef4444', '#f59e0b', '#10b981', '#0ea5e9', '#8b5cf6'];
+const MAX_GALLERY_ITEMS = 20;
 
 const createDefaultGalleryItem = (id, accentColor) => ({
   id,
@@ -64,7 +65,9 @@ const normalizeAccentColor = (value, fallback) =>
   /^#[0-9a-fA-F]{6}$/.test(String(value || '').trim()) ? String(value).trim() : fallback;
 
 const normalizeGalleryItems = (items) => {
-  const source = Array.isArray(items) && items.length > 0 ? items.slice(0, 8) : defaultHomeContent.galleryItems;
+  const source = Array.isArray(items) && items.length > 0
+    ? items.slice(0, MAX_GALLERY_ITEMS)
+    : defaultHomeContent.galleryItems;
 
   return source.map((item, index) => ({
     id: cleanText(item?.id, `gallery-${index + 1}`),

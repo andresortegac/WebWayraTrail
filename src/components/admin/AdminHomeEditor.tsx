@@ -36,6 +36,7 @@ const FALLBACK_PREVIEW_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 800'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%23163126'/%3E%3Cstop offset='0.5' stop-color='%2325493d'/%3E%3Cstop offset='1' stop-color='%23c18d2d'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='800' fill='url(%23g)'/%3E%3Ccircle cx='220' cy='180' r='170' fill='rgba(255,255,255,0.08)'/%3E%3Ccircle cx='980' cy='620' r='210' fill='rgba(255,255,255,0.05)'/%3E%3C/svg%3E";
 const MAX_UPLOAD_EDGE = 1600;
 const MAX_UPLOAD_BYTES = 120 * 1024;
+const MAX_GALLERY_ITEMS = 20;
 const IMAGE_QUALITIES = [0.82, 0.74, 0.66, 0.58, 0.5];
 
 const readBlobAsDataUrl = (blob: Blob) =>
@@ -220,6 +221,14 @@ export function AdminHomeEditor() {
   };
 
   const addGalleryItem = () => {
+    if (content.galleryItems.length >= MAX_GALLERY_ITEMS) {
+      setSaveState({
+        tone: 'error',
+        message: `Puedes publicar un maximo de ${MAX_GALLERY_ITEMS} slides. Quita uno antes de agregar otro.`,
+      });
+      return;
+    }
+
     setContent((prev) => ({
       ...prev,
       galleryItems: [...prev.galleryItems, createEmptyGalleryItem(`gallery-${Date.now()}`, '#f97316')],
@@ -427,7 +436,12 @@ export function AdminHomeEditor() {
                   title="Slides del carrusel"
                   description="Cada slide acepta imagen por carga directa o por URL, y sus textos se usan tambien en la portada."
                 />
-                <Button type="button" onClick={addGalleryItem} className="bg-[#15352a] hover:bg-[#0f241d]">
+                <Button
+                  type="button"
+                  onClick={addGalleryItem}
+                  disabled={content.galleryItems.length >= MAX_GALLERY_ITEMS}
+                  className="bg-[#15352a] hover:bg-[#0f241d]"
+                >
                   <Plus className="mr-2 h-4 w-4" />
                   Agregar slide
                 </Button>
