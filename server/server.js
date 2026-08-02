@@ -117,6 +117,10 @@ app.get('/api/debug/startup-log', (req, res) => {
   }
 });
 
+// Hostinger's managed proxy resolves these direct browser entries reliably
+// when they are registered before the API/database middleware.
+app.get(['/login', '/admin'], serveSpaIndex);
+
 // Routes API
 app.use('/api', (req, res, next) => {
   if (isDatabaseReady()) {
@@ -166,10 +170,6 @@ function serveSpaIndex(req, res, next) {
 
   return res.sendFile(indexPath);
 }
-
-// Register the client-side entry points explicitly. Some managed Node proxies
-// resolve direct browser requests before a generic fallback middleware runs.
-app.get(['/login', '/admin'], serveSpaIndex);
 
 // SPA routing: serve index.html for any route that doesn't have a file extension
 // This allows React Router to handle client-side routing
