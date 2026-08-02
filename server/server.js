@@ -3,6 +3,9 @@ const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 
+// ⚠️  CRITICAL: Run startup checks FIRST
+require('./startup-check');
+
 // Load/create .env file FIRST, before requiring anything else
 require('./config-loader');
 
