@@ -32,7 +32,9 @@ log(`   Working directory: ${path.join(__dirname, '..')}`);
 log(`   Looking for: ${indexPath}`);
 log('═══════════════════════════════════════');
 
-const MIN_VALID_INDEX_SIZE = 800; // Minimum size for a valid Vite-compiled index.html
+// Vite's index is intentionally small because the compiled assets live in dist/assets.
+// The current valid production document is roughly 430 bytes.
+const MIN_VALID_INDEX_SIZE = 300;
 
 const distExists = fs.existsSync(distPath);
 const indexExists = fs.existsSync(indexPath);

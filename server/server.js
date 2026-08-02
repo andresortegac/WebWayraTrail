@@ -157,6 +157,20 @@ if (!fs.existsSync(distPath)) {
 // Serve static files
 app.use(express.static(distPath));
 
+function serveSpaIndex(req, res, next) {
+  const indexPath = path.join(distPath, 'index.html');
+
+  if (!fs.existsSync(indexPath)) {
+    return next();
+  }
+
+  return res.sendFile(indexPath);
+}
+
+// Register the client-side entry points explicitly. Some managed Node proxies
+// resolve direct browser requests before a generic fallback middleware runs.
+app.get(['/login', '/admin'], serveSpaIndex);
+
 // SPA routing: serve index.html for any route that doesn't have a file extension
 // This allows React Router to handle client-side routing
 app.use((req, res, next) => {
@@ -167,18 +181,18 @@ app.use((req, res, next) => {
   
   // Otherwise, serve index.html for client-side routing
   const indexPath = path.join(distPath, 'index.html');
-  
-  if (fs.existsSync(indexPath)) {
-    console.log(`[SPA Route] ${req.method} ${req.path} → serving index.html`);
-    res.sendFile(indexPath);
-  } else {
+
+  if (!fs.existsSync(indexPath)) {
     console.error(`[SPA Route] ❌ index.html not found at ${indexPath}`);
-    res.status(404).json({
+    return res.status(404).json({
       message: 'Frontend not available',
       path: req.path,
       indexPath: indexPath
     });
   }
+
+  console.log(`[SPA Route] ${req.method} ${req.path} → serving index.html`);
+  return serveSpaIndex(req, res, next);
 });
 
 // Start the HTTP server even if the database is temporarily unavailable.
