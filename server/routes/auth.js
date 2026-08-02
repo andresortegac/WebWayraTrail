@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../db');
-const { JWT_SECRET } = require('../middleware/auth');
+const { JWT_SECRET, normalizeUserRole } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -66,8 +66,9 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
+    const normalizedRole = normalizeUserRole(user.role, 'admin');
     const token = jwt.sign(
-      { id: user.id, username: user.username, role: user.role },
+      { id: user.id, username: user.username, role: normalizedRole },
       JWT_SECRET,
       { expiresIn: '24h' }
     );
@@ -77,7 +78,7 @@ router.post('/login', async (req, res) => {
       user: {
         id: Number(user.id),
         username: user.username,
-        role: user.role
+        role: normalizedRole
       }
     });
   } catch (error) {
@@ -106,7 +107,13 @@ router.get('/verify', async (req, res) => {
       if (err) {
         return res.status(403).json({ message: 'Invalid token' });
       }
-      res.json({ valid: true, user: decoded });
+
+      const safeUser = {
+        ...decoded,
+        role: normalizeUserRole(decoded?.role, decoded?.role ? decoded.role : 'admin'),
+      };
+
+      res.json({ valid: true, user: safeUser });
     });
   } catch (error) {
     res.status(500).json({ message: 'Server error' });
