@@ -54,22 +54,7 @@ setInterval(() => {
   }
 }, DB_RETRY_MS);
 
-// Routes API
-app.use('/api', (req, res, next) => {
-  if (isDatabaseReady()) {
-    return next();
-  }
-
-  return res.status(503).json({
-    message: 'La base de datos no está disponible en este momento. Intenta nuevamente en unos minutos.',
-  });
-});
-
-app.use('/api/auth', authRoutes);
-app.use('/api/inscriptions', inscriptionRoutes);
-app.use('/api/site-content', siteContentRoutes);
-
-// 🔍 DEBUG ENDPOINTS
+// 🔍 DEBUG ENDPOINTS - MUST BE BEFORE DB MIDDLEWARE
 app.get('/api/debug/status', (req, res) => {
   const distPath = path.join(__dirname, '../dist');
   const indexPath = path.join(distPath, 'index.html');
@@ -131,6 +116,21 @@ app.get('/api/debug/startup-log', (req, res) => {
     });
   }
 });
+
+// Routes API
+app.use('/api', (req, res, next) => {
+  if (isDatabaseReady()) {
+    return next();
+  }
+
+  return res.status(503).json({
+    message: 'La base de datos no está disponible en este momento. Intenta nuevamente en unos minutos.',
+  });
+});
+
+app.use('/api/auth', authRoutes);
+app.use('/api/inscriptions', inscriptionRoutes);
+app.use('/api/site-content', siteContentRoutes);
 
 const uploadsDir = path.join(__dirname, '../uploads');
 fs.mkdirSync(uploadsDir, { recursive: true });
