@@ -191,6 +191,9 @@ export default function Home() {
   const activeSponsors = homeContent.sponsorItems.filter(
     (sponsor) => sponsor.name.trim() !== '' && sponsor.image.trim() !== ''
   );
+  const sponsorPoster = activeSponsors.length === 1 ? activeSponsors[0] : null;
+  const sponsorPosterWebsite = sponsorPoster?.website.trim() || '';
+  const sponsorPosterHref = /^https?:\/\//i.test(sponsorPosterWebsite) ? sponsorPosterWebsite : '';
   const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
   const whatsappAltHref = `https://wa.me/${WHATSAPP_NUMBER_ALT}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
@@ -586,42 +589,65 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7 gap-6">
-            {activeSponsors.map((sponsor) => {
-              const cardClassName =
-                'wayra-sponsor-card';
-              const sponsorWebsite = sponsor.website.trim();
-              const sponsorHref = /^https?:\/\//i.test(sponsorWebsite) ? sponsorWebsite : '';
-              const cardContent = (
-                <>
-                  <img
-                    src={sponsor.image}
-                    alt={sponsor.name}
-                    className="h-24 w-full object-contain mb-4 [image-rendering:-webkit-optimize-contrast]"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <p className="text-sm font-semibold text-gray-700">{sponsor.name}</p>
-                </>
-              );
-
-              return sponsorHref ? (
-                <a
-                  key={sponsor.id}
-                  href={sponsorHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={cardClassName}
-                >
-                  {cardContent}
-                </a>
-              ) : (
-                <div key={sponsor.id} className={cardClassName}>
-                  {cardContent}
+          {sponsorPoster ? (
+            <div className="relative overflow-hidden rounded-[2.25rem] border border-emerald-950/10 bg-[#102c21] p-4 shadow-[0_40px_100px_-55px_rgba(9,45,30,0.85)] sm:p-6 lg:p-8">
+              <div className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-emerald-400/15 blur-3xl" />
+              <div className="pointer-events-none absolute -bottom-24 right-0 h-80 w-80 rounded-full bg-amber-300/10 blur-3xl" />
+              <div className="relative grid gap-7 lg:grid-cols-[0.7fr_1.3fr] lg:items-center">
+                <div className="p-3 text-white sm:p-5 lg:p-7">
+                  <p className="text-xs font-bold uppercase tracking-[0.26em] text-emerald-300">Una fuerza colectiva</p>
+                  <h3 className="mt-5 text-3xl font-black leading-[1.02] tracking-[-0.035em] sm:text-4xl lg:text-5xl">
+                    Marcas que hacen posible cada kilómetro.
+                  </h3>
+                  <p className="mt-5 max-w-xl text-base leading-8 text-emerald-50/70">
+                    Este es el equipo de aliados que cree en el territorio, el deporte y la comunidad. Su respaldo convierte WAYRA TRAIL en una experiencia a otro nivel.
+                  </p>
+                  <div className="mt-7 flex flex-wrap gap-2">
+                    {['Territorio', 'Deporte', 'Comunidad'].map((value) => (
+                      <span key={value} className="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white/85 backdrop-blur-sm">
+                        {value}
+                      </span>
+                    ))}
+                  </div>
+                  {sponsorPosterHref && (
+                    <a href={sponsorPosterHref} target="_blank" rel="noreferrer" className="mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-bold text-emerald-900 transition hover:bg-emerald-50">
+                      Conocer a nuestros aliados
+                      <ChevronRight className="h-4 w-4" />
+                    </a>
+                  )}
                 </div>
-              );
-            })}
-          </div>
+
+                {sponsorPosterHref ? (
+                  <a href={sponsorPosterHref} target="_blank" rel="noreferrer" className="group block overflow-hidden rounded-[1.75rem] border border-white/15 bg-white/95 p-3 shadow-2xl sm:p-5">
+                    <img src={sponsorPoster.image} alt="Afiche oficial de patrocinadores y aliados de Wayra Trail" className="mx-auto max-h-[820px] w-auto max-w-full object-contain transition duration-500 group-hover:scale-[1.015]" loading="lazy" decoding="async" />
+                  </a>
+                ) : (
+                  <div className="overflow-hidden rounded-[1.75rem] border border-white/15 bg-white/95 p-3 shadow-2xl sm:p-5">
+                    <img src={sponsorPoster.image} alt="Afiche oficial de patrocinadores y aliados de Wayra Trail" className="mx-auto max-h-[820px] w-auto max-w-full object-contain" loading="lazy" decoding="async" />
+                  </div>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-7">
+              {activeSponsors.map((sponsor) => {
+                const sponsorWebsite = sponsor.website.trim();
+                const sponsorHref = /^https?:\/\//i.test(sponsorWebsite) ? sponsorWebsite : '';
+                const cardContent = (
+                  <>
+                    <img src={sponsor.image} alt={sponsor.name} className="mb-4 h-24 w-full object-contain [image-rendering:-webkit-optimize-contrast]" loading="lazy" decoding="async" />
+                    <p className="text-sm font-semibold text-gray-700">{sponsor.name}</p>
+                  </>
+                );
+
+                return sponsorHref ? (
+                  <a key={sponsor.id} href={sponsorHref} target="_blank" rel="noreferrer" className="wayra-sponsor-card">{cardContent}</a>
+                ) : (
+                  <div key={sponsor.id} className="wayra-sponsor-card">{cardContent}</div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </section>
 
