@@ -71,8 +71,8 @@ const distPath = path.join(__dirname, '../dist');
 
 app.use(express.static(distPath));
 
-// Express 5 requires named wildcards; this route also matches "/".
-app.get('/{*splat}', (req, res) => {
+// Catch-all route for SPA: serve index.html for any unmatched routes
+app.use((req, res) => {
   res.sendFile(path.join(distPath, 'index.html'));
 });
 
