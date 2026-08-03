@@ -83,7 +83,7 @@ export default function Home() {
   const [hasAcceptedRegulation, setHasAcceptedRegulation] = useState(false);
   const [formData, setFormData] = useState<InscriptionFormData>(initialFormData);
   const [fotoFile, setFotoFile] = useState<File | null>(null);
-  const [homeContent, setHomeContent] = useState<HomeContent>(() => duplicateHomeContent());
+  const [homeContent, setHomeContent] = useState<HomeContent | null>(null);
 
   useEffect(() => {
     const loadHomeContent = async () => {
@@ -92,6 +92,7 @@ export default function Home() {
         setHomeContent(duplicateHomeContent(mergeHomeContentWithDefaults(response)));
       } catch (error) {
         console.error('Error loading home content:', error);
+        setHomeContent(duplicateHomeContent());
       }
     };
 
@@ -171,6 +172,20 @@ export default function Home() {
       setIsSubmitting(false);
     }
   };
+
+  if (!homeContent) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#F1F8E9] px-6">
+        <div className="flex flex-col items-center gap-4 text-center" role="status" aria-live="polite">
+          <img src="/chimuelo.png" alt="WAYRA TRAIL" className="h-20 w-auto animate-pulse" />
+          <div>
+            <p className="text-xl font-black tracking-wide text-green-800">WAYRA TRAIL</p>
+            <p className="mt-1 text-sm text-green-700">Cargando contenido...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const customHeroSlides = homeContent.galleryItems
     .filter((item) => item.image.trim() !== '')

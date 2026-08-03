@@ -55,11 +55,12 @@ echo ""
 echo "5️⃣ Verificando conectividad a Base de Datos..."
 node -e "
 const mysql = require('mysql2/promise');
-const host = process.env.DB_HOST || '5.183.10.192';
+require('dotenv').config();
+const host = process.env.DB_HOST;
 const port = process.env.DB_PORT || 3306;
-const user = process.env.DB_USERNAME || 'u811973920_wayratrail';
-const password = process.env.DB_PASSWORD || 'Wayra@2026_';
-const database = process.env.DB_DATABASE || 'u811973920_wayratrail_db';
+const user = process.env.DB_USERNAME;
+const password = process.env.DB_PASSWORD;
+const database = process.env.DB_DATABASE;
 
 (async () => {
   try {
