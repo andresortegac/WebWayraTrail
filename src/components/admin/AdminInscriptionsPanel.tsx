@@ -4,6 +4,8 @@ import {
   ChevronDown,
   ChevronUp,
   Download,
+  Eye,
+  ImageOff,
   RefreshCw,
   Search,
   Trash2,
@@ -106,6 +108,8 @@ export function AdminInscriptionsPanel() {
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [inscriptionToDelete, setInscriptionToDelete] = useState<number | null>(null);
+  const [selectedPhoto, setSelectedPhoto] = useState<Inscription | null>(null);
+  const [unavailablePhotos, setUnavailablePhotos] = useState<Record<number, boolean>>({});
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
@@ -171,6 +175,24 @@ export function AdminInscriptionsPanel() {
       ...prev,
       [category]: !prev[category],
     }));
+  };
+
+  const downloadPhoto = (inscription: Inscription) => {
+    if (!inscription.foto_url || unavailablePhotos[inscription.id]) return;
+
+    const extension = inscription.foto_url.split('.').pop()?.split('?')[0] || 'jpg';
+    const safeName = `${inscription.nombres}-${inscription.apellidos}`
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-zA-Z0-9_-]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .toLowerCase();
+    const link = document.createElement('a');
+    link.href = inscription.foto_url;
+    link.download = `wayra-trail-${safeName || inscription.id}.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
   };
 
   const exportToExcelFile = () => {
@@ -572,15 +594,38 @@ export function AdminInscriptionsPanel() {
                           >
                             <td className="px-4 py-3 text-sm text-[#183127]">{inscription.id}</td>
                             <td className="px-4 py-3 text-sm text-[#183127]">
-                              {inscription.foto_url ? (
-                                <img
-                                  src={inscription.foto_url}
-                                  alt={`Foto de ${inscription.nombres}`}
-                                  className="h-12 w-12 rounded-full object-cover"
-                                />
+                              {inscription.foto_url && !unavailablePhotos[inscription.id] ? (
+                                <div className="flex items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => setSelectedPhoto(inscription)}
+                                    className="group relative h-14 w-14 shrink-0 overflow-hidden rounded-2xl border-2 border-white bg-slate-100 shadow-sm ring-1 ring-slate-200 transition hover:scale-105 hover:ring-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                                    aria-label={`Ver foto de ${inscription.nombres} ${inscription.apellidos}`}
+                                  >
+                                    <img
+                                      src={inscription.foto_url}
+                                      alt={`Foto de ${inscription.nombres}`}
+                                      className="h-full w-full object-cover"
+                                      onError={() => setUnavailablePhotos((prev) => ({ ...prev, [inscription.id]: true }))}
+                                    />
+                                    <span className="absolute inset-0 flex items-center justify-center bg-[#071a12]/0 text-white opacity-0 transition group-hover:bg-[#071a12]/55 group-hover:opacity-100">
+                                      <Eye className="h-5 w-5" />
+                                    </span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => downloadPhoto(inscription)}
+                                    className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-emerald-100 bg-emerald-50 text-emerald-700 transition hover:bg-emerald-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                                    aria-label={`Descargar foto de ${inscription.nombres} ${inscription.apellidos}`}
+                                    title="Descargar foto"
+                                  >
+                                    <Download className="h-4 w-4" />
+                                  </button>
+                                </div>
                               ) : (
-                                <span className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-xs text-slate-500">
-                                  SIN FOTO
+                                <span className="inline-flex h-14 min-w-14 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-2 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+                                  <ImageOff className="mb-1 h-4 w-4" />
+                                  Sin foto
                                 </span>
                               )}
                             </td>
@@ -653,6 +698,50 @@ export function AdminInscriptionsPanel() {
               Eliminar
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={Boolean(selectedPhoto)} onOpenChange={(open) => !open && setSelectedPhoto(null)}>
+        <DialogContent className="max-w-3xl overflow-hidden border-0 bg-[#f7faf7] p-0 shadow-2xl">
+          {selectedPhoto && (
+            <>
+              <div className="flex items-center justify-between gap-4 border-b border-[#dfe8e2] bg-white px-6 py-5 pr-14">
+                <DialogHeader className="text-left">
+                  <DialogTitle className="text-xl text-[#12231b]">
+                    {selectedPhoto.nombres} {selectedPhoto.apellidos}
+                  </DialogTitle>
+                  <DialogDescription>
+                    Inscripción #{selectedPhoto.id} · Categoría {selectedPhoto.categoria}
+                  </DialogDescription>
+                </DialogHeader>
+                <Button
+                  type="button"
+                  onClick={() => downloadPhoto(selectedPhoto)}
+                  disabled={Boolean(unavailablePhotos[selectedPhoto.id])}
+                  className="shrink-0 bg-[#15352a] hover:bg-[#0e261d]"
+                >
+                  <Download className="mr-2 h-4 w-4" />
+                  Descargar foto
+                </Button>
+              </div>
+              <div className="flex min-h-[420px] items-center justify-center bg-[radial-gradient(circle_at_top,#e8f3ea_0%,#dce9df_45%,#cbdcd0_100%)] p-5 sm:p-8">
+                {!unavailablePhotos[selectedPhoto.id] ? (
+                  <img
+                    src={selectedPhoto.foto_url}
+                    alt={`Foto de ${selectedPhoto.nombres} ${selectedPhoto.apellidos}`}
+                    className="max-h-[65vh] max-w-full rounded-2xl object-contain shadow-[0_28px_70px_-30px_rgba(15,45,33,0.65)]"
+                    onError={() => setUnavailablePhotos((prev) => ({ ...prev, [selectedPhoto.id]: true }))}
+                  />
+                ) : (
+                  <div className="flex flex-col items-center text-center text-slate-500">
+                    <ImageOff className="mb-4 h-12 w-12 text-slate-400" />
+                    <p className="font-semibold text-slate-700">Esta fotografía no está disponible</p>
+                    <p className="mt-1 max-w-sm text-sm">El registro existe, pero el archivo original no se encontró en el servidor.</p>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </div>
