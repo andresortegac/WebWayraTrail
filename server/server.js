@@ -15,6 +15,7 @@ const db = require('./db');
 const authRoutes = require('./routes/auth');
 const inscriptionRoutes = require('./routes/inscriptions');
 const siteContentRoutes = require('./routes/site-content');
+const { uploadsDir, recoverLegacyUploads } = require('./uploads');
 
 const app = express();
 const DB_RETRY_MS = Number(process.env.DB_RETRY_MS || 30000);
@@ -136,8 +137,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/inscriptions', inscriptionRoutes);
 app.use('/api/site-content', siteContentRoutes);
 
-const uploadsDir = path.join(__dirname, '../uploads');
-fs.mkdirSync(uploadsDir, { recursive: true });
+const recoveredUploads = recoverLegacyUploads();
+if (recoveredUploads > 0) {
+  console.log(`Recovered ${recoveredUploads} uploaded photo(s) from previous deployments.`);
+}
 app.use('/uploads', express.static(uploadsDir));
 
 // Serve the frontend build in every environment.
