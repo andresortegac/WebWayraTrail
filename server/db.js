@@ -33,6 +33,15 @@ function normalizeDatabaseHost(host) {
   return host;
 }
 
+async function resolveDatabaseConfig() {
+  const { address } = await dns.promises.lookup(dbConfig.host, { family: 4 });
+
+  return {
+    ...dbConfig,
+    host: address,
+  };
+}
+
 function readDatabaseUrlConfig() {
   const rawUrl = readEnv('DATABASE_URL', readEnv('MYSQL_URL', ''));
   if (!rawUrl) {
@@ -94,9 +103,11 @@ async function initDatabase() {
   let initialized = false;
 
   try {
+    const connectionConfig = await resolveDatabaseConfig();
+
     // Try to create the database when the MySQL user allows it.
     // Managed hosts often provision the database ahead of time and block CREATE DATABASE.
-    const tempConnection = await mysql.createConnection(dbConfig);
+    const tempConnection = await mysql.createConnection(connectionConfig);
     try {
       await tempConnection.execute(`CREATE DATABASE IF NOT EXISTS \`${databaseName}\``);
     } catch (error) {
@@ -116,7 +127,7 @@ async function initDatabase() {
 
     // Now create pool with database
     nextPool = mysql.createPool({
-      ...dbConfig,
+      ...connectionConfig,
       database: databaseName
     });
 
