@@ -1,11 +1,5 @@
 const mysql = require('mysql2/promise');
-const dns = require('node:dns');
 require('dotenv').config();
-
-// Hostinger's Node runtime may prefer IPv6 for the database hostname, while
-// Remote MySQL access is commonly authorized with the app's IPv4 address.
-// Prefer IPv4 so the connection uses the authorized outbound address.
-dns.setDefaultResultOrder('ipv4first');
 
 function readEnv(name, fallback) {
   const value = process.env[name];
@@ -31,15 +25,6 @@ function decodeUrlPart(value) {
 
 function normalizeDatabaseHost(host) {
   return host;
-}
-
-async function resolveDatabaseConfig() {
-  const { address } = await dns.promises.lookup(dbConfig.host, { family: 4 });
-
-  return {
-    ...dbConfig,
-    host: address,
-  };
 }
 
 function readDatabaseUrlConfig() {
@@ -103,11 +88,9 @@ async function initDatabase() {
   let initialized = false;
 
   try {
-    const connectionConfig = await resolveDatabaseConfig();
-
     // Try to create the database when the MySQL user allows it.
     // Managed hosts often provision the database ahead of time and block CREATE DATABASE.
-    const tempConnection = await mysql.createConnection(connectionConfig);
+    const tempConnection = await mysql.createConnection(dbConfig);
     try {
       await tempConnection.execute(`CREATE DATABASE IF NOT EXISTS \`${databaseName}\``);
     } catch (error) {
@@ -127,7 +110,7 @@ async function initDatabase() {
 
     // Now create pool with database
     nextPool = mysql.createPool({
-      ...connectionConfig,
+      ...dbConfig,
       database: databaseName
     });
 
