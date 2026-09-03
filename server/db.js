@@ -1,5 +1,11 @@
 const mysql = require('mysql2/promise');
+const dns = require('node:dns');
 require('dotenv').config();
+
+// Hostinger's Node runtime may prefer IPv6 for the database hostname, while
+// Remote MySQL access is commonly authorized with the app's IPv4 address.
+// Prefer IPv4 so the connection uses the authorized outbound address.
+dns.setDefaultResultOrder('ipv4first');
 
 function readEnv(name, fallback) {
   const value = process.env[name];
