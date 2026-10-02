@@ -42,6 +42,8 @@ import type { HomeContent, InscriptionFormData } from '@/types';
 
 const WHATSAPP_NUMBER = '573226635756';
 const WHATSAPP_NUMBER_ALT = '573138925127';
+// Cambia a false para volver a mostrar el encabezado y la portada habituales.
+const SHOW_POSTPONEMENT_NOTICE = true;
 const WHATSAPP_MESSAGE =
   'Hola, quiero inscribirme en WAYRA TRAIL. Me gustaria recibir informacion sobre el pago, el envio del comprobante y la foto de bienvenida.';
 
@@ -214,6 +216,17 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#F1F8E9]">
+      {SHOW_POSTPONEMENT_NOTICE ? (
+        <section id="inicio" className="bg-[#102c21] px-2 py-3 sm:px-4 sm:py-6 lg:px-8">
+          <h1 className="sr-only">Resolucion de aplazamiento de Wayra Trail</h1>
+          <img
+            src="/aviso-aplazamiento-wayra-trail.png"
+            alt="Resolucion numero 001 de 2026: aplazamiento de Wayra Trail Ruta de Guerreros Ancestrales 16K para el 15 de noviembre de 2026"
+            className="mx-auto block h-auto w-full max-w-[1536px]"
+          />
+        </section>
+      ) : (
+        <>
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-green-100/80 bg-white/85 backdrop-blur-xl shadow-[0_10px_30px_-24px_rgba(21,53,42,0.25)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex items-center justify-between gap-4">
@@ -334,6 +347,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+        </>
+      )}
 
       <section id="categorias" className="py-16 lg:py-24 section-pattern">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
