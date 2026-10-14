@@ -280,13 +280,7 @@ const hasConfiguredContent = (content?: Partial<HomeContent> | null) => {
     )
   );
 
-  // Si el usuario agregó más slides que los 3 por defecto, debe preservarlos aunque estén vacíos
-  const hasExtraGalleryItems = Array.isArray(content.galleryItems) && content.galleryItems.length > defaultHomeContent.galleryItems.length;
-  const hasExtraVideoItems = Array.isArray(content.videoItems) && content.videoItems.length > defaultHomeContent.videoItems.length;
-  const hasExtraInfoItems = Array.isArray(content.infoItems) && content.infoItems.length > defaultHomeContent.infoItems.length;
-  const hasExtraSponsorItems = Array.isArray(content.sponsorItems) && content.sponsorItems.length > defaultHomeContent.sponsorItems.length;
-
-  return Boolean(galleryHasData || videosHaveData || infoHasData || sponsorsHaveData || hasExtraGalleryItems || hasExtraVideoItems || hasExtraInfoItems || hasExtraSponsorItems);
+  return Boolean(galleryHasData || videosHaveData || infoHasData || sponsorsHaveData);
 };
 
 export const mergeHomeContentWithDefaults = (content?: Partial<HomeContent> | null): HomeContent => {

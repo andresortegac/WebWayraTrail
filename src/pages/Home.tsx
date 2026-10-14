@@ -42,6 +42,8 @@ import type { HomeContent, InscriptionFormData } from '@/types';
 
 const WHATSAPP_NUMBER = '573226635756';
 const WHATSAPP_NUMBER_ALT = '573138925127';
+const REGISTRATION_DEADLINE = new Date('2026-10-25T05:00:00Z');
+const REGISTRATION_DEADLINE_LABEL = '24 de octubre de 2026';
 // Cambia a false para volver a mostrar el encabezado y la portada habituales.
 const SHOW_POSTPONEMENT_NOTICE = true;
 const WHATSAPP_MESSAGE =
@@ -213,9 +215,18 @@ export default function Home() {
   const sponsorPosterHref = /^https?:\/\//i.test(sponsorPosterWebsite) ? sponsorPosterWebsite : '';
   const whatsappHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
   const whatsappAltHref = `https://wa.me/${WHATSAPP_NUMBER_ALT}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
+  const registrationsAreOpen = Date.now() < REGISTRATION_DEADLINE.getTime();
 
   return (
     <div className="min-h-screen bg-[#F1F8E9]">
+      <header className="bg-amber-300 px-4 py-3 text-center text-emerald-950 shadow-sm" role="status">
+        <p className="flex items-center justify-center gap-2 text-sm font-black sm:text-base">
+          <CalendarDays className="h-5 w-5 shrink-0" aria-hidden="true" />
+          {registrationsAreOpen
+            ? `¡Inscripciones abiertas hasta el ${REGISTRATION_DEADLINE_LABEL}!`
+            : 'Inscripciones cerradas'}
+        </p>
+      </header>
       {SHOW_POSTPONEMENT_NOTICE ? (
         <section id="inicio" className="bg-[#102c21] px-2 py-3 sm:px-4 sm:py-6 lg:px-8">
           <h1 className="sr-only">Resolucion de aplazamiento de Wayra Trail</h1>
@@ -309,9 +320,9 @@ export default function Home() {
                 <div>
                   <p className="max-w-3xl whitespace-pre-line text-base leading-8 text-slate-600 lg:text-lg">{homeContent.heroDescription}</p>
                   <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-                    <button onClick={handleOpenInscription} className="wayra-button flex items-center justify-center gap-2">
+                    <button onClick={handleOpenInscription} disabled={!registrationsAreOpen} className="wayra-button flex items-center justify-center gap-2 disabled:cursor-not-allowed disabled:opacity-60">
                       <User className="h-5 w-5" />
-                      {homeContent.primaryCtaText}
+                      {registrationsAreOpen ? homeContent.primaryCtaText : 'Inscripciones cerradas'}
                     </button>
                     <button onClick={() => scrollToSection('reglamento')} className="wayra-button-outline flex items-center justify-center gap-2">
                       {homeContent.secondaryCtaText}
@@ -325,7 +336,9 @@ export default function Home() {
             <aside className="relative overflow-hidden rounded-[2rem] bg-[#102c21] p-6 text-white shadow-[0_35px_80px_-45px_rgba(11,44,31,0.9)] sm:p-8">
               <div className="absolute -right-16 -top-16 h-52 w-52 rounded-full bg-emerald-400/15 blur-3xl" />
               <div className="relative flex h-full flex-col">
-                <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-300">Inscripciones abiertas</p>
+                <p className="text-xs font-bold uppercase tracking-[0.24em] text-emerald-300">
+                  {registrationsAreOpen ? `Inscripciones abiertas hasta el ${REGISTRATION_DEADLINE_LABEL}` : 'Inscripciones cerradas'}
+                </p>
                 <h3 className="mt-4 text-3xl font-black leading-tight">Asegura tu lugar en la ruta.</h3>
                 <p className="mt-4 text-sm leading-7 text-emerald-50/75">
                   Inscríbete al evento y reserva tu participación. Confirma el proceso de pago directamente con la organización.
@@ -335,7 +348,9 @@ export default function Home() {
                   <div className="mt-2 flex items-center gap-3 text-lg font-black"><NequiIcon /><span>322 663 5756</span></div>
                 </div>
                 <div className="mt-auto space-y-3 pt-7">
-                  <button onClick={handleOpenInscription} className="w-full rounded-xl bg-white px-5 py-3 font-bold text-emerald-900 transition hover:bg-emerald-50">Quiero inscribirme</button>
+                  <button onClick={handleOpenInscription} disabled={!registrationsAreOpen} className="w-full rounded-xl bg-white px-5 py-3 font-bold text-emerald-900 transition hover:bg-emerald-50 disabled:cursor-not-allowed disabled:opacity-60">
+                    {registrationsAreOpen ? 'Quiero inscribirme' : 'Inscripciones cerradas'}
+                  </button>
                   <a href={whatsappHref} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-2 rounded-xl border border-white/15 bg-[#25D366] px-5 py-3 text-sm font-bold text-white transition hover:bg-[#20ba59]">
                     <WhatsAppIcon className="h-5 w-5" />
                     Hablar por WhatsApp
@@ -687,14 +702,17 @@ export default function Home() {
             Listo para el desafío
           </h2>
           <p className="text-lg text-green-100 mb-8">
-            Completa tu registro y asegura tu lugar en esta experiencia. Los cupos son limitados.
+            {registrationsAreOpen
+              ? `Completa tu registro hasta el ${REGISTRATION_DEADLINE_LABEL} y asegura tu lugar. Los cupos son limitados.`
+              : 'El periodo de inscripciones ha finalizado.'}
           </p>
           <button
             onClick={handleOpenInscription}
-            className="bg-white text-green-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-50 transition-colors shadow-lg inline-flex items-center gap-2"
+            disabled={!registrationsAreOpen}
+            className="bg-white text-green-700 px-8 py-4 rounded-xl font-bold text-lg hover:bg-green-50 transition-colors shadow-lg inline-flex items-center gap-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             <User className="w-5 h-5" />
-            Inscribirme ahora
+            {registrationsAreOpen ? 'Inscribirme ahora' : 'Inscripciones cerradas'}
           </button>
         </div>
       </section>

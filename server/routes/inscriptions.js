@@ -26,6 +26,17 @@ const upload = multer({
 });
 
 const router = express.Router();
+const REGISTRATION_DEADLINE = Date.parse('2026-10-25T05:00:00Z');
+
+function requireOpenRegistration(req, res, next) {
+  if (Date.now() >= REGISTRATION_DEADLINE) {
+    return res.status(403).json({
+      message: 'Las inscripciones cerraron el 24 de octubre de 2026',
+    });
+  }
+
+  return next();
+}
 
 // Calculate category based on age
 function calculateCategory(edad) {
@@ -42,7 +53,7 @@ function calculateCategory(edad) {
 }
 
 // Create new inscription (public)
-router.post('/', upload.single('foto'), async (req, res) => {
+router.post('/', requireOpenRegistration, upload.single('foto'), async (req, res) => {
   try {
     const {
       nombres,
